@@ -1,0 +1,14 @@
+{
+  "name": "@sigrh/libs",
+  "version": "1.0.2",
+  "main": "dist/index.js",
+  "author": "asaje379",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.5.5"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  }
+}
