@@ -11,6 +11,15 @@ export class CandidatService {
     @InjectModel(Candidat.name) private readonly candidatModel: Model<CandidatDocument>
   ) { }
 
+  async loadFormProd() {
+
+  }
+
+  async get(id: string) {
+    const candidate = await this.candidatModel.findById(id);
+    return candidate;
+  }
+
   async all() {
     const availableCandidates = await this.candidatModel.count({});
     if (availableCandidates === 0) {

@@ -13,13 +13,4 @@ export class CandidatController {
     return await this.candidatService.all();
   }
 
-  @Get('verify/:id')
-  async verify() { }
-
-  @Get('accept/:id')
-  async accept() { }
-
-  @Get('reject/:id')
-  async reject() { }
-
 }
