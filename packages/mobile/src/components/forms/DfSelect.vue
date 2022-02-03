@@ -1,32 +1,39 @@
 <template>
-  <div class="dropdown-container relative" ref="containerRef" @click="toggle">
+  <div>
+    <label class="semi-bold">{{ label }}</label>
     <div
-      class="
-        dropdown
-        flex
-        items-center
-        justify-between
-        py-7
-        px-8
-        border-border-dark
-        radius-8
-      "
-    >
-      <div>{{ currentValue.label }}</div>
-      <arrow-down />
-    </div>
-
-    <div
-      class="dropdown-items absolute radius-8 bg-white mt-2 p-4"
-      v-if="isOpen"
+      class="dropdown-container relative mt-4"
+      ref="containerRef"
+      @click="toggle"
     >
       <div
-        v-for="(item, index) in data"
-        :key="index"
-        class="py-6 px-12 semi-bold"
-        @click="select(item)"
+        class="
+          dropdown
+          flex
+          items-center
+          justify-between
+          py-7
+          px-8
+          border-border-dark
+          radius-8
+        "
       >
-        {{ item.label }}
+        <div>{{ currentValue.label }}</div>
+        <arrow-down />
+      </div>
+
+      <div
+        class="dropdown-items absolute radius-8 bg-white mt-2 p-4"
+        v-if="isOpen"
+      >
+        <div
+          v-for="(item, index) in data"
+          :key="index"
+          class="py-6 px-12 semi-bold"
+          @click="select(item)"
+        >
+          {{ item.label }}
+        </div>
       </div>
     </div>
   </div>
@@ -47,6 +54,7 @@ export default defineComponent({
   },
   props: {
     data: Object as PropType<SelectInterface>,
+    label: String,
   },
   setup(_, { emit }) {
     const currentValue = ref({ label: "" });

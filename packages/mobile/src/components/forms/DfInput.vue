@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label>{{ label }}</label>
+    <label class="semi-bold">{{ label }}</label>
     <div
       class="flex gap-4 items-center border-border-dark radius-8 py-7 px-8 mt-4"
     >
@@ -8,8 +8,9 @@
       <input
         type="text"
         :placeholder="placeholder"
-        v-model="currentValue"
+        :value="currentValue"
         @input="handleInput"
+        style="width: 90%"
         class="noborder nooutline fs-14"
       />
     </div>
@@ -18,7 +19,7 @@
 
 <script lang="ts">
 /* eslint-disable */
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch, PropType } from "vue";
 
 export default defineComponent({
   props: {
@@ -31,7 +32,7 @@ export default defineComponent({
       default: "",
     },
     value: {
-      type: String,
+      type: String as PropType<string | number | any>,
       default: "",
     },
   },
@@ -40,13 +41,14 @@ export default defineComponent({
     const currentValue = ref(props.value);
 
     const handleInput = ($event: any) => {
-      emit("change", $event.target.value);
+      emit("change", $event);
     };
 
     watch(
       props,
-      () => {
-        currentValue.value = props.value;
+      (newPropsValue) => {
+        currentValue.value = newPropsValue.value;
+        emit("change", newPropsValue.value);
       },
       { deep: true }
     );

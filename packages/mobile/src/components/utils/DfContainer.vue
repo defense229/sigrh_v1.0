@@ -8,5 +8,6 @@
 .container {
   width: 90%;
   margin: 5% auto;
+  height: 100%;
 }
 </style>

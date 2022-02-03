@@ -1,87 +1,107 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content :fullscreen="true">
-      <df-container>
-        <df-select
-          :data="[
-            { label: 'Normal' },
-            { label: 'Enseignant' },
-            { label: 'Aide soignant' },
-          ]"
-        />
-        <div class="fs-14">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sed
-          excepturi ex voluptates iusto, quia optio voluptatibus, saepe
-          cupiditate soluta neque nesciunt repellat libero consequatur unde
-          animi eveniet quidem nisi expedita!
+    <df-layout-content color="primary">
+      <div>
+        <div class="fs-16 text-white text-center pt-16">
+          Bienvenu sur la plateforme de
+        </div>
+        <div
+          class="bold fs-18 text-white text-center pt-4 mx-8 pb-8"
+          style="border-bottom: solid 1px #fff"
+        >
+          Recrutement militaire
         </div>
 
-        <button @click="changeValue('Hello')">Set Value</button>
-
-        <div class="fs-20">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis aliquam
-          corporis dolorem earum ab eaque officiis voluptatum id repudiandae.
-          Sed id perspiciatis praesentium molestias possimus aliquid, sapiente
-          perferendis quia at.
+        <div class="mt-16">
+          <df-logos type="big" />
         </div>
 
-        <df-input :value="testValue" label="Label 1" @change="handleChange" />
+        <div
+          class="top-radius bg-white px-10 py-10 mt-18 pb-20 absolute"
+          style="bottom: 0; width: 100%"
+        >
+          <div class="fs-24 bold text-center py-6">Connectez-vous</div>
 
-        <df-input label="Label 2">
-          <person-icon />
-        </df-input>
-      </df-container>
-    </ion-content>
+          <div class="flex flex-col gap-8 mt-12">
+            <df-input label="Identifiant" @change="setUsername">
+              <person-icon />
+            </df-input>
+
+            <df-password label="Mot de passe" @change="setPassword" />
+          </div>
+          <div class="mt-16 mb-12">
+            <df-button-expand @click="handleSubmit"
+              >Se connecter</df-button-expand
+            >
+          </div>
+        </div>
+        <df-loading :isOpen="isLoading" />
+      </div>
+    </df-layout-content>
   </ion-page>
 </template>
 
 <script lang="ts">
 /* eslint-disable */
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/vue";
+import { IonContent, IonPage } from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import DfInput from "../components/forms/DfInput.vue";
 import PersonIcon from "../components/svgs/PersonIcon.vue";
 import DfContainer from "../components/utils/DfContainer.vue";
 import DfSelect from "../components/forms/DfSelect.vue";
+import DfLogos from "../components/utils/DfLogos.vue";
+import DfButtonExpand from "../components/forms/DFButtonExpand.vue";
+import DfButton from "../components/forms/DfButton.vue";
+import DfLoading from "../components/utils/DfLoading.vue";
+import DfPassword from "../components/forms/DfPassword.vue";
+import DfLayoutContent from "../components/utils/DfLayoutContent.vue";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   components: {
     IonContent,
-    IonHeader,
     IonPage,
-    IonTitle,
-    IonToolbar,
     DfInput,
     PersonIcon,
     DfContainer,
     DfSelect,
+    DfLogos,
+    DfButtonExpand,
+    DfButton,
+    DfLoading,
+    DfPassword,
+    DfLayoutContent,
   },
   setup() {
-    const testValue = ref("Hi");
+    const router = useRouter();
+    const userInfo = ref({
+      username: "",
+      password: "",
+    });
+    const isLoading = ref(false);
 
-    const changeValue = (newValue: string) => {
-      testValue.value = newValue;
+    const setUsername = ($event: any) => {
+      userInfo.value.username = $event.target.value;
     };
 
-    const handleChange = (value: string) => {
-      console.log(value);
+    const setPassword = ($event: any) => {
+      userInfo.value.password = $event.target.value;
     };
+
+    const handleSubmit = () => {
+      isLoading.value = true;
+      console.log(userInfo.value);
+      setTimeout(() => {
+        isLoading.value = false;
+        router.push("/presences");
+      }, 2000);
+    };
+
     return {
-      testValue,
-      changeValue,
-      handleChange,
+      isLoading,
+      setUsername,
+      setPassword,
+      handleSubmit,
     };
   },
 });
