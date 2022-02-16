@@ -35,6 +35,10 @@ export default defineComponent({
       type: String as PropType<string | number | any>,
       default: "",
     },
+    uppercase: {
+      type: Boolean,
+      default: false
+    }
   },
 
   setup(props, { emit }) {
@@ -47,7 +51,7 @@ export default defineComponent({
     watch(
       props,
       (newPropsValue) => {
-        currentValue.value = newPropsValue.value;
+        currentValue.value = newPropsValue.uppercase ? newPropsValue.value.toUpperCase(): newPropsValue.value;
         emit("change", newPropsValue.value);
       },
       { deep: true }

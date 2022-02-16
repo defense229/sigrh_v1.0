@@ -113,6 +113,7 @@ $colors: (primary: #085A03,
     black: #000000,
     "dark-gray": #394452,
     "border-dark": #858C94,
+    light: #00000026
 );
 
 @each $key,
@@ -143,7 +144,6 @@ $val in $colors {
 }
 
 // MARGINS
-
 @for $i from 0 to 31 {
     .m-#{$i} {
         margin: $i * 2px;

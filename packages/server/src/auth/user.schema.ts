@@ -10,6 +10,9 @@ export class User {
   password: string;
 
   @Prop()
+  role: string;
+
+  @Prop()
   departement: string;
 }
 

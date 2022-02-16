@@ -17,7 +17,7 @@
         </div>
 
         <div
-          class="top-radius bg-white px-10 py-10 mt-18 pb-20 absolute"
+          class="top-radius bg-white px-10 py-4 mt-18 pb-10 absolute"
           style="bottom: 0; width: 100%"
         >
           <div class="fs-24 bold text-center py-6">Connectez-vous</div>
@@ -29,7 +29,7 @@
 
             <df-password label="Mot de passe" @change="setPassword" />
           </div>
-          <div class="mt-16 mb-12">
+          <div class="mt-16">
             <df-button-expand @click="handleSubmit"
               >Se connecter</df-button-expand
             >
@@ -55,7 +55,7 @@ import DfButton from "../components/forms/DfButton.vue";
 import DfLoading from "../components/utils/DfLoading.vue";
 import DfPassword from "../components/forms/DfPassword.vue";
 import DfLayoutContent from "../components/utils/DfLayoutContent.vue";
-import { useRouter } from "vue-router";
+import { useLogin } from "../hooks/useLogin";
 
 export default defineComponent({
   components: {
@@ -73,29 +73,7 @@ export default defineComponent({
     DfLayoutContent,
   },
   setup() {
-    const router = useRouter();
-    const userInfo = ref({
-      username: "",
-      password: "",
-    });
-    const isLoading = ref(false);
-
-    const setUsername = ($event: any) => {
-      userInfo.value.username = $event.target.value;
-    };
-
-    const setPassword = ($event: any) => {
-      userInfo.value.password = $event.target.value;
-    };
-
-    const handleSubmit = () => {
-      isLoading.value = true;
-      console.log(userInfo.value);
-      setTimeout(() => {
-        isLoading.value = false;
-        router.push("/presences");
-      }, 2000);
-    };
+    const { isLoading, setUsername, setPassword, handleSubmit } = useLogin();
 
     return {
       isLoading,

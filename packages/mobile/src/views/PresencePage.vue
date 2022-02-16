@@ -1,75 +1,142 @@
 <template>
-  <ion-page>
-    <df-layout-header />
-    <df-layout-content>
-      <df-container>
-        <div class="relative" style="height: 100%">
-          <div class="pt-12 bold fs-18 text-dark-gray">
-            Entrez le N° de table ou le N° de la pièce d'identité du candidat
-            pour valider sa présence
-          </div>
-          <div class="mt-30 flex flex-col gap-12">
-            <df-input label="N° de table / Pièce d'identité" />
-            <df-select
-              label="Catégorie du candidat"
-              :data="[
-                { label: 'Normal', value: 'NORMAL' },
-                { label: 'Enseignant (e)', value: 'ENSEIGNANT' },
-                { label: 'Aide soignant (e)', value: 'AIDE_SOIGNANT' },
-              ]"
-            />
-            <df-button-expand> Suivant </df-button-expand>
-          </div>
+  <df-default-page>
+    <div class="page">
+      <div>
+        <div class="pt-12 bold fs-18 text-dark-gray">
+          Entrez le N° de table ou le N° de la pièce d'identité du candidat pour
+          valider sa présence
+        </div>
+        <div class="mt-30 flex flex-col gap-12">
+          <df-input
+            :value="candidatInfo.id"
+            @change="setId"
+            label="N° de table / Pièce d'identité"
+            uppercase
+          />
+          <df-select
+            label="Catégorie du candidat"
+            :data="data"
+            @change="setStatus"
+          />
+          <df-button-expand :disabled="!isValidForm" @click="handleSubmit">
+            Suivant
+          </df-button-expand>
+        </div>
+      </div>
 
-          <div
-            class="flex justify-between items-center absolute mb-12"
-            style="bottom: 0; width: 100%"
-          >
-            <df-button type="outline">
-              <template v-slot:icon>
-                <logout-icon />
-              </template>
-              Se déconnecter
+      <div class="flex justify-between items-center mb-12">
+        <df-button type="outline" @click="logout">
+          <template v-slot:icon>
+            <logout-icon />
+          </template>
+          Se déconnecter
+        </df-button>
+
+        <df-button @click="closeRegistrations">
+          <template v-slot:icon>
+            <lock-outline />
+          </template>
+          Clôturer
+        </df-button>
+      </div>
+      <df-loading :isOpen="isLoading" />
+      <df-modal :isOpen="isModalOpen">
+        <div class="fs-14">
+          <div class="my-8 text-center">
+            La phase d'enregistrement des présences sera clôturer pour cette
+            édition. <br />
+            <br />
+            Etes-vous sûr de vouloir poursuivre votre opération ?
+          </div>
+          <div class="flex justify-between items-center my-4">
+            <df-button type="outline" @click="cancelCloseRegistrations">
+              Annuler
             </df-button>
 
-            <df-button>
-              <template v-slot:icon>
-                <lock-outline />
-              </template>
-              Clôturer
+            <df-button @click="confirmCloseRegistrations">
+              Confirmer
             </df-button>
           </div>
         </div>
-      </df-container>
-    </df-layout-content>
-  </ion-page>
+      </df-modal>
+    </div>
+  </df-default-page>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { IonPage } from "@ionic/vue";
-import DfLayoutHeader from "../components/utils/DfLayoutHeader.vue";
-import DfLayoutContent from "../components/utils/DfLayoutContent.vue";
+import { defineComponent, ref } from "vue";
 import DfInput from "../components/forms/DfInput.vue";
 import DfSelect from "../components/forms/DfSelect.vue";
 import DfButtonExpand from "../components/forms/DFButtonExpand.vue";
 import DfButton from "../components/forms/DfButton.vue";
-import DfContainer from "../components/utils/DfContainer.vue";
 import LogoutIcon from "../components/svgs/LogoutIcon.vue";
 import LockOutline from "../components/svgs/LockOutline.vue";
+import DfDefaultPage from "../components/utils/DfDefaultPage.vue";
+import { useRouter } from "vue-router";
+import DfLoading from "../components/utils/DfLoading.vue";
+import DfModal from "../components/utils/DfModal.vue";
+import { usePresencePageForm } from "../hooks/usePresencePageForm";
+import { DF_STEPS, setCurrentStep } from "../libs/middleware";
 
 export default defineComponent({
   components: {
-    IonPage,
-    DfLayoutHeader,
-    DfLayoutContent,
     DfInput,
     DfSelect,
     DfButtonExpand,
     DfButton,
-    DfContainer,
     LogoutIcon,
     LockOutline,
+    DfDefaultPage,
+    DfLoading,
+    DfModal,
+  },
+  setup() {
+    const router = useRouter();
+    const {
+      handleSubmit,
+      candidatInfo,
+      setId,
+      setStatus,
+      data: selectData,
+      isValidForm,
+      isLoading,
+    } = usePresencePageForm(router);
+
+    const isModalOpen = ref(false);
+
+    const closeRegistrations = () => isModalOpen.value = true;
+
+    const cancelCloseRegistrations = () => isModalOpen.value = false;
+
+    const confirmCloseRegistrations = () => {
+      isModalOpen.value = false;
+      setCurrentStep(DF_STEPS.VALIDATION);
+      router.push("/validations");
+    };
+
+    return {
+      handleSubmit,
+      logout: () => router.push("/"),
+      closeRegistrations,
+      candidatInfo,
+      setId,
+      setStatus,
+      data: selectData,
+      isValidForm,
+      isLoading,
+      isModalOpen,
+      cancelCloseRegistrations,
+      confirmCloseRegistrations,
+    };
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.page {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+</style>

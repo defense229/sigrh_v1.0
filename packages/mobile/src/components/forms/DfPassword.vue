@@ -57,8 +57,6 @@ export default defineComponent({
     const toggleType = () => {
       currentType.value =
         currentType.value === "password" ? "text" : "password";
-
-      console.log(currentValue);
     };
 
     watch(

@@ -4,6 +4,8 @@ export const DF_TYPE_CANDIDAT = {
     aideSoignant: 'AIDE_SOIGNANT'
 };
 
+export type DF_CANDIDAT_CATEGORIE = 'NORMAL' | 'ENSEIGNANT' | 'AIDE_SOIGNANT';
+
 export const departements = [
     "Atacora", "Donga", "Alibori", "Borgou", "Collines",
     "Zou", "Atlantique", "Littoral", "Couffo", "Mono", "Oueme", "Plateau"
@@ -70,7 +72,7 @@ export function generateCandidat(index: number) {
         "dateNaissance": generateDate(),
         "lieuNaissance": generateWord(15),
         "diplomePresente": generateWord(15),
-        "numeroPiece": generateNumber(11111111, 999999999)
+        "numeroPiece": generateNumber(11111111, 999999999) + ''
     }
 }
 

@@ -3,6 +3,7 @@ export declare const DF_TYPE_CANDIDAT: {
     enseignant: string;
     aideSoignant: string;
 };
+export declare type DF_CANDIDAT_CATEGORIE = 'NORMAL' | 'ENSEIGNANT' | 'AIDE_SOIGNANT';
 export declare const departements: string[];
 export declare const departements_prefix: string[];
 export declare const random: (len: number) => number;
@@ -21,7 +22,7 @@ export declare function generateCandidat(index: number): {
     dateNaissance: string;
     lieuNaissance: string;
     diplomePresente: string;
-    numeroPiece: number;
+    numeroPiece: string;
 };
 export declare function generateCandidates(size: number): {
     demobilise: string;
@@ -38,7 +39,7 @@ export declare function generateCandidates(size: number): {
     dateNaissance: string;
     lieuNaissance: string;
     diplomePresente: string;
-    numeroPiece: number;
+    numeroPiece: string;
 }[];
 export declare function generateUsers(size: number): {
     departement: string;

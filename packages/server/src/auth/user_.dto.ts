@@ -7,5 +7,7 @@ export class UserDto {
   @ApiProperty()
   password: string;
 
+  role?: string;
+
   departement?: string;
 }

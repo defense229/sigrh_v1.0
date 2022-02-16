@@ -6,7 +6,6 @@
       ' ' +
       border
     "
-    @click="handleClick"
     :disabled="disabled"
   >
     <slot name="icon" />
@@ -40,14 +39,9 @@ export default defineComponent({
         : "border-border-dark px-6"
     );
 
-    const handleClick = () => {
-      emit("click");
-    };
-
     return {
       bg,
-      border,
-      handleClick,
+      border
     };
   },
 });

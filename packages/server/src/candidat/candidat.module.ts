@@ -11,6 +11,7 @@ import { CandidatController } from './candidat.controller';
     ])
   ],
   providers: [CandidatService],
-  controllers: [CandidatController]
+  controllers: [CandidatController],
+  exports: [CandidatService]
 })
 export class CandidatModule { }

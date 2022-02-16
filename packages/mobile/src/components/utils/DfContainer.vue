@@ -7,7 +7,8 @@
 <style lang="scss" scoped>
 .container {
   width: 90%;
-  margin: 5% auto;
+  margin: 0 auto;
+  padding-top: 5%;
   height: 100%;
 }
 </style>

@@ -14,4 +14,22 @@ export class CandidatDto {
   lieuNaissance: string;
   diplomePresente: string;
   numeroPiece: number;
+  adresse: string;
+  telephone: string;
+  sexe: string;
+  email: string;
+  anneeObtention: string;
+  lieuObtention: string;
+  dateEnregistrement: string;
+  photo: string;
+  acteNaissance: string;
+  certificatNationalite: string;
+  carteIdentite: string;
+  diplome: string;
+  attestationResidence: string;
+  casierJudiciaire: string;
+  certificatPositionMilitaire: string;
+  certificatMedicalAptitudePhysique: string;
+  decAccept: boolean;
+  decRefuse: boolean;
 }

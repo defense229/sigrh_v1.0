@@ -59,7 +59,7 @@ function generateCandidat(index) {
         "dateNaissance": generateDate(),
         "lieuNaissance": generateWord(15),
         "diplomePresente": generateWord(15),
-        "numeroPiece": generateNumber(11111111, 999999999)
+        "numeroPiece": generateNumber(11111111, 999999999) + ''
     };
 }
 exports.generateCandidat = generateCandidat;

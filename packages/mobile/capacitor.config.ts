@@ -1,10 +1,17 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'mobile',
+  appId: 'com.defense.defrecrutv2',
+  appName: 'defrecrutmobilev2',
   webDir: 'dist',
-  bundledWebRuntime: false
+  bundledWebRuntime: false,
+  plugins: {
+    SplashScreen: {
+      backgroundColor: '#085A03',
+      showSpinner: true,
+      spinnerColor: "#FFFFFF",
+    }
+  }
 };
 
 export default config;

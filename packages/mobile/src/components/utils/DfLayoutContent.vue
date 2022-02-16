@@ -1,6 +1,6 @@
-<template>
+100%<template>
   <ion-content :fullscreen="true">
-    <div :class="css" style="height: calc(100% - 41px)">
+    <div :class="css" style="height: 100%">
       <slot />
     </div>
   </ion-content>

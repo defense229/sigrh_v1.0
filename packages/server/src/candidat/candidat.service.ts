@@ -1,9 +1,18 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
 import { Candidat, CandidatDocument } from './candidat.schema';
-import { getEnv } from '../lib';
-import { seed } from '@sigrh/libs';
+import { getEnv, DF_DATA_PAGINATION } from '../lib';
+import { seed, DF_CANDIDAT_CATEGORIE, DF_TYPE_CANDIDAT } from '@sigrh/libs';
+import { Model } from 'mongoose';
+export interface DF_FILTER {
+  categorie?: DF_CANDIDAT_CATEGORIE;
+  genre?: 'M' | 'F' | 'H';
+  accepted?: boolean;
+  rejected?: boolean;
+  sportPresent?: boolean;
+  sportAccept?: boolean;
+  departement?: string;
+}
 
 @Injectable()
 export class CandidatService {
@@ -11,8 +20,8 @@ export class CandidatService {
     @InjectModel(Candidat.name) private readonly candidatModel: Model<CandidatDocument>
   ) { }
 
-  async loadFormProd() {
-
+  async getModel() {
+    return this.candidatModel;
   }
 
   async get(id: string) {
@@ -31,6 +40,25 @@ export class CandidatService {
     }
     const candidates = await this.candidatModel.find({});
     return candidates;
+  }
+
+  async find(query: DF_FILTER, pagination: DF_DATA_PAGINATION = { page: 1, limit: 10 }) {
+    const values = await this.candidatModel.find({ ...query }, null, {
+      skip: (pagination.page - 1) * pagination.limit,
+      limit: pagination.limit
+    });
+    const total = await this.candidatModel.countDocuments({ ...query });
+    const mens = await this.candidatModel.countDocuments({ sexe: 'H', ...query });
+    const womens = await this.candidatModel.countDocuments({ sexe: 'F', ...query });
+    const aideSoignants = await this.candidatModel.countDocuments({ demobilise: DF_TYPE_CANDIDAT.aideSoignant, ...query });
+    const enseignants = await this.candidatModel.countDocuments({ demobilise: DF_TYPE_CANDIDAT.enseignant, ...query });
+    const normals = total - aideSoignants - enseignants;
+    return {
+      total,
+      values,
+      gender: { male: mens, female: womens },
+      category: { normal: normals, aideSoignant: aideSoignants, enseignant: enseignants }
+    }
   }
 
   async verify(id: string, status: string) {
@@ -64,8 +92,10 @@ export class CandidatService {
       demobilise: status.toUpperCase()
     };
 
+    console.log(updatedValue);
+
     await this.candidatModel.updateOne({ _id: updatedValue._id }, updatedValue);
-    return { statusCode: 200, message: 'Candidat marqué présent avec succès' };
+    return { statusCode: 200, message: 'Candidat marqué présent avec succès', id: updatedValue._id };
   }
 
   async accept(id: string) {
@@ -91,7 +121,7 @@ export class CandidatService {
     };
 
     await this.candidatModel.updateOne({ _id: updatedValue._id }, updatedValue);
-    return { statusCode: 200, message: 'Candidat marqué accepté avec succès' };
+    return { statusCode: 200, message: 'Candidat marqué accepté avec succès', id: updatedValue._id };
   }
 
 }

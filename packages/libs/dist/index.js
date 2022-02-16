@@ -19,7 +19,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.seed = void 0;
+exports.getDepartementPrefix = exports.DF_DEPARTEMENTS = exports.DF_TYPE_CANDIDAT = exports.seed = void 0;
 const seedLib = __importStar(require("./seed"));
 exports.seed = seedLib;
+exports.DF_TYPE_CANDIDAT = {
+    normal: 'NORMAL',
+    enseignant: 'ENSEIGNANT',
+    aideSoignant: 'AIDE_SOIGNANT'
+};
+exports.DF_DEPARTEMENTS = [
+    "Atacora", "Donga", "Alibori", "Borgou", "Collines",
+    "Zou", "Atlantique", "Littoral", "Couffo", "Mono", "Oueme", "Plateau"
+];
+exports.getDepartementPrefix = exports.DF_DEPARTEMENTS.map(it => it.toUpperCase().substring(0, 3));
 //# sourceMappingURL=index.js.map

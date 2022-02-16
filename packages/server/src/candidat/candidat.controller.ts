@@ -1,4 +1,4 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, Param } from '@nestjs/common';
 import { CandidatService } from "./candidat.service";
 import { ApiTags } from '@nestjs/swagger';
 
@@ -11,6 +11,11 @@ export class CandidatController {
   @Get()
   async index() {
     return await this.candidatService.all();
+  }
+
+  @Get('/:id')
+  async getOne(@Param('id') id: string) {
+    return await this.candidatService.get(id);
   }
 
 }

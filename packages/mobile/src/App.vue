@@ -1,7 +1,11 @@
 <template>
   <ion-app>
-    <ion-router-outlet />
-    <df-footer />
+    <div class="big-container">
+      <div class="content-container">
+        <ion-router-outlet />
+      </div>
+      <df-footer />
+    </div>
   </ion-app>
 </template>
 
@@ -19,3 +23,18 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.big-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.content-container {
+  height: 100%;
+  overflow: auto;
+  position: relative;
+}
+</style>
