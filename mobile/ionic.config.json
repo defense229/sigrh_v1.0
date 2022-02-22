@@ -1,0 +1,7 @@
+{
+  "name": "MDN_RECRUTEMENT",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}

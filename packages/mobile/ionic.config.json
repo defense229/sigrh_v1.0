@@ -1,7 +1,0 @@
-{
-  "name": "defrecrutmobilev2",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "vue"
-}

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MDN_RECRUTEMENT</string>
+    <string name="title_activity_main">MDN_RECRUTEMENT</string>
+    <string name="package_name">mdn.defense.defrecrut</string>
+    <string name="custom_url_scheme">mdn.defense.defrecrut</string>
+</resources>
