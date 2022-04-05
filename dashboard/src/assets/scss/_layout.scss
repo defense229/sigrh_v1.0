@@ -1,0 +1,229 @@
+// FLEXBOX
+.flex {
+  display: flex;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+@for $i from 0 to 20 {
+  .gap-#{$i} {
+    gap: $i * 2px;
+  }
+}
+
+.grid {
+  display: grid;
+}
+
+@for $i from 1 to 10 {
+  .grid-cols-#{$i} {
+    grid-template-columns: repeat($i, 1fr);
+  }
+}
+
+$positions: (
+  start: flex-start,
+  end: flex-end,
+  center: center,
+  between: space-between,
+  around: space-around,
+);
+
+@each $key, $val in $positions {
+  .justify-#{$key} {
+    justify-content: $val;
+  }
+
+  .items-#{$key} {
+    align-items: $val;
+  }
+}
+
+// MARGINS
+@for $i from 0 to 101 {
+  .m-#{$i} {
+    margin: $i * 2px;
+  }
+
+  .ml-#{$i} {
+    margin-left: $i * 2px;
+  }
+
+  .mr-#{$i} {
+    margin-right: $i * 2px;
+  }
+
+  .mt-#{$i} {
+    margin-top: $i * 2px;
+  }
+
+  .mb-#{$i} {
+    margin-bottom: $i * 2px;
+  }
+
+  .mx-#{$i} {
+    margin-left: $i * 2px;
+    margin-right: $i * 2px;
+  }
+
+  .my-#{$i} {
+    margin-top: $i * 2px;
+    margin-bottom: $i * 2px;
+  }
+
+  .p-#{$i} {
+    padding: $i * 2px;
+  }
+
+  .pl-#{$i} {
+    padding-left: $i * 2px;
+  }
+
+  .pr-#{$i} {
+    padding-right: $i * 2px;
+  }
+
+  .pt-#{$i} {
+    padding-top: $i * 2px;
+  }
+
+  .pb-#{$i} {
+    padding-bottom: $i * 2px;
+  }
+
+  .px-#{$i} {
+    padding-left: $i * 2px;
+    padding-right: $i * 2px;
+  }
+
+  .py-#{$i} {
+    padding-top: $i * 2px;
+    padding-bottom: $i * 2px;
+  }
+}
+
+.m-auto {
+  margin: auto;
+}
+
+.p-auto {
+  padding: auto;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.hidden {
+  display: none;
+}
+
+.block {
+  display: block;
+}
+
+@each $pos in (top, left, bottom, right) {
+  .#{$pos}-0 {
+    #{$pos}: 0px;
+  }
+
+  .#{$pos}-100 {
+    #{$pos}: 100px;
+  }
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  width: 100%;
+}
+
+.w-page {
+  width: 100vw;
+}
+
+.h-page {
+  height: 100vh;
+}
+
+.w-half {
+  width: 50%;
+}
+
+.h-half {
+  height: 50%;
+}
+
+.box {
+  width: fit-content;
+  height: fit-content;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.card {
+  background: #FFFFFF;
+  box-shadow: 0px 15px 60px rgba(0, 0, 0, 0.12);
+  border-radius: 16px;
+  margin: 40px 0px;
+  padding: 32px;
+}
+
+.topbar {
+  height: 60px;
+}
+
+.sidebar {
+  position: fixed;
+  top: 60px;
+  height: calc(100vh - 60px);
+  width: 260px;
+  overflow: auto;
+  background-color: $white;
+  padding: 32px 24px;
+  transition: 0.3s ease-in;
+
+  .active {
+    background-color: #B4D6B2;
+    color: #085A03;
+    border-radius: 4px;
+    transition: 0.3s ease-out;
+  }
+}
+
+.mainwindow {
+  position: fixed;
+  top: 60px;
+  height: calc(100vh - 60px);
+  width: calc(100% - 260px);
+  overflow: auto;
+  left: 260px;
+  padding: 32px 24px;
+}

@@ -1,0 +1,97 @@
+.input {
+  width: 100%;
+  border-radius: 8px;
+  border: solid 1px $border-dark;
+  padding: 0 10px;
+  margin: 8px 0;
+  background-color: $white;
+  input {
+    border: none;
+    padding: 12px 10px;
+    outline: none;
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 12px 10px;
+    border-radius: 8px;
+  }
+}
+
+.label {
+  font-weight: 600;
+  color: $black;
+}
+
+@each $key, $val in $colors {
+  .input-#{$key} {
+    &:focus {
+      box-shadow: 0 0 2px 0 $val;
+    }
+  }
+}
+
+.button {
+  border-radius: 6px;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: 0.5s ease-in;
+
+  &:hover {
+    transform: scale(1.005);
+    transition: 0.3s ease-out;
+    opacity: 0.9;
+    box-shadow: 0 3px 3px 0 #999999;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: auto;
+  }
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2px;
+  border: 1px solid rgba(11, 95, 255, 0.5);
+  background-color: $white;
+}
+
+.checkbox-active {
+  background: #0B5FFF;
+  border: 1px solid #0B5FFF;
+}
+
+.select {
+  position: relative;
+
+  .dropdown {
+    padding: 10px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: $white;
+    box-shadow: 0 3px 5px 0 #999999;
+    border-radius: 8px;
+    margin-top: 3px;
+    z-index: 2;
+
+    div {
+      cursor: pointer;
+      &:hover {
+        background-color: #B4D6B2;
+        color: $primary;
+        border-radius: 2px;
+      }
+    }
+  }
+}

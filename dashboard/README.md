@@ -1,19 +1,18 @@
-# dashboard
+# DEFRRECRUT DASHBOARD
 
-## Project setup
-```
-yarn install
-```
+## Components Roadmap
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+### Typographies
 
-### Compiles and minifies for production
-```
-yarn build
-```
+    * font-size : {x: string}
+    * font-weight : thin, medium, semi, bold
+    * font-style : regular, italic
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Utils
+
+    * Flex
+    * Grid
+    * Space
+    * If
+    * List
+    * Flag

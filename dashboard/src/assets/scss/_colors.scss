@@ -1,0 +1,36 @@
+$primary: #085a03;
+$white: #ffffff;
+$dark: #09101d;
+$black: #000000;
+$dark-gray: #394452;
+$border-dark: #858c94;
+$light: #F4F6F9;
+
+// COLORS
+$colors: (
+  primary: $primary,
+  'white': $white,
+  'dark': $dark,
+  'black': $black,
+  'dark-gray': $dark-gray,
+  'border-dark': $border-dark,
+  light: $light,
+);
+
+@each $key, $val in $colors {
+  .bg-#{$key} {
+    background-color: $val;
+  }
+
+  .text-#{$key} {
+    color: $val;
+  }
+
+  .border-#{$key} {
+    border: solid 1px $val;
+  }
+}
+
+.bg-transparent {
+  background-color: transparent;
+}

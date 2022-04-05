@@ -16,6 +16,32 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@sigrh/db-parser": [
+        "libs/db-parser/src"
+      ],
+      "@sigrh/db-parser/*": [
+        "libs/db-parser/src/*"
+      ],
+      "@sigrh/config": [
+        "libs/config/src"
+      ],
+      "@sigrh/config/*": [
+        "libs/config/src/*"
+      ],
+      "@sigrh/websocket": [
+        "libs/websocket/src"
+      ],
+      "@sigrh/websocket/*": [
+        "libs/websocket/src/*"
+      ],
+      "@sigrh/runner": [
+        "libs/runner/src"
+      ],
+      "@sigrh/runner/*": [
+        "libs/runner/src/*"
+      ]
+    }
   }
 }
