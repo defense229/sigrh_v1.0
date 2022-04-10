@@ -1,9 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { ExamStatus, IExam } from './exam.types';
+import { ExamStatus, ExamStepStatus, IExam } from './exam.types';
 import { Document, Types } from 'mongoose';
 
-@Schema()
+@Schema({
+  timestamps: true,
+})
 export class Exam implements IExam {
   id?: string;
 
@@ -16,6 +18,21 @@ export class Exam implements IExam {
 
   @Prop({ required: true, default: ExamStatus.NEW })
   status: ExamStatus;
+
+  @Prop({ default: ExamStepStatus.INACTIVE })
+  candidateFileCollectStep: ExamStepStatus;
+
+  @Prop({ default: ExamStepStatus.INACTIVE })
+  sportStep: ExamStepStatus;
+
+  @Prop({ default: ExamStepStatus.INACTIVE })
+  fileAuthenticationStep: ExamStepStatus;
+
+  @Prop({ default: ExamStepStatus.INACTIVE })
+  writingStep: ExamStepStatus;
+
+  @Prop({ default: ExamStepStatus.INACTIVE })
+  healthControlStep: ExamStepStatus;
 
   @Prop({ default: true })
   enabled: boolean;

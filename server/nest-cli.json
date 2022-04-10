@@ -79,6 +79,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/report/tsconfig.app.json"
       }
+    },
+    "mail-push": {
+      "type": "application",
+      "root": "apps/mail-push",
+      "entryFile": "main",
+      "sourceRoot": "apps/mail-push/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/mail-push/tsconfig.app.json"
+      }
     }
   }
 }

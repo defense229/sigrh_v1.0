@@ -6,7 +6,7 @@ export class MbService {
   constructor(private readonly candidatService: CandidatService) {}
 
   async get(id: string) {
-    return await this.candidatService.get(id);
+    return await this.candidatService.one(id);
   }
 
   async verify(id: string, status: string) {

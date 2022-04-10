@@ -1,8 +1,7 @@
-export const __COLORS = {
-  primary: '#085a03',
-  white: '#ffffff',
-  dark: '#09101d',
-  black: '#000000',
-  'dark-gray': '#394452',
-  light: '#00000026',
+export const _STATUS_COLORS = {
+  NEW: '#296094',
+  PENDING: '#F6AD20',
+  CLOSED: '#6B707D',
+  ACCEPTED: '#2B8941',
+  REJECTED: '#DA1414',
 };

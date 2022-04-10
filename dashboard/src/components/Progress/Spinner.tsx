@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
-import { __COLORS } from '../../services/libs';
-import { TColors } from '../../services/types/style.types';
+import { TColors, __COLORS } from '../../services/types';
 
 export interface ISpinner {
   color?: TColors;

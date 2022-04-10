@@ -14,7 +14,7 @@ const Input = ({
 
   return (
     <div className="w-full">
-      <label htmlFor="">
+      <label className="semi-bold" htmlFor="">
         {label}
         {props.required && <span style={{ color: 'red' }}> * </span>}
       </label>

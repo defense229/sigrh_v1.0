@@ -1,6 +1,6 @@
 import { InputHTMLAttributes } from 'react';
 import { CommonElement } from '../../services/libs';
-import { TColors } from '../../services/types/style.types';
+import { TColors } from '../../services/types';
 
 export interface IInput extends InputHTMLAttributes<HTMLInputElement> {
   label?: string | null;

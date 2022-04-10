@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Search from '../components/Inputs/Search';
-import Topbar from '../components/Navbars/Topbar';
+import Topbar from '../components/Layout/Topbar/Topbar';
 import PageLoading from '../components/Progress/PageLoading';
 import Container from '../components/Utils/Containers/Container';
 import HomeItem, { IHomeItem } from '../components/Utils/Others/HomeItem';
@@ -13,7 +13,7 @@ const _items: IHomeItem[] = [
     title: 'Defrecrut (DOPA)',
     description:
       'Cliquez sur ce lien pour configurer et gerer tous les concours ayant trait au Ministère de la Défense National',
-    url: '/defrecrut',
+    url: '/exams',
   },
 ];
 

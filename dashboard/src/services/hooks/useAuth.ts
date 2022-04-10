@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { sessionKeys, _defaultUser } from '../libs';
-import { logout } from '../libs/auth';
+import { _defaultUser } from '../libs';
+import { logout, sessionKeys } from '../libs';
 import { userStateAtom } from '../providers/store/atoms/user.atom';
 import { IUser } from '../types/login.types';
 
@@ -22,14 +22,14 @@ export function useAuth() {
 
       if (session !== '' && session.id !== '') {
         setAuth(session);
-        setUserState(session);
+        setUserState(() => session);
       } else {
         logout();
         navigate('/');
       }
     }
     setLoading(false);
-  }, [userState]);
+  }, [userState, navigate, setUserState]);
 
   return [loading, auth];
 }

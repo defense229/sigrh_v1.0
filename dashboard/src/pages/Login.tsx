@@ -13,30 +13,37 @@ import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { userStateAtom } from '../services/providers/store/atoms/user.atom';
 import { login } from '../services/libs/auth';
+import Toast from '../components/Modals/Toast';
 
 function Login() {
   const [user, setUser] = useState<IUser>(_defaultUser);
   const setUserState = useSetRecoilState(userStateAtom);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const handleChange = (attr: 'username' | 'password', value: string) => {
     setUser({ ...user, [attr]: value });
   };
 
   const handleSubmit = async (event: any) => {
+    setLoading(true);
     event.preventDefault();
 
-    const response = await axios.post(config.api_url.sigrh + 'auth/login', {
-      ...user,
-    });
-    const result = response.data;
+    try {
+      const response = await axios.post(config.api_url.sigrh + 'auth/login', {
+        ...user,
+      });
+      const result = response.data;
 
-    if (result.statusCode === 201) {
       login(result.data.user);
       setUserState(result.data.user);
+      setLoading(false);
       navigate('/home');
-    } else {
+    } catch (err) {
+      setHasError(true);
       setUser(_defaultUser);
+      setLoading(false);
     }
   };
 
@@ -63,7 +70,9 @@ function Login() {
                 onChange={(e) => handleChange('password', e.target.value)}
                 label="Mot de passe"
               />
-              <Button expand>Se connecter</Button>
+              <Button expand loading={loading}>
+                Se connecter
+              </Button>
             </Flex>
           </form>
         </div>
@@ -71,6 +80,15 @@ function Login() {
       <div className="fixed w-full bottom-0 left-0">
         <BeninFlag />
       </div>
+      <Toast
+        color="danger"
+        xpos="right"
+        ypos="top"
+        open={hasError}
+        onClose={() => setHasError(false)}
+      >
+        <b>Identifiants incorrects</b>
+      </Toast>
     </div>
   );
 }

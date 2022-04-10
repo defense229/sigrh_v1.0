@@ -10,7 +10,7 @@ const EmptyState = ({ children }: IEmptyState) => {
   return (
     <Flex justify="center" items="center" direction="col">
       <SvgEmpty />
-      <div>{children}</div>
+      <div className="mt-10 fs-16 semi-bold">{children}</div>
     </Flex>
   );
 };

@@ -6,6 +6,6 @@ export interface IFlex extends HTMLAttributes<HTMLElement> {
   justify?: TFlexPosition;
   items?: TFlexPosition;
   gap?: string;
-  children: ReactElement | ReactElement[];
+  children: ReactElement | ReactElement[] | null;
   direction?: 'row' | 'col';
 }

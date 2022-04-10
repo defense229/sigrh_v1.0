@@ -7,6 +7,8 @@ import {
   DF_TYPE_CANDIDAT,
 } from '../lib';
 import { Model } from 'mongoose';
+import { DbParserService } from '@sigrh/db-parser';
+import { RepositoryService } from '../repository/repository.service';
 
 export interface DF_FILTER {
   categorie?: DF_CANDIDAT_CATEGORIE;
@@ -20,48 +22,42 @@ export interface DF_FILTER {
 }
 
 @Injectable()
-export class CandidatService {
+export class CandidatService extends RepositoryService<Candidat> {
   constructor(
     @InjectModel(Candidat.name)
-    private readonly candidatModel: Model<CandidatDocument>,
-  ) {}
-
-  async get(id: string) {
-    const candidate = await this.candidatModel.findById(id);
-    return candidate;
-  }
-
-  async all() {
-    const candidates = await this.candidatModel.find({});
-    return candidates;
+    protected readonly model: Model<CandidatDocument>,
+    protected dbParser: DbParserService,
+  ) {
+    super(model, dbParser);
+    this.searchFields = ['nom', 'prenom', 'numero', 'telephone'];
   }
 
   async filter(query: DF_FILTER) {
-    return await this.candidatModel.find(query);
+    return await this.model.find(query);
   }
 
-  async find(
+  async findDeep(
     query: DF_FILTER,
     pagination: DF_DATA_PAGINATION = { page: 1, limit: 10 },
   ) {
-    const values = await this.candidatModel.find({ ...query }, null, {
+    const values = await this.model.find({ ...query }, null, {
       skip: (pagination.page - 1) * pagination.limit,
       limit: pagination.limit,
     });
-    const total = await this.candidatModel.countDocuments({ ...query });
-    const mens = await this.candidatModel.countDocuments({
+    const total = await this.model.countDocuments({ ...query });
+    const mens = await this.model.countDocuments({
       sexe: 'H',
       ...query,
     });
-    const womens = await this.candidatModel.countDocuments({
+    const womens = await this.model.countDocuments({
       sexe: 'F',
       ...query,
     });
-    const aideSoignants = await this.candidatModel.countDocuments({
+    const aideSoignants = await this.model.countDocuments({
       demobilise: DF_TYPE_CANDIDAT.aideSoignant,
       ...query,
     });
-    const enseignants = await this.candidatModel.countDocuments({
+    const enseignants = await this.model.countDocuments({
       demobilise: DF_TYPE_CANDIDAT.enseignant,
       ...query,
     });
@@ -79,18 +75,18 @@ export class CandidatService {
   }
 
   async verify(id: string, status: string) {
-    const firstCondition = await this.candidatModel.findOne({
+    const firstCondition = await this.model.findOne({
       accepted: true,
       numero: id,
     });
 
-    const secondCondition = await this.candidatModel.findOne({
+    const secondCondition = await this.model.findOne({
       accepted: true,
       numeroPiece: id,
     });
 
     if (!firstCondition && !secondCondition) {
-      const foundedCandidate = await this.candidatModel.findById(id);
+      const foundedCandidate = await this.model.findById(id);
       throw new HttpException(
         foundedCandidate ? foundedCandidate.motif : 'Dossier non accepté',
         HttpStatus.NOT_ACCEPTABLE,
@@ -112,7 +108,7 @@ export class CandidatService {
       demobilise: status.toUpperCase(),
     };
 
-    await this.candidatModel.updateOne({ _id: updatedValue._id }, updatedValue);
+    await this.model.updateOne({ _id: updatedValue._id }, updatedValue);
     return {
       statusCode: 200,
       message: 'Candidat marqué présent avec succès',
@@ -121,12 +117,12 @@ export class CandidatService {
   }
 
   async accept(id: string) {
-    const firstCondition = await this.candidatModel.findOne({
+    const firstCondition = await this.model.findOne({
       sportPresent: true,
       numero: id,
     });
 
-    const secondCondition = await this.candidatModel.findOne({
+    const secondCondition = await this.model.findOne({
       sportPresent: true,
       numeroPiece: id,
     });
@@ -145,11 +141,98 @@ export class CandidatService {
       sportAccept: true,
     };
 
-    await this.candidatModel.updateOne({ _id: updatedValue._id }, updatedValue);
+    await this.model.updateOne({ _id: updatedValue._id }, updatedValue);
     return {
       statusCode: 200,
       message: 'Candidat marqué accepté avec succès',
       id: updatedValue._id,
     };
   }
+
+  async getCollectStats(id: string) {
+    const received = await this.model.countDocuments({
+      enabled: true,
+      exam: id,
+    });
+    const accepted = await this.model.countDocuments({
+      enabled: true,
+      accepted: true,
+      exam: id,
+    });
+    const rejected = await this.model.countDocuments({
+      enabled: true,
+      accepted: false,
+      exam: id,
+    });
+    return {
+      received,
+      accepted,
+      rejected,
+    };
+  }
+
+  async getSportStats(id: string) {
+    const presents = await this.model.countDocuments({
+      enabled: true,
+      accepted: true,
+      sportPresent: true,
+      exam: id,
+    });
+
+    const notPresents = await this.model.countDocuments({
+      enabled: true,
+      accepted: true,
+      sportPresent: false,
+      exam: id,
+    });
+
+    const accepted = await this.model.countDocuments({
+      enabled: true,
+      accepted: true,
+      sportAccept: true,
+      exam: id,
+    });
+
+    const notAccepted = await this.model.countDocuments({
+      enabled: true,
+      accepted: true,
+      sportPresent: true,
+      sportAccept: false,
+      exam: id,
+    });
+    return { presents, notPresents, accepted, notAccepted };
+  }
+
+  async getDecStats(id: string) {
+    const all = await this.model.countDocuments({
+      enabled: true,
+      accepted: true,
+      sportAccept: true,
+      exam: id,
+    });
+
+    const accepted = await this.model.countDocuments({
+      enabled: true,
+      accepted: true,
+      sportAccept: true,
+      exam: id,
+      decAccept: true,
+    });
+
+    const rejected = await this.model.countDocuments({
+      enabled: true,
+      accepted: true,
+      sportAccept: true,
+      exam: id,
+      decRefuse: true,
+    });
+
+    return { all, accepted, rejected };
+  }
+
+  async getWritingStats(id: string) {}
+
+  async getHCStats(id: string) {}
+
+  async getGlobalStats(id: string) {}
 }

@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IRepartition } from './repartition.types';
 import { Document, Types } from 'mongoose';
 
-@Schema()
+@Schema({ timestamps: true })
 export class Repartition implements IRepartition {
   id?: string;
 

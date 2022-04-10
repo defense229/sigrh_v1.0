@@ -4,11 +4,7 @@ import Spinner from './Spinner';
 
 function PageLoading() {
   return (
-    <Flex
-      justify="center"
-      items="center"
-      className="fixed top-0 left-0 w-page h-page"
-    >
+    <Flex justify="center" items="center" className="py-30">
       <div className="card">
         <Flex items="center" gap="10px">
           <Spinner color="primary" />

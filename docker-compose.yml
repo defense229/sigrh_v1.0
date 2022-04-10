@@ -1,0 +1,48 @@
+version: '3.9'
+services:
+  web:
+    build: ./dashboard
+    container_name: defrecrut-dashboard
+    ports:
+      - "80:3000"
+    restart: always
+
+  mail-push:
+    build: ./server
+    container_name: mdn-mail-push
+    command: yarn prod:mail
+    ports:
+      - "3794:7001"
+    restart: always
+
+  qrcode-generator:
+    build: ./server
+    container_name: mdn-qrcode-generator
+    command: yarn prod:qrcode
+    ports:
+      - "3793:7002"
+    restart: always
+
+  report:
+    build: ./server
+    container_name: mdn-report
+    command: yarn prod:report
+    ports:
+      - "3792:7004"
+    restart: always
+
+  score-manager:
+    build: ./server
+    container_name: mdn-score-manager
+    command: yarn prod:score
+    ports:
+      - "3791:7003"
+    restart: always
+
+  core:
+    build: ./server
+    container_name: defrecrut-core
+    command: yarn prod:core
+    ports:
+      - "3790:7000"
+    restart: always

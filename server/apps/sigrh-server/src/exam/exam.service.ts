@@ -5,7 +5,6 @@ import { Model } from 'mongoose';
 import { DbParserService } from '@sigrh/db-parser';
 import { RepositoryService } from '../repository/repository.service';
 import { CenterService } from './center/center.service';
-import { Center } from './center/center.dto';
 import { CandidatService } from '../candidat/candidat.service';
 import { ReportService } from '../consumers/report/report.service';
 import { HandleHttpException } from '../decorators';
@@ -17,6 +16,7 @@ import { getDepartementCode, WsEvents } from '../lib';
 import { hash } from 'bcrypt';
 import { QrcodeService } from '../consumers/qrcode/qrcode.service';
 import { WsGateway } from '@sigrh/websocket';
+import { examSteps, ExamStepStatus } from './exam.types';
 
 @Injectable()
 export class ExamService extends RepositoryService<Exam> {
@@ -33,20 +33,13 @@ export class ExamService extends RepositoryService<Exam> {
     private readonly ws: WsGateway,
   ) {
     super(model, dbParser);
+    this.searchFields = ['label'];
   }
 
   @HandleHttpException()
   async one(id: string) {
     const _result = await this.model.findById(id);
     return this.dbParser.parseData(_result);
-  }
-
-  async all(limit: number = 10, skip: number = 0, search: string = undefined) {
-    const _result = await this.model
-      .find({ enabled: true, label: !search ? /.+/ : new RegExp(search, 'i') })
-      .skip(skip)
-      .limit(limit);
-    return _result.map((item) => this.dbParser.parseData(item));
   }
 
   async createRepartition(id: string) {
@@ -231,4 +224,12 @@ export class ExamService extends RepositoryService<Exam> {
   async downloadXlsx(data: Record<string, string>[]) {
     return await this.report.downloadXlsx(data);
   }
+
+  async activeStep(id: string, step: string) {
+    const _step = { ...examSteps };
+    _step[step] = ExamStepStatus.ACTIVE;
+    return await this.model.updateOne({ id }, { ..._step });
+  }
+
+  async gotoNextStep(id: string) {}
 }

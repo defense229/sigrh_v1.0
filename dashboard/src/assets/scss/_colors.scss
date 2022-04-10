@@ -3,8 +3,10 @@ $white: #ffffff;
 $dark: #09101d;
 $black: #000000;
 $dark-gray: #394452;
+$gray: #999999;
 $border-dark: #858c94;
-$light: #F4F6F9;
+$light: #f4f6f9;
+$danger: #d71a1a;
 
 // COLORS
 $colors: (
@@ -12,9 +14,11 @@ $colors: (
   'white': $white,
   'dark': $dark,
   'black': $black,
+  'gray': $gray,
   'dark-gray': $dark-gray,
   'border-dark': $border-dark,
   light: $light,
+  danger: $danger,
 );
 
 @each $key, $val in $colors {
@@ -28,6 +32,10 @@ $colors: (
 
   .border-#{$key} {
     border: solid 1px $val;
+  }
+
+  .border-right-#{$key} {
+    border-right: solid 1px $val;
   }
 }
 

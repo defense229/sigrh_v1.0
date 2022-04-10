@@ -65,19 +65,37 @@
   background-color: $white;
 }
 
+.radio {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 2px solid #0085ff;
+  background-color: $white;
+}
+
 .checkbox-active {
-  background: #0B5FFF;
-  border: 1px solid #0B5FFF;
+  background: #0b5fff;
+  border: 1px solid #0b5fff;
+}
+
+.radio-active {
+  width: 8px;
+  height: 8px;
+  background: #0085ff;
+  border-radius: 50%;
 }
 
 .select {
   position: relative;
 
   .dropdown {
-    padding: 10px;
+    padding: 15px;
     position: absolute;
     top: 100%;
-    left: 0;
+    right: 0;
     width: 100%;
     background-color: $white;
     box-shadow: 0 3px 5px 0 #999999;
@@ -88,7 +106,7 @@
     div {
       cursor: pointer;
       &:hover {
-        background-color: #B4D6B2;
+        background-color: #b4d6b2;
         color: $primary;
         border-radius: 2px;
       }

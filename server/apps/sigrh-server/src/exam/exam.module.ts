@@ -14,6 +14,7 @@ import { ReportService } from '../consumers/report/report.service';
 import { RepartitionModule } from './repartition/repartition.module';
 import { QrcodeService } from '../consumers/qrcode/qrcode.service';
 import { WsGateway } from '@sigrh/websocket';
+import { DepartementsModule } from './departements/departements.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { WsGateway } from '@sigrh/websocket';
     HttpModule,
     CandidatModule,
     RepartitionModule,
+    DepartementsModule,
   ],
   controllers: [ExamController, FieldController],
   providers: [

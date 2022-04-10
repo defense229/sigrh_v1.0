@@ -9,11 +9,18 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
-    "start:server": "nest start --watch",
+    "start:core": "nest start --watch",
     "start:qrcode": "nest start qrcode-generator --watch",
     "start:score": "nest start score-manager --watch",
     "start:report": "nest start report --watch",
-    "dev": "npm-run-all --parallel start:server start:qrcode start:score start:report"
+    "start:mail": "nest start mail-push --watch",
+    "prod:core": "nest start",
+    "prod:qrcode": "nest start qrcode-generator",
+    "prod:score": "nest start score-manager",
+    "prod:report": "nest start report",
+    "prod:mail": "nest start mail-push",
+    "dev": "npm-run-all --parallel start:core start:qrcode start:score start:report start:mail",
+    "prod": "nest build && nest build qrcode-generator && nest build score-manager && nest build report && nest build mail-push"
   },
   "dependencies": {
     "@nestjs/axios": "^0.0.7",

@@ -1,5 +1,8 @@
 import { IUser } from '../types/login.types';
-import { sessionKeys } from './keys';
+
+export const sessionKeys = {
+  user: '__DF_USER__',
+};
 
 export function login(user: IUser) {
   sessionStorage.setItem(sessionKeys.user, JSON.stringify(user));

@@ -1,5 +1,5 @@
 import React, { HTMLAttributes, ReactElement, useMemo } from 'react';
-import { TColors } from '../../services/types/style.types';
+import { TColors } from '../../services/types';
 import Spinner from '../Progress/Spinner';
 import Flex from '../Utils/Flex/Flex';
 

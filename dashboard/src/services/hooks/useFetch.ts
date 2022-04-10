@@ -20,7 +20,7 @@ export function useFetch<T>(options: IFetch) {
         headers: options.headers,
       })
       .then((response: AxiosResponse) => {
-        setData([] as unknown as T);
+        setData(response.data);
         setLoading(false);
       })
       .catch((error) => {

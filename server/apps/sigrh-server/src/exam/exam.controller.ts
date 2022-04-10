@@ -15,9 +15,9 @@ import { Response } from 'express';
 import { writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
-import { Center } from './center/center.dto';
 import { Exam } from './exam.dto';
 import { ExamService } from './exam.service';
+import { ExamStepStatus } from './exam.types';
 import { genDepObject } from './templates/gen-dep-array';
 import { getPdfList } from './templates/list';
 
@@ -51,8 +51,13 @@ export class ExamController {
     return await this.examService.one(id);
   }
 
+  @Get('active-step/:id/:step')
+  async activeStep(@Param('id') id: string, @Param('step') step: string) {
+    return await this.examService.activeStep(id, step);
+  }
+
   @Put(':id')
-  async update(@Param('id') id: string, @Body() exam: Partial<Exam>) {
+  async update(@Param('id') id: string, @Body() exam: Exam) {
     return await this.examService.update(id, exam);
   }
 

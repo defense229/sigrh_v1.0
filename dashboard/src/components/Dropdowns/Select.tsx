@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useClickAwayListener } from '../../services/hooks/useClickAwayListener';
 import Input from '../Inputs/Input';
 import SvgArrowDown from '../Svgs/SvgArrowDown';
-import { ISelect } from './select.types';
+import { ISelect } from './dropdown.types';
 
 function Select({
   values = [],
@@ -11,9 +12,12 @@ function Select({
   required = false,
   placeholder = '',
 }: ISelect) {
+  const containerRef = useRef(null);
   const data = useRef(values);
   const [_label, setLabel] = useState('');
   const [open, setOpen] = useState(false);
+
+  useClickAwayListener(containerRef, () => setOpen(false));
 
   useEffect(() => {
     data.current = values;
@@ -34,7 +38,7 @@ function Select({
   };
 
   return (
-    <div className="select">
+    <div className="select" ref={containerRef}>
       <div onClick={handleOpen}>
         <Input
           label={label}

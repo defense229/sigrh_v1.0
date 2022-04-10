@@ -1,0 +1,46 @@
+.datatable {
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+      text-align: left;
+      padding: 12px 20px 12px 10px;
+    }
+
+    th {
+      background-color: #d4e1d3;
+    }
+
+    td {
+      background-color: $white;
+      border-bottom: solid 1px $light;
+    }
+
+    tr {
+      &:hover {
+        cursor: pointer;
+        td {
+          background-color: #fdf7e8;
+        }
+      }
+    }
+
+    .check {
+      width: 40px;
+    }
+  }
+
+  .dt-card {
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    background: #ffffff;
+    border: 1px solid #dadee3;
+  }
+
+  .dt-box {
+    width: 100%;
+    overflow: auto;
+  }
+}

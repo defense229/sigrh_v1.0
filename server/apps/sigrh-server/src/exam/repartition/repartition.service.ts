@@ -13,5 +13,6 @@ export class RepartitionService extends RepositoryService<Repartition> {
     protected dbParser: DbParserService,
   ) {
     super(model, dbParser);
+    this.searchFields = [];
   }
 }

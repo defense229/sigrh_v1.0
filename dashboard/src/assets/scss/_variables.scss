@@ -23,6 +23,18 @@ code {
   text-align: center;
 }
 
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
 @keyframes rotate {
   from {
     transform: rotate(0deg);
@@ -67,6 +79,17 @@ code {
 
 @include generate-border-radius(6);
 @include generate-border-radius(8);
+@include generate-border-radius(16);
+
+// SHADOW
+@mixin generate-elevation($val) {
+  .elevation-#{$val} {
+    box-shadow: 0 0 ($val + px) 0 #aaaaaa;
+  }
+}
+@include generate-elevation(5);
+@include generate-elevation(12);
+@include generate-elevation(25);
 
 .radius-full {
   border-radius: 50%;
@@ -92,3 +115,24 @@ input {
   cursor: auto;
 }
 
+.status-display {
+  border-radius: 40px;
+  padding: 4px 10px;
+  width: fit-content;
+}
+
+.not-visible {
+  visibility: hidden;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.hide {
+  display: none;
+}
+
+.ellipsis {
+  text-overflow: ellipsis;
+}

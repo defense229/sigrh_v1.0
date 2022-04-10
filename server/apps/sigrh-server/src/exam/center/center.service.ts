@@ -20,11 +20,7 @@ export class CenterService extends RepositoryService<Center> {
     private readonly ws: WsGateway,
   ) {
     super(model, dbParser);
-  }
-
-  async all() {
-    const _result = await this.model.find({});
-    return _result.map((item) => this.dbParser.parseData(item));
+    this.searchFields = ['departement'];
   }
 
   @HandleHttpException(HttpStatus.CONFLICT)
