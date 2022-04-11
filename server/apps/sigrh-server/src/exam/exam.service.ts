@@ -16,7 +16,7 @@ import { getDepartementCode, WsEvents } from '../lib';
 import { hash } from 'bcrypt';
 import { QrcodeService } from '../consumers/qrcode/qrcode.service';
 import { WsGateway } from '@sigrh/websocket';
-import { examSteps, ExamStepStatus } from './exam.types';
+import { ExamRepartitionStatus, examSteps, ExamStepStatus } from './exam.types';
 
 @Injectable()
 export class ExamService extends RepositoryService<Exam> {
@@ -43,6 +43,9 @@ export class ExamService extends RepositoryService<Exam> {
   }
 
   async createRepartition(id: string) {
+    await this.centerService.update(id, {
+      repartitionStatus: ExamRepartitionStatus.PROCESSING,
+    });
     const center = await this.centerService.one(id);
     const fields = await this.scoreService.getFields(center.exam);
     if (!fields || fields.length === 0) {
@@ -150,6 +153,9 @@ export class ExamService extends RepositoryService<Exam> {
           }
 
           const len = Math.ceil(_candidates.length / data.centers);
+          await this.centerService.update(id, {
+            rooms: len,
+          });
           for (let i = 0; i < data.centers; ++i) {
             const start = i * len;
             result[`Centre ${i + 1}`] = _candidates.slice(start, start + len);
@@ -164,6 +170,12 @@ export class ExamService extends RepositoryService<Exam> {
               const start = i * len;
               result[`Centre ${i + 1}`] = candidates.slice(start, start + len);
             }
+
+            await this.centerService.update(id, {
+              candidates: Math.ceil(
+                (Object.values(result)[0] as Array<any>).length / data.rooms,
+              ),
+            });
 
             for (const c in result) {
               const list = result[c];

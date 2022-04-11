@@ -1,12 +1,12 @@
 import React from 'react';
 import { STATUS_MATCHING, _STATUS_COLORS } from '../../../services/libs';
-import { TStatusExam } from '../../../services/types';
+import { TCenterStatus, TStatusExam } from '../../../services/types';
 import { TStatusCandidate } from '../../../services/types/candidates.types';
 import Flex from '../Flex/Flex';
 import Bullet from './Bullet';
 
 type Props = {
-  value?: TStatusExam | TStatusCandidate;
+  value?: TStatusExam | TStatusCandidate | TCenterStatus;
 };
 
 function StatusDisplay({ value = 'NEW' }: Props) {

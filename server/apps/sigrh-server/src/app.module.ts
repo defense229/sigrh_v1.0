@@ -14,6 +14,7 @@ import { ExamModule } from './exam/exam.module';
 import { RepositoryModule } from './repository/repository.module';
 import { config } from '@sigrh/config';
 import { ReportService } from './consumers/report/report.service';
+import { WebsocketModule } from '@sigrh/websocket';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ReportService } from './consumers/report/report.service';
     HttpModule,
     ExamModule,
     RepositoryModule,
+    WebsocketModule,
   ],
   controllers: [AppController],
   providers: [AppService, QrcodeService, ScoreService, ReportService],

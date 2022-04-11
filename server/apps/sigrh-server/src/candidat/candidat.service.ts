@@ -164,10 +164,18 @@ export class CandidatService extends RepositoryService<Candidat> {
       accepted: false,
       exam: id,
     });
+    const mens = await this.model.countDocuments({ enabled: true, sexe: 'H' });
+    const womens = await this.model.countDocuments({
+      enabled: true,
+      sexe: 'F',
+    });
+
     return {
       received,
       accepted,
       rejected,
+      mens,
+      womens,
     };
   }
 

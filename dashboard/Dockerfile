@@ -6,4 +6,3 @@ RUN yarn install --production
 COPY . .
 RUN yarn build
 CMD [ "yarn", "start:prod" ]
-EXPOSE 80

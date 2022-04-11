@@ -7,8 +7,8 @@ import ExamDetails from '../exams/ExamDetails';
 const settingsTabs: IRouterTab[] = [
   { title: 'Candidats', url: '' },
   { title: 'Départements', url: 'departements' },
-  { title: "Centres d'examen", url: 'centers' },
   { title: 'Matières', url: 'fields' },
+  { title: "Centres d'examen", url: 'centers' },
 ];
 
 function Settings() {

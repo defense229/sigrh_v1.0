@@ -8,6 +8,7 @@ import { IWsPayload } from './websocket.types';
 
 @WebSocketGateway({
   cors: { origin: '*' },
+  transports: ['websocket'],
 })
 export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private _sockets: Socket[] = [];

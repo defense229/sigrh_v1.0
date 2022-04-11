@@ -1,8 +1,6 @@
 import React from 'react';
 
-type Props = {};
-
-function HealthControl({}: Props) {
+function HealthControl() {
   return <div>HealthControl</div>;
 }
 

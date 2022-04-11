@@ -71,6 +71,7 @@ export class RepositoryService<T> {
 
   @HandleHttpException()
   async update(id: string, data: Partial<T>) {
+    console.log(data);
     await this.model.findOneAndUpdate({ _id: id }, data, { new: true });
     const _result = await this.model.findById(id);
 

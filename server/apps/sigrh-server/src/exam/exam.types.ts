@@ -29,3 +29,9 @@ export const examSteps = {
   writingStep: 'INACTIVE',
   healthControlStep: 'INACTIVE',
 };
+
+export enum ExamRepartitionStatus {
+  WAITING = 'WAITING',
+  PROCESSING = 'PROCESSING',
+  FINISHED = 'FINISHED',
+}

@@ -53,6 +53,7 @@ code {
   }
 }
 
+@include generate-font-size(10);
 @include generate-font-size(12);
 @include generate-font-size(14);
 @include generate-font-size(16);

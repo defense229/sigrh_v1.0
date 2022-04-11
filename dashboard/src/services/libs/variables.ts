@@ -17,6 +17,8 @@ export const STATUS_MATCHING: any = {
   CLOSED: 'Terminé',
   ACCEPTED: 'Accepté',
   REJECTED: 'Rejeté',
+  WAITING: 'En attente',
+  FINISHED: 'Terminé',
 };
 
 export enum ExamSteps {

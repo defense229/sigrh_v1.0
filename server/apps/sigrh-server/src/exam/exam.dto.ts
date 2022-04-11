@@ -1,6 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { ExamStatus, ExamStepStatus, IExam } from './exam.types';
+import {
+  ExamRepartitionStatus,
+  ExamStatus,
+  ExamStepStatus,
+  IExam,
+} from './exam.types';
 import { Document, Types } from 'mongoose';
 
 @Schema({

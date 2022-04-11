@@ -102,6 +102,8 @@
     border-radius: 8px;
     margin-top: 3px;
     z-index: 2;
+    max-height: 250px;
+    overflow: auto;
 
     div {
       cursor: pointer;

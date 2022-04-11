@@ -2,7 +2,7 @@ import { CommonElement } from '../../services/libs';
 
 export interface ISelect {
   values?: any[];
-  key?: string;
+  display?: string;
   onChange?: (x: any) => void;
   label?: string | null;
   required?: boolean;

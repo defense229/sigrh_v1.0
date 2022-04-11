@@ -1,17 +1,17 @@
+import axios from 'axios';
 import React, { Suspense, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import Button from '../../../../components/Buttons/Button';
 import Modal from '../../../../components/Modals/Modal';
 import ComponentLoading from '../../../../components/Progress/ComponentLoading';
 import SvgEdit from '../../../../components/Svgs/SvgEdit';
 import Table from '../../../../components/Tables/Table';
 import EmptyState from '../../../../components/Utils/EmptyState/EmptyState';
+import { config } from '../../../../env';
+import { useQueryParams } from '../../../../services/hooks/useQueryParams';
 import { useTable } from '../../../../services/hooks/useTable';
-import {
-  departementQuery,
-  departementsList,
-} from '../../../../services/providers/store/atoms/departement.atom';
+import { departementsList } from '../../../../services/providers/store/atoms/departement.atom';
 import AddDepartement from './AddDepartement';
 
 function LoadDepartement({ reload }: { reload: any }) {
@@ -46,6 +46,14 @@ function LoadDepartement({ reload }: { reload: any }) {
     [hovered.id]
   );
 
+  const removeItems = async (rows: any[]) => {
+    await axios.post(
+      config.api_url.sigrh + 'departements/archive',
+      rows.map((row) => row.id)
+    );
+    reload();
+  };
+
   if (departements.length === 0)
     return (
       <div className="my-10">
@@ -55,11 +63,18 @@ function LoadDepartement({ reload }: { reload: any }) {
 
   return (
     <div className="datatable my-8">
-      <Table selection cols={cols} rows={departements} {...tableProps} />
+      <Table
+        onRemoved={removeItems}
+        selection
+        cols={cols}
+        rows={departements}
+        {...tableProps}
+      />
 
       <Modal open={!!current} title="Modifier le centre d’examen">
         <AddDepartement
-          id={id ?? ''}
+          id={current ? current.id : null}
+          exam={id ?? ''}
           label={current ? current.label : null}
           onFinish={() => {
             setCurrent(null);
@@ -74,9 +89,7 @@ function LoadDepartement({ reload }: { reload: any }) {
 function DepartementSettings() {
   const { id } = useParams();
   const [open, setOpen] = useState(false);
-  const _setDep = useSetRecoilState(departementQuery);
-
-  const reload: any = () => _setDep({});
+  const { reload } = useQueryParams();
 
   const toggle = () => setOpen((open) => !open);
 
@@ -88,9 +101,9 @@ function DepartementSettings() {
       <Suspense fallback={<ComponentLoading />}>
         <LoadDepartement reload={reload} />
       </Suspense>
-      <Modal open={open} title="Créer un centre d’examen">
+      <Modal open={open} title="Créer un département">
         <AddDepartement
-          id={id ?? ''}
+          exam={id ?? ''}
           onFinish={() => {
             setOpen(false);
             reload();

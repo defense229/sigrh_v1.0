@@ -1,4 +1,4 @@
-import React, { Suspense, useMemo } from 'react';
+import React, { Suspense, useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import ComponentLoading from '../../../components/Progress/ComponentLoading';
@@ -19,10 +19,12 @@ function LoadCandidates({ id = '' }: Props) {
   const { hovered, ...tableProps } = useTable(candidates);
   const navigate = useNavigate();
 
-  const handleDetailClick = (row: any) => {
-    console.log(row);
-    navigate(`/exam/${id}/candidate/${row.id}`);
-  };
+  const handleDetailClick = useCallback(
+    (row: any) => {
+      navigate(`/exam/${id}/candidate/${row.id}`);
+    },
+    [id, navigate]
+  );
 
   const cols = useMemo(
     () => [

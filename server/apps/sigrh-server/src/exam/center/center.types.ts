@@ -1,3 +1,5 @@
+import { ExamRepartitionStatus } from '../exam.types';
+
 export interface ICenter {
   exam: string;
   departement: string;
@@ -5,4 +7,6 @@ export interface ICenter {
   rooms: number;
   candidates: number;
   enabled: boolean;
+  percenteDone?: number;
+  repartitionStatus?: ExamRepartitionStatus;
 }

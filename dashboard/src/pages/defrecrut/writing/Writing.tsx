@@ -1,8 +1,6 @@
 import React from 'react';
 
-type Props = {};
-
-function Writing({}: Props) {
+function Writing() {
   return <div>Writing</div>;
 }
 

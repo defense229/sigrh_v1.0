@@ -1,8 +1,6 @@
 import React from 'react';
 
-type Props = {};
-
-function Users({}: Props) {
+function Users() {
   return <div>Users</div>;
 }
 

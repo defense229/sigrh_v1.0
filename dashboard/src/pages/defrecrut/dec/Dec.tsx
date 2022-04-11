@@ -1,8 +1,6 @@
 import React from 'react';
 
-type Props = {};
-
-function Dec({}: Props) {
+function Dec() {
   return <div>Dec</div>;
 }
 

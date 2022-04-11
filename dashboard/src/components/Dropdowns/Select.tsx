@@ -6,7 +6,7 @@ import { ISelect } from './dropdown.types';
 
 function Select({
   values = [],
-  key = 'name',
+  display = 'name',
   onChange = () => {},
   label = null,
   required = false,
@@ -27,7 +27,7 @@ function Select({
     if (typeof value === 'string') {
       setLabel(value);
     } else {
-      setLabel(value[key]);
+      setLabel(value[display]);
     }
     onChange(value);
     handleOpen();
@@ -56,10 +56,10 @@ function Select({
             return (
               <div
                 key={index}
-                className="py-3 px-4"
+                className="py-4 px-4"
                 onClick={() => handleSelection(item)}
               >
-                {typeof item === 'string' ? item : item[key]}
+                {typeof item === 'string' ? item : item[display]}
               </div>
             );
           })}

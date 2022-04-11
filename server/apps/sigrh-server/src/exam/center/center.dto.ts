@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ICenter } from './center.types';
 import { Document, Types } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
+import { ExamRepartitionStatus } from '../exam.types';
 
 @Schema({ timestamps: true })
 export class Center implements ICenter {
@@ -27,6 +28,12 @@ export class Center implements ICenter {
 
   @Prop({ default: true })
   enabled: boolean;
+
+  @Prop({ default: 0 })
+  percenteDone?: number;
+
+  @Prop({ default: ExamRepartitionStatus.WAITING })
+  repartitionStatus?: ExamRepartitionStatus;
 }
 
 export class CenterUpdateInput {
