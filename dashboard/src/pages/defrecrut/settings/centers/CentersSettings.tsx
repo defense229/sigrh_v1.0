@@ -124,7 +124,7 @@ function CentersSettings() {
   return (
     <div>
       <Flex justify="end" gap="20px">
-        <Button outlined>Démarrer les répartitions</Button>
+        {/* <Button outlined>Démarrer les répartitions</Button> */}
         <Button onClick={toggle}>Créer un centre d'examen</Button>
       </Flex>
       <Suspense fallback={<ComponentLoading />}>

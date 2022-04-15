@@ -84,9 +84,19 @@ export class CandidatController {
     return await this.candidatService.getCollectStats(id);
   }
 
+  @Get('file-collect-stats-all/:id')
+  async getCollectStatsAll(@Param('id') id: string) {
+    return await this.candidatService.getCollectStatsAll(id);
+  }
+
   @Get('sport-stats/:id')
   async getSportStats(@Param('id') id: string) {
     return await this.candidatService.getSportStats(id);
+  }
+
+  @Get('sport-stats-all/:id')
+  async getSportStatsAll(@Param('id') id: string) {
+    return await this.candidatService.getSportStatsAll(id);
   }
 
   @Get('dec-stats/:id')

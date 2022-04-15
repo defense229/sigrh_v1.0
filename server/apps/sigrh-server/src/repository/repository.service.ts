@@ -95,4 +95,9 @@ export class RepositoryService<T> {
     const _result = await this.model.findOne({ enabled: true, ...query });
     return this.dbParser.parseData(_result);
   }
+
+  @HandleHttpException()
+  async count(query: Record<string, any>) {
+    return await this.model.countDocuments({ ...query, enabled: true });
+  }
 }

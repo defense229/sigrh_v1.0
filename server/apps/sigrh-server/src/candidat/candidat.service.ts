@@ -333,7 +333,7 @@ export class CandidatService extends RepositoryService<Candidat> {
     return result;
   }
 
-  async getSportStatsAll(id: string) {
+  async getSportStats(id: string) {
     const presents = await this.model.countDocuments({
       enabled: true,
       accepted: true,
@@ -365,36 +365,244 @@ export class CandidatService extends RepositoryService<Candidat> {
     return { presents, notPresents, accepted, notAccepted };
   }
 
-  async getSportStats(id: string) {
-    const presents = await this.model.countDocuments({
+  async getSportStatsAll(id: string) {
+    let presents = await this.model.countDocuments({
       enabled: true,
       accepted: true,
       sportPresent: true,
       exam: id,
     });
 
-    const notPresents = await this.model.countDocuments({
+    let presentsMen = await this.model.countDocuments({
+      enabled: true,
+      accepted: true,
+      sexe: 'H',
+      sportPresent: true,
+      exam: id,
+    });
+
+    let presentsWomen = await this.model.countDocuments({
+      enabled: true,
+      accepted: true,
+      sexe: 'F',
+      sportPresent: true,
+      exam: id,
+    });
+
+    let notPresents = await this.model.countDocuments({
       enabled: true,
       accepted: true,
       sportPresent: false,
       exam: id,
     });
 
-    const accepted = await this.model.countDocuments({
+    let notPresentsMen = await this.model.countDocuments({
+      enabled: true,
+      accepted: true,
+      sexe: 'H',
+      sportPresent: false,
+      exam: id,
+    });
+
+    let notPresentsWomen = await this.model.countDocuments({
+      enabled: true,
+      accepted: true,
+      sportPresent: false,
+      sexe: 'F',
+      exam: id,
+    });
+
+    let accepted = await this.model.countDocuments({
       enabled: true,
       accepted: true,
       sportAccept: true,
       exam: id,
     });
 
-    const notAccepted = await this.model.countDocuments({
+    let acceptedMen = await this.model.countDocuments({
+      enabled: true,
+      accepted: true,
+      sportAccept: true,
+      sexe: 'H',
+      exam: id,
+    });
+
+    let acceptedWomen = await this.model.countDocuments({
+      enabled: true,
+      accepted: true,
+      sexe: 'F',
+      sportAccept: true,
+      exam: id,
+    });
+
+    let notAccepted = await this.model.countDocuments({
       enabled: true,
       accepted: true,
       sportPresent: true,
       sportAccept: false,
       exam: id,
     });
-    return { presents, notPresents, accepted, notAccepted };
+
+    let notAcceptedMen = await this.model.countDocuments({
+      enabled: true,
+      accepted: true,
+      sportPresent: true,
+      sportAccept: false,
+      sexe: 'H',
+      exam: id,
+    });
+
+    let notAcceptedWomen = await this.model.countDocuments({
+      enabled: true,
+      accepted: true,
+      sportPresent: true,
+      sexe: 'F',
+      sportAccept: false,
+      exam: id,
+    });
+
+    const result = {
+      all: {
+        presents,
+        notPresents,
+        accepted,
+        notAccepted,
+        acceptedMen,
+        acceptedWomen,
+        presentsMen,
+        presentsWomen,
+        notAcceptedMen,
+        notAcceptedWomen,
+        notPresentsMen,
+        notPresentsWomen,
+      },
+    };
+
+    for (const dep of DF_DEPARTEMENTS) {
+      let presents = await this.model.countDocuments({
+        enabled: true,
+        departement: dep,
+        accepted: true,
+        sportPresent: true,
+        exam: id,
+      });
+
+      let presentsMen = await this.model.countDocuments({
+        enabled: true,
+        departement: dep,
+        accepted: true,
+        sexe: 'H',
+        sportPresent: true,
+        exam: id,
+      });
+
+      let presentsWomen = await this.model.countDocuments({
+        enabled: true,
+        departement: dep,
+        accepted: true,
+        sexe: 'F',
+        sportPresent: true,
+        exam: id,
+      });
+
+      let notPresents = await this.model.countDocuments({
+        enabled: true,
+        departement: dep,
+        accepted: true,
+        sportPresent: false,
+        exam: id,
+      });
+
+      let notPresentsMen = await this.model.countDocuments({
+        enabled: true,
+        departement: dep,
+        accepted: true,
+        sexe: 'H',
+        sportPresent: false,
+        exam: id,
+      });
+
+      let notPresentsWomen = await this.model.countDocuments({
+        enabled: true,
+        departement: dep,
+        accepted: true,
+        sportPresent: false,
+        sexe: 'F',
+        exam: id,
+      });
+
+      let accepted = await this.model.countDocuments({
+        enabled: true,
+        departement: dep,
+        accepted: true,
+        sportAccept: true,
+        exam: id,
+      });
+
+      let acceptedMen = await this.model.countDocuments({
+        enabled: true,
+        departement: dep,
+        accepted: true,
+        sportAccept: true,
+        sexe: 'H',
+        exam: id,
+      });
+
+      let acceptedWomen = await this.model.countDocuments({
+        enabled: true,
+        departement: dep,
+        accepted: true,
+        sexe: 'F',
+        sportAccept: true,
+        exam: id,
+      });
+
+      let notAccepted = await this.model.countDocuments({
+        enabled: true,
+        departement: dep,
+        accepted: true,
+        sportPresent: true,
+        sportAccept: false,
+        exam: id,
+      });
+
+      let notAcceptedMen = await this.model.countDocuments({
+        enabled: true,
+        departement: dep,
+        accepted: true,
+        sportPresent: true,
+        sportAccept: false,
+        sexe: 'H',
+        exam: id,
+      });
+
+      let notAcceptedWomen = await this.model.countDocuments({
+        enabled: true,
+        departement: dep,
+        accepted: true,
+        sportPresent: true,
+        sexe: 'F',
+        sportAccept: false,
+        exam: id,
+      });
+
+      result[dep] = {
+        presents,
+        notPresents,
+        accepted,
+        notAccepted,
+        acceptedMen,
+        acceptedWomen,
+        presentsMen,
+        presentsWomen,
+        notAcceptedMen,
+        notAcceptedWomen,
+        notPresentsMen,
+        notPresentsWomen,
+      };
+    }
+
+    return result;
   }
 
   async getDecStats(id: string) {

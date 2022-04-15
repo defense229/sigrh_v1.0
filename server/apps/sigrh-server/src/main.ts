@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api/v2');
-  app.enableCors();
+  app.enableCors({ origin: '*' });
 
   const config = new DocumentBuilder()
     .setTitle('SIGRH API')
