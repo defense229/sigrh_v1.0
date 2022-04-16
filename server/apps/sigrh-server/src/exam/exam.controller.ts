@@ -17,7 +17,6 @@ import { tmpdir } from 'os';
 import { join } from 'path';
 import { Exam } from './exam.dto';
 import { ExamService } from './exam.service';
-import { ExamStepStatus } from './exam.types';
 import { genDepObject } from './templates/gen-dep-array';
 import { getPdfList } from './templates/list';
 

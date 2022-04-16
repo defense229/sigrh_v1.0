@@ -1,15 +1,15 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { DbParserService } from '@sigrh/db-parser';
+import { HandleHttpException } from '@sigrh/decorators';
 import { Model } from 'mongoose';
-import { HandleHttpException } from '../decorators';
-import { Exam } from '../exam/exam.dto';
+import { Repository } from './repository.dto';
 
 @Injectable()
 export class RepositoryService<T> {
   private searcher = {};
   constructor(
-    @InjectModel(Exam.name)
+    @InjectModel(Repository.name)
     protected readonly model: Model<any>,
     protected dbParser: DbParserService,
   ) {

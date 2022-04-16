@@ -16,6 +16,10 @@ export class Field implements IField {
   @ApiProperty({ required: true })
   @Prop({ required: true, minlength: 3 })
   exam: string;
+
+  @ApiProperty({ required: false })
+  @Prop({ type: Object })
+  extras?: Record<string, any>;
 }
 
 export type FieldDocument = Field & Document;

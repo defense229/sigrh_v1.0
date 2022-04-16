@@ -81,7 +81,6 @@ function LoadCandidates({ id = '' }: Props) {
     [hovered.id, handleDetailClick]
   );
 
-  console.log(candidates);
 
   return (
     <div className="pb-8">

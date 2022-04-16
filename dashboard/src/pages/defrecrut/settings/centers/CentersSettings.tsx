@@ -13,12 +13,14 @@ import { config } from '../../../../env';
 import { useQueryParams } from '../../../../services/hooks/useQueryParams';
 import { useTable } from '../../../../services/hooks/useTable';
 import { centersList } from '../../../../services/providers/store/atoms/center.atom';
+import { WsEvents } from '../../../../services/providers/websocket/events';
 import { useSocketListener } from '../../../../services/providers/websocket/SocketProvider';
 import AddCenter from './AddCenter';
 
 function LoadCentersSettings() {
   const { id } = useParams();
   const centers = useRecoilValue(centersList(id ?? ''));
+  const [memo, setMemo] = useState<any>({});
   const { setSelectedItems, hovered, reload, ...tableProps } = useTable({
     values: centers,
     total: centers.length,
@@ -26,8 +28,16 @@ function LoadCentersSettings() {
   const [current, setCurrent] = useState<any>(null);
   const addSocketListener = useSocketListener();
 
-  addSocketListener('test', (data: any) => {
-    console.log('Center socket: ', data);
+  addSocketListener(WsEvents.REPARTITION_END, (data: any) => {
+    // console.log(WsEvents.REPARTITION_END, data);
+  });
+
+  addSocketListener(WsEvents.REPARTITION_ERROR, (data: any) => {
+    // console.log(WsEvents.REPARTITION_ERROR, data);
+  });
+
+  addSocketListener(WsEvents.REPARTITION_PROGRESS, (data: any) => {
+    // setMemo({ ...memo, [data.id]: data.percentage });
   });
 
   const handleRun = async (id: string) => {
@@ -50,7 +60,7 @@ function LoadCentersSettings() {
             className="text-primary fs-10 semi-bold"
             onClick={() => handleRun(row.id)}
           >
-            <u>Lancer la répart.</u>
+            {memo[row.id] ? memo[row.id] : <u>Lancer la répart.</u>}
           </div>
         ),
       },
@@ -71,7 +81,7 @@ function LoadCentersSettings() {
         },
       },
     ],
-    [hovered.id]
+    [hovered.id, memo]
   );
 
   const removeItems = async (rows: any[]) => {

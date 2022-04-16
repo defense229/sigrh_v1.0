@@ -79,7 +79,6 @@ function AddCenter({ onClose = () => {}, center = null }: Props) {
         ? center_.departement1
         : `${center_.departement1}-${center_.departement2}`;
 
-      console.log(payload);
       if (!center) {
         await axios.post(config.api_url.sigrh + 'centers', payload);
       } else {

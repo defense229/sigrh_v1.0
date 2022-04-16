@@ -24,7 +24,6 @@ function Home() {
 
   const handleSearch = (event: any) => {
     const value = event.target.value.toLowerCase();
-    console.log(value);
     const founded = _items.filter((item: IHomeItem) => {
       return (
         item.title.toLowerCase().includes(value) ||

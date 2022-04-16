@@ -41,6 +41,18 @@
       ],
       "@sigrh/runner/*": [
         "libs/runner/src/*"
+      ],
+      "@sigrh/repository": [
+        "libs/repository/src"
+      ],
+      "@sigrh/repository/*": [
+        "libs/repository/src/*"
+      ],
+      "@sigrh/decorators": [
+        "libs/decorators/src"
+      ],
+      "@sigrh/decorators/*": [
+        "libs/decorators/src/*"
       ]
     }
   }

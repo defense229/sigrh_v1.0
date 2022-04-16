@@ -15,7 +15,7 @@ export class IPdfDownloadPayload {
   @ApiProperty()
   html: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, default: false })
   landscape?: boolean;
 
   @ApiProperty({ required: false, enum: PDFFormat })

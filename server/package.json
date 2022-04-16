@@ -99,7 +99,9 @@
       "^@sigrh/db-parser(|/.*)$": "<rootDir>/libs/db-parser/src/$1",
       "^@sigrh/config(|/.*)$": "<rootDir>/libs/config/src/$1",
       "^@sigrh/websocket(|/.*)$": "<rootDir>/libs/websocket/src/$1",
-      "^@sigrh/runner(|/.*)$": "<rootDir>/libs/runner/src/$1"
+      "^@sigrh/runner(|/.*)$": "<rootDir>/libs/runner/src/$1",
+      "^@sigrh/repository(|/.*)$": "<rootDir>/libs/repository/src/$1",
+      "^@sigrh/decorators(|/.*)$": "<rootDir>/libs/decorators/src/$1"
     }
   }
 }

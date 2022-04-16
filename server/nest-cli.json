@@ -88,6 +88,33 @@
       "compilerOptions": {
         "tsConfigPath": "apps/mail-push/tsconfig.app.json"
       }
+    },
+    "repository": {
+      "type": "library",
+      "root": "libs/repository",
+      "entryFile": "index",
+      "sourceRoot": "libs/repository/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/repository/tsconfig.lib.json"
+      }
+    },
+    "decorators": {
+      "type": "library",
+      "root": "libs/decorators",
+      "entryFile": "index",
+      "sourceRoot": "libs/decorators/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/decorators/tsconfig.lib.json"
+      }
+    },
+    "defrecrut-ln": {
+      "type": "application",
+      "root": "apps/defrecrut-ln",
+      "entryFile": "main",
+      "sourceRoot": "apps/defrecrut-ln/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/defrecrut-ln/tsconfig.app.json"
+      }
     }
   }
 }
