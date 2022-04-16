@@ -14,13 +14,15 @@
     "start:score": "nest start score-manager --watch",
     "start:report": "nest start report --watch",
     "start:mail": "nest start mail-push --watch",
+    "start:defln": "nest start defrecrut-ln --watch",
     "prod:core": "nest start",
     "prod:qrcode": "nest start qrcode-generator",
     "prod:score": "nest start score-manager",
     "prod:report": "nest start report",
     "prod:mail": "nest start mail-push",
-    "dev": "npm-run-all --parallel start:core start:qrcode start:score start:report start:mail",
-    "prod": "nest build && nest build qrcode-generator && nest build score-manager && nest build report && nest build mail-push"
+    "prod:defln": "nest start defrecrut-ln",
+    "dev": "npm-run-all --parallel start:*",
+    "prod": "chmod +x build.sh && ./build.sh"
   },
   "dependencies": {
     "@nestjs/axios": "^0.0.7",
