@@ -20,6 +20,9 @@ export class Field implements IField {
   @ApiProperty({ required: false })
   @Prop({ type: Object })
   extras?: Record<string, any>;
+
+  @Prop({ type: Boolean, default: true })
+  enabled?: boolean;
 }
 
 export type FieldDocument = Field & Document;

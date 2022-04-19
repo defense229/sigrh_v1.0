@@ -9,27 +9,46 @@ import { IExam } from '../../../services/types';
 function AddExam({
   value = null,
   onFinish = () => {},
+  isLn = false,
 }: {
   value?: IExam | null;
   onFinish: (x?: any) => void;
+  isLn?: boolean;
 }) {
   const [label, setLabel] = useState(!!value ? value.label : '');
   const [loading, setLoading] = useState(false);
 
+  console.log(isLn);
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     setLoading(true);
-    if (!value) {
-      await axios.post(config.api_url.sigrh + 'exams', {
-        label,
-      });
+    if (!isLn) {
+      if (!value) {
+        await axios.post(config.api_url.sigrh + 'exams', {
+          label,
+        });
+      } else {
+        const id = value.id;
+        delete value.id;
+        await axios.put(config.api_url.sigrh + 'exams/' + id, {
+          ...value,
+          label,
+        });
+      }
     } else {
-      const id = value.id;
-      delete value.id;
-      await axios.put(config.api_url.sigrh + 'exams/' + id, {
-        ...value,
-        label,
-      });
+      if (!value) {
+        await axios.post(config.api_url.defrecrutLn + 'exams', {
+          label,
+        });
+      } else {
+        const id = value.id;
+        delete value.id;
+        await axios.put(config.api_url.defrecrutLn + 'exams/' + id, {
+          ...value,
+          label,
+        });
+      }
     }
     setLoading(false);
     onFinish();

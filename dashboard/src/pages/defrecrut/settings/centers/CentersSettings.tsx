@@ -1,14 +1,19 @@
 import axios from 'axios';
-import React, { Suspense, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import Button from '../../../../components/Buttons/Button';
+import Dropdown from '../../../../components/Dropdowns/Dropdown';
 import Modal from '../../../../components/Modals/Modal';
 import ComponentLoading from '../../../../components/Progress/ComponentLoading';
+import ProgressBar from '../../../../components/Progress/ProgressBar';
 import SvgEdit from '../../../../components/Svgs/SvgEdit';
+import SvgMore from '../../../../components/Svgs/SvgMore';
+import SvgQrcode from '../../../../components/Svgs/SvgQrcode';
 import Table from '../../../../components/Tables/Table';
 import EmptyState from '../../../../components/Utils/EmptyState/EmptyState';
 import Flex from '../../../../components/Utils/Flex/Flex';
+import IconWithLabel from '../../../../components/Utils/Others/IconWithLabel';
 import { config } from '../../../../env';
 import { useQueryParams } from '../../../../services/hooks/useQueryParams';
 import { useTable } from '../../../../services/hooks/useTable';
@@ -27,18 +32,21 @@ function LoadCentersSettings() {
   });
   const [current, setCurrent] = useState<any>(null);
   const addSocketListener = useSocketListener();
+  const navigate = useNavigate();
 
-  addSocketListener(WsEvents.REPARTITION_END, (data: any) => {
-    // console.log(WsEvents.REPARTITION_END, data);
-  });
+  useEffect(() => {
+    addSocketListener(WsEvents.REPARTITION_END, (data: any) => {
+      setMemo({ ...memo, [data.id]: 100 });
+    });
 
-  addSocketListener(WsEvents.REPARTITION_ERROR, (data: any) => {
-    // console.log(WsEvents.REPARTITION_ERROR, data);
-  });
+    addSocketListener(WsEvents.REPARTITION_ERROR, (data: any) => {
+      // console.log(WsEvents.REPARTITION_ERROR, data);
+    });
 
-  addSocketListener(WsEvents.REPARTITION_PROGRESS, (data: any) => {
-    // setMemo({ ...memo, [data.id]: data.percentage });
-  });
+    addSocketListener(WsEvents.REPARTITION_PROGRESS, (data: any) => {
+      setMemo({ ...memo, [data.id]: data.percentage });
+    });
+  }, []);
 
   const handleRun = async (id: string) => {
     const response = await axios.post(
@@ -60,7 +68,11 @@ function LoadCentersSettings() {
             className="text-primary fs-10 semi-bold"
             onClick={() => handleRun(row.id)}
           >
-            {memo[row.id] ? memo[row.id] : <u>Lancer la répart.</u>}
+            {memo[row.id] ? (
+              <ProgressBar value={memo[row.id]} />
+            ) : (
+              <u>Lancer la répart.</u>
+            )}
           </div>
         ),
       },
@@ -73,15 +85,32 @@ function LoadCentersSettings() {
                 (row.id === hovered.id ? 'visible' : 'not-visible') +
                 ' text-right'
               }
-              onClick={() => setCurrent(row)}
             >
-              <SvgEdit />
+              <Flex items="center" justify="end" gap="20px">
+                <SvgEdit onClick={() => setCurrent(row)} />
+                <Dropdown
+                  style={{ width: '200px' }}
+                  dropdown={
+                    <Flex direction="col" gap="20px">
+                      <IconWithLabel
+                        icon={<SvgQrcode />}
+                        label="Qrcodes"
+                        onClick={() =>
+                          navigate(`/exam/${id}/qrcodes/${row.departement}`)
+                        }
+                      />
+                    </Flex>
+                  }
+                >
+                  <SvgMore />
+                </Dropdown>
+              </Flex>
             </div>
           );
         },
       },
     ],
-    [hovered.id, memo]
+    [hovered.id, memo, id, navigate]
   );
 
   const removeItems = async (rows: any[]) => {

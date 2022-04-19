@@ -22,6 +22,16 @@ export class ScoreManagerService {
     return _result.map((item: Score) => this.dbParser.parseData(item));
   }
 
+  async countByExam(exam: string, field = 'ALL') {
+    console.log(exam, field);
+    let result: number;
+    if (field !== 'ALL') {
+      result = await this.model.countDocuments({ exam, field });
+    }
+    result = await this.model.countDocuments({ exam });
+    return result;
+  }
+
   async getCandidateScore(exam: string, candidate: string) {
     const _result = await this.model
       .find({ exam, candidate })
@@ -74,7 +84,20 @@ export class ScoreManagerService {
 
   async save(payload: Score) {
     try {
-      return this.dbParser.parseData(await this.model.create(payload));
+      const { field, candidate, exam } = payload;
+      const previousScore = await this.model.findOne({
+        field,
+        candidate,
+        exam,
+      });
+      if (!previousScore)
+        return this.dbParser.parseData(await this.model.create(payload));
+      return this.dbParser.parseData(
+        await this.model.updateOne(
+          { _id: previousScore.id },
+          { value: payload.value },
+        ),
+      );
     } catch (error) {
       throw new HttpException(
         { statusCode: HttpStatus.NOT_ACCEPTABLE, message: error.message },

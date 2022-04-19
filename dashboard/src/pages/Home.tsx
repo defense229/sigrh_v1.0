@@ -15,6 +15,12 @@ const _items: IHomeItem[] = [
       'Cliquez sur ce lien pour configurer et gerer tous les concours ayant trait au Ministère de la Défense National',
     url: '/exams',
   },
+  {
+    title: 'Defrecrut Spécial (DOPA)',
+    description:
+      'Cliquez sur ce lien pour configurer et gerer tous les concours spéciaux ayant trait au Ministère de la Défense National',
+    url: '/exams-ln',
+  },
 ];
 
 function Home() {
@@ -54,7 +60,7 @@ function Home() {
           <div className="fs-20 pb-4 semi-bold">Entités militaires</div>
           <hr />
 
-          <div className="grid grid-cols-3 my-8 cursor-pointer">
+          <div className="grid grid-cols-3 my-8 cursor-pointer gap-20">
             {items.map((item: IHomeItem, index: number) => {
               return (
                 <div

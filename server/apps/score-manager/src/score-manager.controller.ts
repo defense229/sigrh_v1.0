@@ -37,4 +37,12 @@ export class ScoreManagerController {
   async create(@Body() payload: Score) {
     return await this.scoreManagerService.save(payload);
   }
+
+  @Get('count-scores/exam/:id')
+  async countScore(
+    @Param('id') exam: string,
+    @Query('field') field: string = 'ALL',
+  ) {
+    return await this.scoreManagerService.countByExam(exam, field);
+  }
 }

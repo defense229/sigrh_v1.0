@@ -3,4 +3,5 @@ export interface IField {
   coefficient: number;
   exam: string;
   extras?: Record<string, any>;
+  enabled?: boolean;
 }

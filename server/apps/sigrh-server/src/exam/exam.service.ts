@@ -16,7 +16,14 @@ import { getDepartementCode, WsEvents } from '../lib';
 import { hash } from 'bcrypt';
 import { QrcodeService } from '../consumers/qrcode/qrcode.service';
 import { WsGateway } from '@sigrh/websocket';
-import { ExamRepartitionStatus, examSteps, ExamStepStatus } from './exam.types';
+import {
+  ExamRepartitionStatus,
+  examSteps,
+  ExamStepStatus,
+  ISimulationPayload,
+} from './exam.types';
+import { ScorePayload } from '../consumers/score/score.types';
+import { createRunner } from '@sigrh/runner';
 
 @Injectable()
 export class ExamService extends RepositoryService<Exam> {
@@ -31,6 +38,7 @@ export class ExamService extends RepositoryService<Exam> {
     private scoreService: ScoreService,
     private qrcodeService: QrcodeService,
     private readonly ws: WsGateway,
+    private score: ScoreService,
   ) {
     super(model, dbParser);
     this.searchFields = ['label'];
@@ -224,7 +232,6 @@ export class ExamService extends RepositoryService<Exam> {
       exam,
       departement,
     });
-    console.log(_repartition);
     if (_repartition) return _repartition.repartition;
     return null;
   }
@@ -244,4 +251,40 @@ export class ExamService extends RepositoryService<Exam> {
   }
 
   async gotoNextStep(id: string) {}
+
+  async addScore(payload: ScorePayload) {
+    await this.score.insertScore(payload);
+    const task = createRunner({
+      name: 'add-score',
+      fn: async () => {
+        const count = await this.countInsertedScores(
+          payload.exam,
+          payload.field,
+        );
+        this.ws.notify({
+          event: WsEvents.ADD_SCORE,
+          cb: () => count,
+        });
+      },
+    });
+    task.run();
+    return;
+  }
+
+  async getScoreResults(exam: string, sort: 'ASC' | 'DSC' = 'DSC') {
+    return await this.score.getResults(exam, sort);
+  }
+
+  async countInsertedScores(exam: string, field: string) {
+    return await this.score.countInsertedScores(exam, field);
+  }
+
+  async simulate(
+    exam: string,
+    sort: 'ASC' | 'DSC' = 'DSC',
+    payload: ISimulationPayload,
+  ) {
+    const results = this.getScoreResults(exam, sort);
+    // TODO: make simulations
+  }
 }

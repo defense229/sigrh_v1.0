@@ -11,10 +11,12 @@ import {
   Res,
 } from '@nestjs/common';
 import { ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
+import { createRunner } from '@sigrh/runner';
 import { Response } from 'express';
 import { writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
+import { ScorePayload } from '../consumers/score/score.types';
 import { Exam } from './exam.dto';
 import { ExamService } from './exam.service';
 import { genDepObject } from './templates/gen-dep-array';
@@ -38,6 +40,14 @@ export class ExamController {
   @Post()
   async create(@Body() exam: Exam) {
     return await this.examService.create(exam);
+  }
+
+  @Get('repartition/:exam/:departement')
+  async getRepartition(
+    @Param('exam') exam: string,
+    @Param('departement') departement: string,
+  ) {
+    return await this.examService.getRepartition(exam, departement);
   }
 
   @Post('create-repartition/:id')
@@ -110,5 +120,19 @@ export class ExamController {
     const path = join(tmpdir(), `repartition_${departement}.xlsx`);
     writeFileSync(path, Buffer.from(buffer.data));
     res.download(path);
+  }
+
+  @Post('add-score')
+  async addScore(@Body() payload: ScorePayload) {
+    await this.examService.addScore(payload);
+    return { status: HttpStatus.OK };
+  }
+
+  @Get('count-scores/:exam/:field')
+  async countScores(
+    @Param('exam') exam: string,
+    @Param('field') field: string,
+  ) {
+    return await this.examService.countInsertedScores(exam, field);
   }
 }

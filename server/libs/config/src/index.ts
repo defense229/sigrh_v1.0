@@ -9,7 +9,7 @@ const _config = {
     db_name: 'defrecrut_test',
   },
   prod: {
-    db_name: 'defrecrut',
+    db_name: 'defrecrut_prod',
   },
 };
 

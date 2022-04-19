@@ -33,6 +33,7 @@ import { DepartementsModule } from './departements/departements.module';
     ScoreService,
     ReportService,
     QrcodeService,
+    ScoreService,
     WsGateway,
   ],
 })

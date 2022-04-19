@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { config } from '@sigrh/config';
 import { HandleHttpException } from '../../decorators';
-import { IFieldPayload } from './score.types';
+import { IFieldPayload, IScorePayload, ScorePayload } from './score.types';
 
 @Injectable()
 export class ScoreService {
@@ -44,5 +44,35 @@ export class ScoreService {
     };
   }
 
-  insertScore() {}
+  @HandleHttpException()
+  async insertScore(score: IScorePayload) {
+    const response = await this.http.axiosRef.post(
+      this.baseUrl + 'scores',
+      score,
+    );
+    return response.data;
+  }
+
+  @HandleHttpException()
+  async getResults(exam: string, sort: 'ASC' | 'DSC') {
+    const response = await this.http.axiosRef.get(
+      this.baseUrl + 'scores/results/' + exam,
+      {
+        params: {
+          sort,
+        },
+      },
+    );
+    return response.data;
+  }
+
+  @HandleHttpException()
+  async countInsertedScores(exam: string, field: string = 'ALL') {
+    console.log(exam);
+    const response = await this.http.axiosRef.get(
+      this.baseUrl + 'scores/count-scores/exam/' + exam + '?field=' + field,
+    );
+    console.log(response.data);
+    return response.data;
+  }
 }

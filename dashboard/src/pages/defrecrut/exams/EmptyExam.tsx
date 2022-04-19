@@ -6,9 +6,10 @@ import AddExam from './AddExam';
 type Props = {
   isAddingExam: boolean;
   setIsAdminExam: (x?: any) => any;
+  isLn?: boolean;
 };
 
-function EmptyExam({ isAddingExam, setIsAdminExam }: Props) {
+function EmptyExam({ isAddingExam, setIsAdminExam, isLn = false }: Props) {
   return (
     <div>
       <EmptyState>
@@ -24,6 +25,7 @@ function EmptyExam({ isAddingExam, setIsAdminExam }: Props) {
         onClose={() => setIsAdminExam(false)}
       >
         <AddExam
+          isLn={isLn}
           onFinish={() => {
             setIsAdminExam(false);
           }}

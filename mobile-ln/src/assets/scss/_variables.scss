@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  font-family: 'Montserrat', sans-serif;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// FONT-SISZES
+@mixin generate-font-size($val) {
+  .fs-#{$val} {
+    font-size: $val + px;
+    line-height: 1.4;
+  }
+}
+
+@include generate-font-size(10);
+@include generate-font-size(12);
+@include generate-font-size(14);
+@include generate-font-size(16);
+@include generate-font-size(18);
+@include generate-font-size(20);
+@include generate-font-size(24);
+@include generate-font-size(32);
+@include generate-font-size(36);
+
+.semi-bold {
+  font-weight: 600;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+// BORDER_RADIUS
+@mixin generate-border-radius($val) {
+  .radius-#{$val} {
+    border-radius: $val + px;
+  }
+}
+
+@include generate-border-radius(6);
+@include generate-border-radius(8);
+@include generate-border-radius(16);
+
+// SHADOW
+@mixin generate-elevation($val) {
+  .elevation-#{$val} {
+    box-shadow: 0 0 ($val + px) 0 #aaaaaa;
+  }
+}
+@include generate-elevation(5);
+@include generate-elevation(12);
+@include generate-elevation(25);
+
+.radius-full {
+  border-radius: 50%;
+}
+
+.noborder {
+  border: none;
+}
+
+.nooutline {
+  outline: none;
+}
+
+input {
+  background-color: #fff;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-auto {
+  cursor: auto;
+}
+
+.status-display {
+  border-radius: 40px;
+  padding: 4px 10px;
+  width: fit-content;
+}
+
+.not-visible {
+  visibility: hidden;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.hide {
+  display: none;
+}
+
+.ellipsis {
+  text-overflow: ellipsis;
+}

@@ -35,3 +35,14 @@ export enum ExamRepartitionStatus {
   PROCESSING = 'PROCESSING',
   FINISHED = 'FINISHED',
 }
+
+export interface ISimulationPayload {
+  type: 'percentage' | 'value';
+  global?: IGlobalSimulationPayload;
+  quotas?: Record<string, number>;
+}
+
+export interface IGlobalSimulationPayload {
+  men: number;
+  women: number;
+}

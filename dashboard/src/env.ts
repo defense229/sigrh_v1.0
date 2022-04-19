@@ -3,6 +3,7 @@ const _config = {
   dev: {
     api_url: {
       sigrh: 'http://localhost:7000/api/v2/',
+      defrecrutLn: 'http://localhost:7006/api/v1/',
       ws: 'ws://localhost:7000/',
     },
   },

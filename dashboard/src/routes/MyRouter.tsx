@@ -1,5 +1,13 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import ExamLn from '../pages/defrecrut-ln/exams/ExamLn';
+import ExamLnWindow from '../pages/defrecrut-ln/exams/ExamLnWindow';
+import CandidatesLn from '../pages/defrecrut-ln/global/candidats/CandidatesLn';
+import DepartementsLn from '../pages/defrecrut-ln/global/departement/DepartementsLn';
+import GlobalVueLn from '../pages/defrecrut-ln/global/GlobalVueLn';
+import Jury from '../pages/defrecrut-ln/global/jury/Jury';
+import JuryMembers from '../pages/defrecrut-ln/global/jury-members/JuryMembers';
+import QuestionsLn from '../pages/defrecrut-ln/global/questions/QuestionsLn';
 import CandidateDetails from '../pages/defrecrut/candidates/CandidateDetails';
 import CandidatesAbsent from '../pages/defrecrut/candidates/CandidatesAbsent';
 import CandidatesAccepted from '../pages/defrecrut/candidates/CandidatesAccepted';
@@ -10,7 +18,7 @@ import CandidateSportAccept from '../pages/defrecrut/candidates/CandidatesSportA
 import CandidatesSportReject from '../pages/defrecrut/candidates/CandidatesSportReject';
 import Dec from '../pages/defrecrut/dec/Dec';
 import AddScore from '../pages/defrecrut/details/scores/AddScore';
-import UnanonymousList from '../pages/defrecrut/details/scores/UnanonymousList';
+import QrCodes from '../pages/defrecrut/details/scores/QrCodes';
 import Exams from '../pages/defrecrut/exams/Exams';
 import ExamWindow from '../pages/defrecrut/exams/ExamWindow';
 import FileCollect from '../pages/defrecrut/fileCollect/FileCollect';
@@ -22,7 +30,6 @@ import DepartementSettings from '../pages/defrecrut/settings/departements/Depart
 import FieldsSettings from '../pages/defrecrut/settings/fields/FieldsSettings';
 import Settings from '../pages/defrecrut/settings/Settings';
 import Sport from '../pages/defrecrut/sport/Sport';
-import Users from '../pages/defrecrut/users/Users';
 import Writing from '../pages/defrecrut/writing/Writing';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
@@ -56,11 +63,20 @@ function MyRouter() {
           <Route path="centers" element={<CentersSettings />} />
           <Route path="fields" element={<FieldsSettings />} />
         </Route>
-        <Route path="users" element={<Users />} />
         <Route path="candidate/:candidateId" element={<CandidateDetails />} />
+        <Route path="add-score/:field" element={<AddScore />} />
+        <Route path="qrcodes/:center" element={<QrCodes />} />
       </Route>
-      <Route path="add-score" element={<AddScore />} />
-      <Route path="unanonym-list" element={<UnanonymousList />} />
+      <Route path="exams-ln" element={<ExamLn />} />
+      <Route path="exam-ln/:id" element={<ExamLnWindow />}>
+        <Route index element={<GlobalVueLn />} />
+        <Route path="departement" element={<DepartementsLn />} />
+        <Route path="jury" element={<Jury />} />
+        <Route path="jury-members" element={<JuryMembers />} />
+        <Route path="candidate" element={<CandidatesLn />} />
+        <Route path="question" element={<QuestionsLn />} />
+        {/* <Route path="qrcodes/:center" element={<QrCodes />} /> */}
+      </Route>
       <Route path="*" element={<NotFoud />} />
     </Routes>
   );

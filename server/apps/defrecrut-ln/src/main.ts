@@ -4,6 +4,7 @@ import { DefrecrutLnModule } from './defrecrut-ln.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(DefrecrutLnModule);
+  app.enableCors();
   app.setGlobalPrefix('api/v1');
 
   const config = new DocumentBuilder()

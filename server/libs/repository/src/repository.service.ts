@@ -37,16 +37,26 @@ export class RepositoryService<T> {
     skip: number = 0,
     search: string = undefined,
     query: any = {},
+    populate?: 'string' | string[],
   ) {
     const total = await this.model.countDocuments({
       enabled: true,
       ...this.parsedSearchFields(search),
       ...query,
     });
-    const _result = await this.model
-      .find({ enabled: true, ...this.parsedSearchFields(search), ...query })
-      .skip(skip)
-      .limit(limit);
+    let _result: any;
+    if (populate) {
+      _result = await this.model
+        .find({ enabled: true, ...this.parsedSearchFields(search), ...query })
+        .populate(populate)
+        .skip(skip)
+        .limit(limit);
+    } else {
+      _result = await this.model
+        .find({ enabled: true, ...this.parsedSearchFields(search), ...query })
+        .skip(skip)
+        .limit(limit);
+    }
     return {
       values: _result.map((item) => this.dbParser.parseData(item)),
       total,
@@ -81,8 +91,16 @@ export class RepositoryService<T> {
   }
 
   @HandleHttpException()
-  async find(query: Record<string, any>) {
-    const _result = await this.model.find({ enabled: true, ...query });
+  async find(query: Record<string, any>, populate?: 'string' | string[]) {
+    console.log('finding');
+    let _result;
+    if (populate) {
+      console.log(populate);
+      _result = await this.model
+        .find({ enabled: true, ...query })
+        .populate(populate);
+      console.log(_result);
+    } else _result = await this.model.find({ enabled: true, ...query });
     return _result.map((item) => this.dbParser.parseData(item));
   }
 

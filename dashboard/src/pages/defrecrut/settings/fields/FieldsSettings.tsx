@@ -1,13 +1,18 @@
 import axios from 'axios';
 import React, { Suspense, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import Button from '../../../../components/Buttons/Button';
+import Dropdown from '../../../../components/Dropdowns/Dropdown';
 import Modal from '../../../../components/Modals/Modal';
 import ComponentLoading from '../../../../components/Progress/ComponentLoading';
 import SvgEdit from '../../../../components/Svgs/SvgEdit';
+import SvgMore from '../../../../components/Svgs/SvgMore';
+import SvgPencilCircle from '../../../../components/Svgs/SvgPencilCircle';
 import Table from '../../../../components/Tables/Table';
 import EmptyState from '../../../../components/Utils/EmptyState/EmptyState';
+import Flex from '../../../../components/Utils/Flex/Flex';
+import IconWithLabel from '../../../../components/Utils/Others/IconWithLabel';
 import { config } from '../../../../env';
 import { useQueryParams } from '../../../../services/hooks/useQueryParams';
 import { useTable } from '../../../../services/hooks/useTable';
@@ -22,6 +27,7 @@ function LoadFields({ reload }: { reload: any }) {
     total: fields.length,
   });
   const [current, setCurrent] = useState<any>(null);
+  const navigate = useNavigate();
 
   const cols = useMemo(
     () => [
@@ -35,15 +41,32 @@ function LoadFields({ reload }: { reload: any }) {
                 (row.id === hovered.id ? 'visible' : 'not-visible') +
                 ' text-right'
               }
-              onClick={() => setCurrent(row)}
             >
-              <SvgEdit />
+              <Flex items="center" justify="end" gap="20px">
+                <SvgEdit onClick={() => setCurrent(row)} />
+                <Dropdown
+                  style={{ width: '200px' }}
+                  dropdown={
+                    <Flex direction="col" gap="20px">
+                      <IconWithLabel
+                        onClick={() =>
+                          navigate(`/exam/${id}/add-score/${row.id}`)
+                        }
+                        icon={<SvgPencilCircle />}
+                        label="Saisir les notes"
+                      />
+                    </Flex>
+                  }
+                >
+                  <SvgMore />
+                </Dropdown>
+              </Flex>
             </div>
           );
         },
       },
     ],
-    [hovered.id]
+    [hovered.id, id, navigate]
   );
 
   const removeItems = async (rows: any[]) => {
@@ -71,7 +94,13 @@ function LoadFields({ reload }: { reload: any }) {
         {...tableProps}
       />
 
-      <Modal open={!!current} title="Modifier le centre d’examen">
+      <Modal
+        open={!!current}
+        title="Modifier le centre d’examen"
+        onClose={() => {
+          setCurrent(null);
+        }}
+      >
         <AddField
           id={current ? current.id : null}
           exam={id ?? ''}
