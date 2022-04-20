@@ -6,6 +6,7 @@ import { Model } from 'mongoose';
 import { DbParserService } from '@sigrh/db-parser';
 import { ScoreService } from '../consumers/score/score.service';
 import { ScorePayload } from '../consumers/score/score.types';
+import { IField } from '../../../score-manager/src/field/field.type';
 
 @Injectable()
 export class QuestionService extends RepositoryService<Question> {
@@ -34,11 +35,23 @@ export class QuestionService extends RepositoryService<Question> {
     return await this.score.getField(id);
   }
 
+  async findByNums(exam: string, ids: string[]) {
+    const fields = await this.score.getFields(exam);
+    console.log(fields);
+    return fields.filter((field: IField, index: number) =>
+      ids.map((id: string) => Number(id)).includes(index + 1),
+    );
+  }
+
   async createScore(score: ScorePayload) {
     return await this.score.insertScore(score);
   }
 
   async remove(id: string) {
     return this.score.removeField(id);
+  }
+
+  async getResults(exam: string) {
+    return await this.score.getResults(exam, 'ASC');
   }
 }

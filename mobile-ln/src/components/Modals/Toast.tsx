@@ -40,20 +40,18 @@ function Toast({
       <div
         className={`toast ${ypos}-${xpos} bg-${color} ${
           _open ? 'fade-in' : 'fade-out'
-        }`}
-      >
+        }`}>
         <Flex
-          items="center"
-          className="text-light py-5 pl-10 pr-5"
-          gap="20px"
-          style={{ borderRadius: '4px' }}
-        >
+          items='center'
+          className='text-light py-5 pl-10 pr-5'
+          gap='20px'
+          style={{ borderRadius: '4px' }}>
           <>{icon}</>
           <div>{children}</div>
-          <div className="box">
+          <div className='box'>
             {closable && (
               <SvgClose
-                color="white"
+                color='white'
                 onClick={() => {
                   setOpen(false);
                   onClose();

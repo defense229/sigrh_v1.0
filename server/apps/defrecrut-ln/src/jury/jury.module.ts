@@ -7,6 +7,7 @@ import { DbParserModule } from '@sigrh/db-parser';
 import { Jury, JurySchema, Member, MemberSchema } from './jury.dto';
 import { CandidatModule } from '../candidat/candidat.module';
 import { WebsocketModule } from '@sigrh/websocket';
+import { QuestionModule } from '../question/question.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { WebsocketModule } from '@sigrh/websocket';
     DbParserModule,
     CandidatModule,
     WebsocketModule,
+    QuestionModule
   ],
   controllers: [JuryController],
   providers: [JuryService, MemberService],

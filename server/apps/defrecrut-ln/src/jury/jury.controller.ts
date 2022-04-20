@@ -73,22 +73,24 @@ export class JuryController {
     return { statusCode: HttpStatus.OK };
   }
 
-  @Get('pick-candidate/:dep/:jury/:num')
+  @Get('pick-candidate/:exam/:dep/:jury/:num')
   async pickCandidate(
+    @Param('exam') exam: string,
     @Param('dep') dep: string,
     @Param('jury') jury: string,
     @Param('num') num: string,
   ) {
-    return this.juryService.pickCandidate(num, dep, jury);
+    return this.juryService.pickCandidate(exam, num, dep, jury);
   }
 
-  @Post('pick-candidate-numbers/:dep/:jury/')
+  @Post('pick-candidate-numbers/:exam/:dep/:jury/:num')
   async pickCandidateNumbers(
+    @Param('exam') exam: string,
     @Param('dep') dep: string,
     @Param('jury') jury: string,
     @Param('num') num: string,
     @Body() nums: string[],
   ) {
-    return this.juryService.pickCandidateNumbers(num, dep, jury, nums);
+    return this.juryService.pickCandidateNumbers(exam, num, dep, jury, nums);
   }
 }

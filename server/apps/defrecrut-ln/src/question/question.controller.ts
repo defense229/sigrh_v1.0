@@ -35,4 +35,9 @@ export class QuestionController {
     await Promise.all(promises);
     return { statusCode: HttpStatus.OK };
   }
+
+  @Get('results/:exam')
+  async getResults(exam: string) {
+    return await this.questionService.getResults(exam);
+  }
 }

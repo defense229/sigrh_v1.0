@@ -8,6 +8,7 @@ import { encrypt, verify } from '../utils';
 import { CandidatService } from '../candidat/candidat.service';
 import { WsGateway } from '@sigrh/websocket';
 import { WsEvents } from 'apps/sigrh-server/src/lib';
+import { QuestionService } from '../question/question.service';
 
 @Injectable()
 export class MemberService extends RepositoryService<Member> {
@@ -48,6 +49,7 @@ export class JuryService extends RepositoryService<Jury> {
     private readonly candidatService: CandidatService,
     private readonly memberService: MemberService,
     private ws: WsGateway,
+    private questions: QuestionService
   ) {
     super(model, dbParser);
   }
@@ -87,10 +89,11 @@ export class JuryService extends RepositoryService<Jury> {
     return await this.memberService.archive(id);
   }
 
-  async pickCandidate(numero: string, departement: string, jury: string) {
+  async pickCandidate(exam: string, numero: string, departement: string, jury: string) {
     const candidate = await this.candidatService.findOne({
       numero,
       departement,
+      exam
     });
     if (!candidate) {
       return { statusCode: HttpStatus.NOT_FOUND };
@@ -107,12 +110,14 @@ export class JuryService extends RepositoryService<Jury> {
   }
 
   async pickCandidateNumbers(
+    exam: string,
     numero: string,
     departement: string,
     jury: string,
     nums: string[],
   ) {
     const candidate = await this.candidatService.findOne({
+      exam,
       numero,
       departement,
     });
@@ -120,10 +125,12 @@ export class JuryService extends RepositoryService<Jury> {
       return { statusCode: HttpStatus.NOT_FOUND };
     }
 
+    const questions = await this.questions.findByNums(exam, nums);
+
     this.ws.notify({
       event: WsEvents.CANDIDATE_NUMBERS_SELECTED,
       cb: () => {
-        return { jury, candidate, nums };
+        return { jury, candidate, nums, questions };
       },
     });
 
