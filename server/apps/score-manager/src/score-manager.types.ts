@@ -4,4 +4,5 @@ export interface IScore {
   field: string;
   candidate: string;
   value: number;
+  extras?: string;
 }

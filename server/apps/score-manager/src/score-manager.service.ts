@@ -84,11 +84,12 @@ export class ScoreManagerService {
 
   async save(payload: Score) {
     try {
-      const { field, candidate, exam } = payload;
+      const { field, candidate, exam, extras } = payload;
       const previousScore = await this.model.findOne({
         field,
         candidate,
         exam,
+        extras,
       });
       if (!previousScore)
         return this.dbParser.parseData(await this.model.create(payload));

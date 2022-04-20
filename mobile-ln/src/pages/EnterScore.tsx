@@ -10,9 +10,10 @@ type Props = {
   questions: any[];
   onFinish: () => void;
   candidate: any;
+  user: any;
 };
 
-function EnterScore({ questions, onFinish, candidate }: Props) {
+function EnterScore({ questions, onFinish, candidate, user }: Props) {
   const [index, setIndex] = useState(1);
   const [openToast, setOpenToast] = useState(false);
   const [score, setScore] = useState('');
@@ -33,6 +34,7 @@ function EnterScore({ questions, onFinish, candidate }: Props) {
         field: q.id,
         candidate: candidate.id,
         value: Number(score),
+        extras: user.jury,
       });
       setLoading(false);
     }

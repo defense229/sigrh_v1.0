@@ -40,6 +40,7 @@ function Home() {
           questions={questions}
           onFinish={handleFinish}
           candidate={current}
+          user={user}
         />
       </Condition>
     </div>

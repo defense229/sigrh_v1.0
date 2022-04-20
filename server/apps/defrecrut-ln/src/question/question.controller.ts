@@ -37,7 +37,7 @@ export class QuestionController {
   }
 
   @Get('results/:exam')
-  async getResults(exam: string) {
+  async getResults(@Param('exam') exam: string) {
     return await this.questionService.getResults(exam);
   }
 }

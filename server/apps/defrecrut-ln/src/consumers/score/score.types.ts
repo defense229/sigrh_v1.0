@@ -4,7 +4,7 @@ export interface IFieldPayload {
   label?: string;
   coefficient?: number;
   exam?: string;
-  extras?: any;
+  extras?: string;
 }
 
 export class FieldPayload implements IFieldPayload {
@@ -40,4 +40,7 @@ export class ScorePayload implements IFieldPayload {
 
   @ApiProperty({ type: Number })
   value: number;
+
+  @ApiProperty()
+  extras?: string;
 }

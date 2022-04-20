@@ -29,6 +29,10 @@ export class Score implements IScore {
   })
   @Prop({ required: true, min: 0, max: 20 })
   value: number;
+
+  @ApiProperty()
+  @Prop()
+  extras?: string;
 }
 
 export type ScoreDocument = Score & Document;
