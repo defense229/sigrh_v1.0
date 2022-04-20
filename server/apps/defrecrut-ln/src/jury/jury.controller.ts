@@ -81,4 +81,14 @@ export class JuryController {
   ) {
     return this.juryService.pickCandidate(num, dep, jury);
   }
+
+  @Post('pick-candidate-numbers/:dep/:jury/')
+  async pickCandidateNumbers(
+    @Param('dep') dep: string,
+    @Param('jury') jury: string,
+    @Param('num') num: string,
+    @Body() nums: string[],
+  ) {
+    return this.juryService.pickCandidateNumbers(num, dep, jury, nums);
+  }
 }

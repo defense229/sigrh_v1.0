@@ -105,4 +105,28 @@ export class JuryService extends RepositoryService<Jury> {
 
     return { statusCode: HttpStatus.OK };
   }
+
+  async pickCandidateNumbers(
+    numero: string,
+    departement: string,
+    jury: string,
+    nums: string[],
+  ) {
+    const candidate = await this.candidatService.findOne({
+      numero,
+      departement,
+    });
+    if (!candidate) {
+      return { statusCode: HttpStatus.NOT_FOUND };
+    }
+
+    this.ws.notify({
+      event: WsEvents.CANDIDATE_NUMBERS_SELECTED,
+      cb: () => {
+        return { jury, candidate, nums };
+      },
+    });
+
+    return { statusCode: HttpStatus.OK };
+  }
 }

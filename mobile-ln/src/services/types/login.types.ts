@@ -4,4 +4,5 @@ export interface IUser {
   departement?: string;
   role?: string;
   id?: string;
+  jury?: string;
 }

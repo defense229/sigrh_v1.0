@@ -6,21 +6,26 @@ import { config } from '../env';
 
 type Props = {
   user: any;
+  numero: string;
 };
 
-function CandidatNumber({ user }: Props) {
-  const [_number, setNumber] = useState('');
+function SelectNumbers({ user, numero }: Props) {
+  const [_numbers, setNumbers] = useState('');
 
   const handleSelect = async () => {
-    console.log(_number);
-    const response = await axios.get(
+    console.log(_numbers);
+    const response = await axios.post(
       config.api_url.defrecrutLn +
         'jury/pick-candidate/' +
         user.departement +
         '/' +
         user.jury +
         '/' +
-        _number
+        numero,
+      _numbers
+        .trim()
+        .split(',')
+        .map((num: string) => Number(num.trim()))
     );
     console.log(response.data);
   };
@@ -28,11 +33,14 @@ function CandidatNumber({ user }: Props) {
   return (
     <div className="my-40 mx-20">
       <div className="fs-20 bold text-center">
-        Veuillez saisir le numéro de table d'un candidat
+        Veuillez saisir les numéros choisis par le candidat.
+      </div>
+      <div className="fs-18 mt-4 bold text-center">
+        Veuillez séparer les numéros par une virgule.
       </div>
 
       <div className="mt-30">
-        <Input value={_number} onChange={(e) => setNumber(e.target.value)} />
+        <Input value={_numbers} onChange={(e) => setNumbers(e.target.value)} />
       </div>
 
       <div className="my-10">
@@ -44,4 +52,4 @@ function CandidatNumber({ user }: Props) {
   );
 }
 
-export default CandidatNumber;
+export default SelectNumbers;
