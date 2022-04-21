@@ -1,4 +1,4 @@
-export const mode = 'dev';
+export const mode = 'prod';
 const _config = {
   dev: {
     api_url: {
@@ -17,6 +17,7 @@ const _config = {
     db_name: 'defrecrut',
     api_url: {
       sigrh: 'http://52.23.134.77:7000/api/v2/',
+      defrecrutLn: 'http://52.23.134.77:7006/api/v1/',
       ws: 'ws://52.23.134.77:7000/',
     },
   },
