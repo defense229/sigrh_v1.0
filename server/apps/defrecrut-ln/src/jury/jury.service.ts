@@ -4,10 +4,9 @@ import { RepositoryService } from '@sigrh/repository';
 import { Jury, JuryDocument, Member, MemberDocument } from './jury.dto';
 import { Model } from 'mongoose';
 import { DbParserService } from '@sigrh/db-parser';
-import { encrypt, verify } from '../utils';
+import { encrypt, verify, WsEvents } from '../utils';
 import { CandidatService } from '../candidat/candidat.service';
 import { WsGateway } from '@sigrh/websocket';
-import { WsEvents } from 'apps/sigrh-server/src/lib';
 import { QuestionService } from '../question/question.service';
 
 @Injectable()

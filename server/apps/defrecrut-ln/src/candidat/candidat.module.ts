@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CandidatService } from './candidat.service';
 import { CandidatController } from './candidat.controller';
-import { Candidat } from 'apps/sigrh-server/src/candidat/candidat.schema';
-import { CandidatSchema } from './candidat.dto';
+import { Candidat, CandidatSchema } from './candidat.dto';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DbParserModule } from '@sigrh/db-parser';
 import { RepositoryModule } from '@sigrh/repository';

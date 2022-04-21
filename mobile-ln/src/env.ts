@@ -16,7 +16,7 @@ const _config = {
   prod: {
     db_name: 'defrecrut',
     api_url: {
-      sigrh: 'http://52.23.134.77:7006/api/v2/',
+      sigrh: 'http://52.23.134.77:7000/api/v2/',
       defrecrutLn: 'http://52.23.134.77:7006/api/v1/',
       ws: 'ws://52.23.134.77:7006/',
     },
