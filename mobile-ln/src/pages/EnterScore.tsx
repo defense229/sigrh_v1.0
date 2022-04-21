@@ -20,23 +20,21 @@ function EnterScore({ questions, onFinish, candidate, user }: Props) {
   const [loading, setLoading] = useState(false);
 
   const handleNext = async () => {
-    console.log(index, questions.length);
-    if (index >= questions.length) {
+    const q = questions[index - 1];
+    setLoading(true);
+    await axios.post(config.api_url.defrecrutLn + 'questions/add-score', {
+      exam: q.exam,
+      field: q.id,
+      candidate: candidate.id,
+      value: Number(score),
+      extras: user.jury,
+    });
+    setLoading(false);
+    if (index === questions.length) {
       setOpenToast(true);
       setTimeout(() => {
         onFinish();
       }, 5000);
-    } else {
-      const q = questions[index - 1];
-      setLoading(true);
-      await axios.post(config.api_url.defrecrutLn + 'questions/add-score', {
-        exam: q.exam,
-        field: q.id,
-        candidate: candidate.id,
-        value: Number(score),
-        extras: user.jury,
-      });
-      setLoading(false);
     }
     setScore('');
     setIndex((index) => index + 1);

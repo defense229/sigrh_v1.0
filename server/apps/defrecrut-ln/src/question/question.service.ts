@@ -7,6 +7,7 @@ import { DbParserService } from '@sigrh/db-parser';
 import { ScoreService } from '../consumers/score/score.service';
 import { ScorePayload } from '../consumers/score/score.types';
 import { IField } from '../../../score-manager/src/field/field.type';
+import { CandidatService } from '../candidat/candidat.service';
 
 @Injectable()
 export class QuestionService extends RepositoryService<Question> {
@@ -15,6 +16,7 @@ export class QuestionService extends RepositoryService<Question> {
     protected readonly model: Model<QuestionDocument>,
     protected readonly dbParser: DbParserService,
     private readonly score: ScoreService,
+    private readonly candidateService: CandidatService,
   ) {
     super(model, dbParser);
   }
@@ -52,6 +54,16 @@ export class QuestionService extends RepositoryService<Question> {
   }
 
   async getResults(exam: string) {
-    return await this.score.getResults(exam, 'ASC');
+    const results = await this.score.getResults(exam, 'DSC');
+    const result = [];
+
+    for (const score of results) {
+      const candidate = await this.candidateService.one(
+        score.scores[0].candidate,
+      );
+      result.push({ ...score, candidate });
+    }
+
+    return result;
   }
 }

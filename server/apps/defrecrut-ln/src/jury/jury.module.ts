@@ -19,7 +19,7 @@ import { QuestionModule } from '../question/question.module';
     DbParserModule,
     CandidatModule,
     WebsocketModule,
-    QuestionModule
+    QuestionModule,
   ],
   controllers: [JuryController],
   providers: [JuryService, MemberService],

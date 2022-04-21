@@ -14,6 +14,12 @@ export class QuestionController {
     return await this.questionService.create(question);
   }
 
+  @Get('results/:exam')
+  async getResults(@Param('exam') exam: string) {
+    console.log(exam);
+    return await this.questionService.getResults(exam);
+  }
+
   @Get(':exam/:id')
   async one(@Param('id') id: string) {
     return await this.questionService.one(id);
@@ -34,10 +40,5 @@ export class QuestionController {
     const promises = ids.map((id) => this.questionService.remove(id));
     await Promise.all(promises);
     return { statusCode: HttpStatus.OK };
-  }
-
-  @Get('results/:exam')
-  async getResults(@Param('exam') exam: string) {
-    return await this.questionService.getResults(exam);
   }
 }

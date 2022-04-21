@@ -43,6 +43,7 @@ export class ScoreManagerService {
         coefficient: item.field.coefficient,
         field: item.field.label,
         poundValue: item.value * item.field.coefficient,
+        extras: item.extras,
       };
       return result;
     });

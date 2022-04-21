@@ -49,7 +49,7 @@ export class JuryService extends RepositoryService<Jury> {
     private readonly candidatService: CandidatService,
     private readonly memberService: MemberService,
     private ws: WsGateway,
-    private questions: QuestionService
+    private questions: QuestionService,
   ) {
     super(model, dbParser);
   }
@@ -89,11 +89,16 @@ export class JuryService extends RepositoryService<Jury> {
     return await this.memberService.archive(id);
   }
 
-  async pickCandidate(exam: string, numero: string, departement: string, jury: string) {
+  async pickCandidate(
+    exam: string,
+    numero: string,
+    departement: string,
+    jury: string,
+  ) {
     const candidate = await this.candidatService.findOne({
       numero,
       departement,
-      exam
+      exam,
     });
     if (!candidate) {
       return { statusCode: HttpStatus.NOT_FOUND };

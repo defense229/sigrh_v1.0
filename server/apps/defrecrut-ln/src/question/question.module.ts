@@ -7,6 +7,7 @@ import { RepositoryModule } from '@sigrh/repository';
 import { DbParserModule } from '@sigrh/db-parser';
 import { ScoreService } from '../consumers/score/score.service';
 import { HttpModule } from '@nestjs/axios';
+import { CandidatModule } from '../candidat/candidat.module';
 
 @Module({
   imports: [
@@ -16,9 +17,10 @@ import { HttpModule } from '@nestjs/axios';
     RepositoryModule,
     DbParserModule,
     HttpModule,
+    CandidatModule,
   ],
   controllers: [QuestionController],
   providers: [QuestionService, ScoreService],
-  exports: [QuestionService]
+  exports: [QuestionService],
 })
 export class QuestionModule {}
