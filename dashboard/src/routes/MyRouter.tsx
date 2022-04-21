@@ -77,7 +77,6 @@ function MyRouter() {
         <Route path='candidate' element={<CandidatesLn />} />
         <Route path='question' element={<QuestionsLn />} />
         <Route path='results' element={<ResultLn />} />
-        {/* <Route path="qrcodes/:center" element={<QrCodes />} /> */}
       </Route>
       <Route path='*' element={<NotFoud />} />
     </Routes>

@@ -18,6 +18,14 @@ export class ScoreService {
   }
 
   @HandleHttpException()
+  async getField(id: string) {
+    const response = await this.http.axiosRef.get(
+      this.baseUrl + 'fields/' + id,
+    );
+    return response.data;
+  }
+
+  @HandleHttpException()
   async addField(field: IFieldPayload) {
     const response = await this.http.axiosRef.post(
       this.baseUrl + 'fields',

@@ -7,32 +7,48 @@ import SvgArrowDown from '../../../../components/Svgs/SvgArrowDown';
 type Props = {
   center_: string;
   repartition: any;
+  exam: string;
+  departement: string;
+  fields: any[];
 };
 
-function QrCodeCenterDisplay({ center_, repartition }: Props) {
+function QrCodeCenterDisplay({
+  center_,
+  repartition,
+  exam,
+  departement,
+  fields,
+}: Props) {
   const [open, setOpen] = useState(false);
 
   const toggle = () => setOpen((open) => !open);
   return (
     <div>
-      <Flex justify="between" items="center">
-        <Flex items="center" gap="12px">
+      <Flex justify='between' items='center'>
+        <Flex items='center' gap='12px'>
           <SvgCenterIcon />
           <div>
             <b>{center_}</b> ({repartition[center_].length} salle
             {repartition[center_].length > 1 ? 's' : ''} de classe)
           </div>
         </Flex>
-        <Flex items="center" gap="12px">
+        <Flex items='center' gap='12px'>
           <SvgArrowDown onClick={toggle} />
         </Flex>
       </Flex>
-      <hr className="my-6" />
+      <hr className='my-6' />
       {repartition[center_].map((candidates: any, index: number) => {
         return (
           <div key={index}>
             {open && (
-              <QrCodeRoomDisplay index={index} candidates={candidates} />
+              <QrCodeRoomDisplay
+                index={index}
+                candidates={candidates}
+                exam={exam}
+                departement={departement}
+                fields={fields}
+                center={center_}
+              />
             )}
           </div>
         );

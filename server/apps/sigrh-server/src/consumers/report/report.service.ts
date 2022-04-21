@@ -7,10 +7,10 @@ export class ReportService {
   baseUrl = config.api_url.report;
   constructor(private http: HttpService) {}
 
-  async downloadPdf(html: string) {
+  async downloadPdf(html: string, other: any = {}) {
     const response = await this.http.axiosRef.post(
       this.baseUrl + 'download-pdf',
-      { html },
+      { html, ...other },
     );
     return response.data;
   }

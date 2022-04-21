@@ -137,3 +137,10 @@ input {
 .ellipsis {
   text-overflow: ellipsis;
 }
+
+.hover-u {
+  &:hover {
+    text-decoration: underline;
+    color: $primary;
+  }
+} 

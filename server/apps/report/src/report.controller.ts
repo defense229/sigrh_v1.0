@@ -19,12 +19,14 @@ export class ReportController {
       {
         format: payload.format ? payload.format : 'A4',
         landscape: payload.landscape ? payload.landscape : false,
-        margin: {
-          top: 20,
-          bottom: 20,
-          left: 30,
-          right: 30,
-        },
+        margin: payload.margin
+          ? payload.margin
+          : {
+              top: 20,
+              bottom: 20,
+              left: 30,
+              right: 30,
+            },
         printBackground: true,
       },
     );

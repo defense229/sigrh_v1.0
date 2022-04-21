@@ -38,6 +38,43 @@ export function genDepArray(data: any) {
   return str;
 }
 
+export function genListArray(data: any, field: string) {
+  let str = `<table>
+    <thead>
+    <tr>
+        <th>N°</th>
+        <th>Numéro de table</th>
+        <th>Tag qrcode</th>
+    </tr>
+    </thead>
+    <tbody>`;
+  for (let i = 0; i < data.length; i++) {
+    str += `<tr>
+        <td>${i + 1}</td>
+        <td>
+        ${data[i].numero}
+        </td>
+        <td>${data[i].qrcodes[field].tag}</td>
+    </tr>`;
+  }
+  str += `</tbody>
+    </table>`;
+
+  return str;
+}
+
+export function genCodeArray(data: any, field: string) {
+  let str = ``;
+  for (let i = 0; i < data.length; i++) {
+    str += `<div>
+      <img src="${data[i].qrcodes[field].qrcode}" />
+      <div>${data[i].qrcodes[field].tag}</div>
+    </div>`;
+  }
+
+  return str;
+}
+
 export function genDepObject(data: any) {
   let result = [];
   for (const key in data) {

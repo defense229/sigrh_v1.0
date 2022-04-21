@@ -13,9 +13,9 @@ const links: ISidebarLink[] = [
   { label: 'Vue globale', path: '' },
   { label: 'Phase de dépôt de dossier', path: 'file-collect' },
   { label: 'Phase sportive', path: 'sport' },
-  { label: 'Authentification des diplômes', path: 'dec' },
+  // { label: 'Authentification des diplômes', path: 'dec' },
   { label: 'Phase écrite', path: 'writing' },
-  { label: 'Visite médicale', path: 'health-control' },
+  // { label: 'Visite médicale', path: 'health-control' },
   { label: 'Paramètres', path: 'settings' },
 ];
 
@@ -24,7 +24,7 @@ function ExamWindow() {
 
   if (authLoading) return <PageLoading />;
   return (
-    <div className="bg-light h-page">
+    <div className='bg-light h-page'>
       <Topbar user={user as IUser} />
       <Sidebar data={links} />
       <MainWindow>

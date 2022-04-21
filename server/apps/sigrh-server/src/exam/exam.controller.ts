@@ -19,8 +19,9 @@ import { join } from 'path';
 import { ScorePayload } from '../consumers/score/score.types';
 import { Exam } from './exam.dto';
 import { ExamService } from './exam.service';
-import { genDepObject } from './templates/gen-dep-array';
+import { genDepObject, genListArray } from './templates/gen-dep-array';
 import { getPdfList } from './templates/list';
+import { getPdfListDes, getPdfCodes } from './templates/list_des';
 
 class ExamQuery {
   @ApiPropertyOptional()
@@ -114,10 +115,61 @@ export class ExamController {
     @Res() res: Response,
   ) {
     const data = await this.examService.getRepartition(exam, departement);
-    console.log(data);
     const payload = genDepObject(data);
     const buffer = await this.examService.downloadXlsx(payload);
     const path = join(tmpdir(), `repartition_${departement}.xlsx`);
+    writeFileSync(path, Buffer.from(buffer.data));
+    res.download(path);
+  }
+
+  @Get('download-repartition/list/:exam/:departement/:field/:center/:room')
+  async downloadList(
+    @Param('exam') exam: string,
+    @Param('departement') departement: string,
+    @Param('field') field: string,
+    @Param('center') center: string,
+    @Param('room') room: string,
+    @Res() res: Response,
+  ) {
+    const data = await this.examService.getRepartition(exam, departement);
+    const result = data[center][Number(room)];
+    const field_ = await this.examService.getField(field);
+    console.log(field_);
+    const html = getPdfListDes(result, { departement, center, room }, field_);
+    const buffer = await this.examService.downloadPdf(html);
+    const path = join(
+      tmpdir(),
+      `list_${departement}_${center}_salle_${room + 1}_${field_.label}.pdf`,
+    );
+    writeFileSync(path, Buffer.from(buffer.data));
+    res.download(path);
+  }
+
+  @Get('download-repartition/code/:exam/:departement/:field/:center/:room')
+  async downloadCodes(
+    @Param('exam') exam: string,
+    @Param('departement') departement: string,
+    @Param('field') field: string,
+    @Param('center') center: string,
+    @Param('room') room: string,
+    @Res() res: Response,
+  ) {
+    const data = await this.examService.getRepartition(exam, departement);
+    const result = data[center][Number(room)];
+    const html = getPdfCodes(result, field);
+    const field_ = await this.examService.getField(field);
+    const buffer = await this.examService.downloadPdf(html, {
+      margin: {
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+      },
+    });
+    const path = join(
+      tmpdir(),
+      `qrcodes_${departement}_${center}_salle_${room + 1}_${field_.label}.pdf`,
+    );
     writeFileSync(path, Buffer.from(buffer.data));
     res.download(path);
   }

@@ -24,54 +24,56 @@ function ExamStats({ id = '' }: Props) {
   if (loadingStats) return <ComponentLoading />;
 
   return (
-    <div className="bg-white radius-16 p-8 my-8 elevation-5">
-      <Flex justify="between" items="center">
-        <div className="fs-18 bold">Statistiques</div>
-        <Select
-          placeholder="Choisir une phase"
-          onChange={setSelectedStep}
-          values={STEPS_SELECT}
-        />
+    <div className='bg-white radius-16 p-8 my-8 elevation-5'>
+      <Flex justify='between' items='center'>
+        <div className='fs-18 bold'>Statistiques</div>
+        <div style={{ width: '250px' }}>
+          <Select
+            placeholder='Choisir une phase'
+            onChange={setSelectedStep}
+            values={STEPS_SELECT}
+          />
+        </div>
       </Flex>
-      <hr className="my-8" />
+      <hr className='my-8' />
       <Condition cond={selectedStep.id === ExamSteps.candidateFileCollectStep}>
-        <div className="grid grid-cols-3 gap-30">
+        <div className='grid grid-cols-3 gap-30'>
           <StatsFrame
-            description="Total des canditatures reçues"
+            description='Total des canditatures reçues'
             icon={<SvgPersons />}
             value={stats.candidateFileCollectStep.received}
           />
           <StatsFrame
-            description="Canditatures acceptées"
+            description='Canditatures acceptées'
             icon={<SvgPersonsAccepted />}
             value={stats.candidateFileCollectStep.accepted}
           />
           <StatsFrame
-            description="Canditatures rejetées"
+            description='Canditatures rejetées'
             icon={<SvgPersonsRejected />}
             value={stats.candidateFileCollectStep.rejected}
           />
         </div>
       </Condition>
       <Condition cond={selectedStep.id === ExamSteps.sportStep}>
-        <div className="grid grid-cols-4 gap-30">
+        <div className='grid grid-cols-4 gap-30'>
           <StatsFrame
-            description="Présents"
+            description='Présents'
             icon={<SvgPersons />}
             value={stats.sportStep.presents}
           />
           <StatsFrame
-            description="Absents"
+            description='Absents'
             icon={<SvgPersonsRejected />}
             value={stats.sportStep.notPresents}
           />
           <StatsFrame
-            description="Acceptées"
+            description='Acceptées'
             icon={<SvgPersonsAccepted />}
             value={stats.sportStep.accepted}
           />
           <StatsFrame
-            description="Rejetées"
+            description='Rejetées'
             icon={<SvgPersonsRejected />}
             value={stats.sportStep.notAccepted}
           />

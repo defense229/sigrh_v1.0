@@ -20,6 +20,9 @@ export class IPdfDownloadPayload {
 
   @ApiProperty({ required: false, enum: PDFFormat })
   format?: PDFFormat;
+
+  @ApiProperty({ required: false })
+  margin?: any;
 }
 
 export class IXlsxDownloadPayload {

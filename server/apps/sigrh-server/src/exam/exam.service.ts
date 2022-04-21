@@ -50,6 +50,10 @@ export class ExamService extends RepositoryService<Exam> {
     return this.dbParser.parseData(_result);
   }
 
+  async getField(id: string) {
+    return await this.score.getField(id);
+  }
+
   async createRepartition(id: string) {
     await this.centerService.update(id, {
       repartitionStatus: ExamRepartitionStatus.PROCESSING,
@@ -236,8 +240,8 @@ export class ExamService extends RepositoryService<Exam> {
     return null;
   }
 
-  async downloadPdf(data: string) {
-    return await this.report.downloadPdf(data);
+  async downloadPdf(data: string, format: any = {}) {
+    return await this.report.downloadPdf(data, format);
   }
 
   async downloadXlsx(data: Record<string, string>[]) {

@@ -32,6 +32,7 @@ function LoadFields({ reload }: { reload: any }) {
   const cols = useMemo(
     () => [
       { label: 'Libellé', name: 'label' },
+      { label: 'Coefficient', name: 'coefficient' },
       {
         label: '',
         render: (row: any) => {
@@ -40,24 +41,22 @@ function LoadFields({ reload }: { reload: any }) {
               className={
                 (row.id === hovered.id ? 'visible' : 'not-visible') +
                 ' text-right'
-              }
-            >
-              <Flex items="center" justify="end" gap="20px">
+              }>
+              <Flex items='center' justify='end' gap='20px'>
                 <SvgEdit onClick={() => setCurrent(row)} />
                 <Dropdown
                   style={{ width: '200px' }}
                   dropdown={
-                    <Flex direction="col" gap="20px">
+                    <Flex direction='col' gap='20px'>
                       <IconWithLabel
                         onClick={() =>
                           navigate(`/exam/${id}/add-score/${row.id}`)
                         }
                         icon={<SvgPencilCircle />}
-                        label="Saisir les notes"
+                        label='Saisir les notes'
                       />
                     </Flex>
-                  }
-                >
+                  }>
                   <SvgMore />
                 </Dropdown>
               </Flex>
@@ -79,13 +78,13 @@ function LoadFields({ reload }: { reload: any }) {
 
   if (fields.length === 0)
     return (
-      <div className="my-10">
+      <div className='my-10'>
         <EmptyState>Aucune matière trouvée</EmptyState>
       </div>
     );
 
   return (
-    <div className="datatable my-8">
+    <div className='datatable my-8'>
       <Table
         onRemoved={removeItems}
         selection
@@ -96,11 +95,10 @@ function LoadFields({ reload }: { reload: any }) {
 
       <Modal
         open={!!current}
-        title="Modifier le centre d’examen"
+        title='Modifier le centre d’examen'
         onClose={() => {
           setCurrent(null);
-        }}
-      >
+        }}>
         <AddField
           id={current ? current.id : null}
           exam={id ?? ''}
@@ -125,13 +123,13 @@ function FieldsSettings() {
 
   return (
     <div>
-      <div className="text-right">
+      <div className='text-right'>
         <Button onClick={toggle}>Créer une matière</Button>
       </div>
       <Suspense fallback={<ComponentLoading />}>
         <LoadFields reload={reload} />
       </Suspense>
-      <Modal open={open} title="Créer une matière">
+      <Modal open={open} title='Créer une matière'>
         <AddField
           exam={id ?? ''}
           onFinish={() => {
