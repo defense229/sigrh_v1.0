@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { RepositoryService } from '@sigrh/repository';
-import { CandidatDocument } from 'apps/sigrh-server/src/candidat/candidat.schema';
-import { Candidat } from './candidat.dto';
+import { Candidat, CandidatDocument } from './candidat.dto';
 import { Model } from 'mongoose';
 import { DbParserService } from '@sigrh/db-parser';
 import { DepartementService } from '../departement/departement.service';

@@ -11,7 +11,6 @@ import { HandleHttpException } from '../decorators';
 import { RepartitionService } from './repartition/repartition.service';
 import { ScoreService } from '../consumers/score/score.service';
 import { customAlphabet } from 'nanoid';
-import { Field } from 'apps/score-manager/src/field/field.dto';
 import { getDepartementCode, WsEvents } from '../lib';
 import { hash } from 'bcrypt';
 import { QrcodeService } from '../consumers/qrcode/qrcode.service';
@@ -71,7 +70,7 @@ export class ExamService extends RepositoryService<Exam> {
 
     const depCode: number = getDepartementCode(departement);
 
-    const starts = fields.map((field: Field) => {
+    const starts = fields.map((field: any) => {
       return {
         shortName: field.label.slice(0, 3).toUpperCase(),
         startValue: Number(customAlphabet('123456789')(3)),
