@@ -25,7 +25,7 @@ export class QrcodeGeneratorService {
   async createQrcode(payload: IQrcodePayload) {
     try {
       const dataUrl = await this.generateQrcode(payload.data);
-      const data = await hash(payload.data, 10);
+      const data = payload.data;
       return await this.model.create({ ...payload, dataUrl, data });
     } catch (e: any) {
       throw new HttpException(

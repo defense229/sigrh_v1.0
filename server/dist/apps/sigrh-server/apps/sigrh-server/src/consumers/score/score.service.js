@@ -23,6 +23,10 @@ let ScoreService = class ScoreService {
         const response = await this.http.axiosRef.get(this.baseUrl + 'fields/exam/' + exam);
         return response.data;
     }
+    async getField(id) {
+        const response = await this.http.axiosRef.get(this.baseUrl + 'fields/' + id);
+        return response.data;
+    }
     async addField(field) {
         const response = await this.http.axiosRef.post(this.baseUrl + 'fields', field);
         return response.data;
@@ -40,9 +44,11 @@ let ScoreService = class ScoreService {
     }
     async insertScore(score) {
         const response = await this.http.axiosRef.post(this.baseUrl + 'scores', score);
+        console.log('[score:]', score, response.data);
         return response.data;
     }
     async getResults(exam, sort) {
+        console.log(exam, sort);
         const response = await this.http.axiosRef.get(this.baseUrl + 'scores/results/' + exam, {
             params: {
                 sort,
@@ -63,6 +69,12 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ScoreService.prototype, "getFields", null);
+__decorate([
+    (0, decorators_1.HandleHttpException)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ScoreService.prototype, "getField", null);
 __decorate([
     (0, decorators_1.HandleHttpException)(),
     __metadata("design:type", Function),

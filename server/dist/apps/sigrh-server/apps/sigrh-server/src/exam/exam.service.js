@@ -27,7 +27,6 @@ const repartition_service_1 = require("./repartition/repartition.service");
 const score_service_1 = require("../consumers/score/score.service");
 const nanoid_1 = require("nanoid");
 const lib_1 = require("../lib");
-const bcrypt_1 = require("bcrypt");
 const qrcode_service_1 = require("../consumers/qrcode/qrcode.service");
 const websocket_1 = require("../../../../libs/websocket/src");
 const exam_types_1 = require("./exam.types");
@@ -106,7 +105,7 @@ let ExamService = class ExamService extends repository_service_1.RepositoryServi
                 const qrcodes = {};
                 const k = ++i;
                 for (const el of starts) {
-                    const data = await (0, bcrypt_1.hash)(`${candidate.id}-${el.field.id}`, 1);
+                    const data = candidate.id;
                     const tag = `${depCode}${el.shortName}${el.startValue + k}`;
                     const qrcode = (await this.qrcodeService.create({ data, tag }))
                         .dataUrl;
@@ -220,7 +219,20 @@ let ExamService = class ExamService extends repository_service_1.RepositoryServi
         return;
     }
     async getScoreResults(exam, sort = 'DSC') {
-        return await this.score.getResults(exam, sort);
+        const results = await this.score.getResults(exam, sort);
+        console.log(results);
+        const result = [];
+        for (const score of results) {
+            if (score.scores[0]) {
+                const candidateId = await this.qrcodeService.verify(score.scores[0].candidate);
+                const candidate = await this.candidatService.one(candidateId);
+                result.push(Object.assign(Object.assign({}, score), { candidate }));
+            }
+            else {
+                result.push(Object.assign({}, score));
+            }
+        }
+        return result;
     }
     async countInsertedScores(exam, field) {
         return await this.score.countInsertedScores(exam, field);

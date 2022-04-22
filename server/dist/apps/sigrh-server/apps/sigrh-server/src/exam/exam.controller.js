@@ -23,6 +23,7 @@ const exam_dto_1 = require("./exam.dto");
 const exam_service_1 = require("./exam.service");
 const gen_dep_array_1 = require("./templates/gen-dep-array");
 const list_1 = require("./templates/list");
+const list_des_1 = require("./templates/list_des");
 class ExamQuery {
 }
 __decorate([
@@ -81,10 +82,37 @@ let ExamController = class ExamController {
     }
     async downloadXlsx(exam, departement, res) {
         const data = await this.examService.getRepartition(exam, departement);
-        console.log(data);
         const payload = (0, gen_dep_array_1.genDepObject)(data);
         const buffer = await this.examService.downloadXlsx(payload);
         const path = (0, path_1.join)((0, os_1.tmpdir)(), `repartition_${departement}.xlsx`);
+        (0, fs_1.writeFileSync)(path, Buffer.from(buffer.data));
+        res.download(path);
+    }
+    async downloadList(exam, departement, field, center, room, res) {
+        const data = await this.examService.getRepartition(exam, departement);
+        const result = data[center][Number(room)];
+        const field_ = await this.examService.getField(field);
+        console.log(field_);
+        const html = (0, list_des_1.getPdfListDes)(result, { departement, center, room }, field_);
+        const buffer = await this.examService.downloadPdf(html);
+        const path = (0, path_1.join)((0, os_1.tmpdir)(), `list_${departement}_${center}_salle_${room + 1}_${field_.label}.pdf`);
+        (0, fs_1.writeFileSync)(path, Buffer.from(buffer.data));
+        res.download(path);
+    }
+    async downloadCodes(exam, departement, field, center, room, res) {
+        const data = await this.examService.getRepartition(exam, departement);
+        const result = data[center][Number(room)];
+        const html = (0, list_des_1.getPdfCodes)(result, field);
+        const field_ = await this.examService.getField(field);
+        const buffer = await this.examService.downloadPdf(html, {
+            margin: {
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+            },
+        });
+        const path = (0, path_1.join)((0, os_1.tmpdir)(), `qrcodes_${departement}_${center}_salle_${room + 1}_${field_.label}.pdf`);
         (0, fs_1.writeFileSync)(path, Buffer.from(buffer.data));
         res.download(path);
     }
@@ -94,6 +122,10 @@ let ExamController = class ExamController {
     }
     async countScores(exam, field) {
         return await this.examService.countInsertedScores(exam, field);
+    }
+    async getResults(exam) {
+        console.log(exam);
+        return await this.examService.getScoreResults(exam, 'DSC');
     }
 };
 __decorate([
@@ -181,6 +213,30 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ExamController.prototype, "downloadXlsx", null);
 __decorate([
+    (0, common_1.Get)('download-repartition/list/:exam/:departement/:field/:center/:room'),
+    __param(0, (0, common_1.Param)('exam')),
+    __param(1, (0, common_1.Param)('departement')),
+    __param(2, (0, common_1.Param)('field')),
+    __param(3, (0, common_1.Param)('center')),
+    __param(4, (0, common_1.Param)('room')),
+    __param(5, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String, String, String, Object]),
+    __metadata("design:returntype", Promise)
+], ExamController.prototype, "downloadList", null);
+__decorate([
+    (0, common_1.Get)('download-repartition/code/:exam/:departement/:field/:center/:room'),
+    __param(0, (0, common_1.Param)('exam')),
+    __param(1, (0, common_1.Param)('departement')),
+    __param(2, (0, common_1.Param)('field')),
+    __param(3, (0, common_1.Param)('center')),
+    __param(4, (0, common_1.Param)('room')),
+    __param(5, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String, String, String, Object]),
+    __metadata("design:returntype", Promise)
+], ExamController.prototype, "downloadCodes", null);
+__decorate([
     (0, common_1.Post)('add-score'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -195,6 +251,13 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], ExamController.prototype, "countScores", null);
+__decorate([
+    (0, common_1.Get)('results/:exam'),
+    __param(0, (0, common_1.Param)('exam')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ExamController.prototype, "getResults", null);
 ExamController = __decorate([
     (0, swagger_1.ApiTags)('EXAMS'),
     (0, common_1.Controller)('exams'),

@@ -18,7 +18,7 @@ export class ScoreService {
   }
 
   @HandleHttpException()
-  async getField(id: string) {
+  async getField(id: string): Promise<any> {
     const response = await this.http.axiosRef.get(
       this.baseUrl + 'fields/' + id,
     );
@@ -58,11 +58,13 @@ export class ScoreService {
       this.baseUrl + 'scores',
       score,
     );
+    console.log('[score:]', score, response.data);
     return response.data;
   }
 
   @HandleHttpException()
   async getResults(exam: string, sort: 'ASC' | 'DSC') {
+    console.log(exam, sort);
     const response = await this.http.axiosRef.get(
       this.baseUrl + 'scores/results/' + exam,
       {

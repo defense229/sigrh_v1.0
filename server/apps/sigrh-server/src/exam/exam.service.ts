@@ -130,7 +130,7 @@ export class ExamService extends RepositoryService<Exam> {
           const qrcodes = {};
           const k = ++i;
           for (const el of starts) {
-            const data = await hash(`${candidate.id}-${el.field.id}`, 1);
+            const data = candidate.id;
             const tag = `${depCode}${el.shortName}${el.startValue + k}`;
             const qrcode = (await this.qrcodeService.create({ data, tag }))
               .dataUrl;
@@ -275,7 +275,23 @@ export class ExamService extends RepositoryService<Exam> {
   }
 
   async getScoreResults(exam: string, sort: 'ASC' | 'DSC' = 'DSC') {
-    return await this.score.getResults(exam, sort);
+    const results = await this.score.getResults(exam, sort);
+    console.log(results);
+    const result = [];
+
+    for (const score of results) {
+      if (score.scores[0]) {
+        const candidateId = await this.qrcodeService.verify(
+          score.scores[0].candidate,
+        );
+        const candidate = await this.candidatService.one(candidateId);
+        result.push({ ...score, candidate });
+      } else {
+        result.push({ ...score });
+      }
+    }
+
+    return result;
   }
 
   async countInsertedScores(exam: string, field: string) {

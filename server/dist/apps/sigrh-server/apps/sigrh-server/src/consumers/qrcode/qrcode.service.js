@@ -23,6 +23,15 @@ let QrcodeService = class QrcodeService {
         const response = await this.http.axiosRef.post(this.baseUrl, qrcode);
         return response.data;
     }
+    async verify(qrcodeValue) {
+        try {
+            const response = await this.http.axiosRef.get(this.baseUrl + qrcodeValue);
+            return response.data.data;
+        }
+        catch (error) {
+            return null;
+        }
+    }
 };
 __decorate([
     (0, decorators_1.HandleHttpException)(),

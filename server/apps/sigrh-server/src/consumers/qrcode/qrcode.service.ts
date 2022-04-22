@@ -22,12 +22,12 @@ export class QrcodeService {
     return response.data;
   }
 
-  // async verify(qrcodeValue: string): Promise<string | null> {
-  //   try {
-  //     const response = await this.http.axiosRef.get(this.baseUrl + qrcodeValue);
-  //     return response.data.id;
-  //   } catch (error) {
-  //     return null;
-  //   }
-  // }
+  async verify(qrcodeValue: string): Promise<string | null> {
+    try {
+      const response = await this.http.axiosRef.get(this.baseUrl + qrcodeValue);
+      return response.data.data;
+    } catch (error) {
+      return null;
+    }
+  }
 }

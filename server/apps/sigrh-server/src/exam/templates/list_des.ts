@@ -1,4 +1,4 @@
-import { genCodeArray, genDepArray, genListArray } from './gen-dep-array';
+import { genCodeArray, genListArray } from './gen-dep-array';
 
 export const getPdfListDes = (
   data: any,

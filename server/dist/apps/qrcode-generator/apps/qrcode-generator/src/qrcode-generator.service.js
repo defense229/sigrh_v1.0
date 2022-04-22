@@ -18,7 +18,6 @@ const mongoose_1 = require("@nestjs/mongoose");
 const qrcode_generator_dto_1 = require("./qrcode-generator.dto");
 const mongoose_2 = require("mongoose");
 const QRCode = require("qrcode");
-const bcrypt_1 = require("bcrypt");
 let QrcodeGeneratorService = class QrcodeGeneratorService {
     constructor(model) {
         this.model = model;
@@ -35,7 +34,7 @@ let QrcodeGeneratorService = class QrcodeGeneratorService {
     async createQrcode(payload) {
         try {
             const dataUrl = await this.generateQrcode(payload.data);
-            const data = await (0, bcrypt_1.hash)(payload.data, 10);
+            const data = payload.data;
             return await this.model.create(Object.assign(Object.assign({}, payload), { dataUrl, data }));
         }
         catch (e) {

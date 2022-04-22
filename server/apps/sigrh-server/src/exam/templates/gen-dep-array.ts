@@ -63,7 +63,7 @@ export function genListArray(data: any, field: string) {
   return str;
 }
 
-export function genCodeArray(data: any, field: string) {
+export function genCodeArray(data: any, field: string): string {
   let str = ``;
   for (let i = 0; i < data.length; i++) {
     str += `<div>

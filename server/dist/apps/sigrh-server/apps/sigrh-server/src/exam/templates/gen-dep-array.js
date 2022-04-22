@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.genDepObject = exports.genDepArray = void 0;
+exports.genDepObject = exports.genCodeArray = exports.genListArray = exports.genDepArray = void 0;
 function genDepArray(data) {
     let str = '';
     for (const key in data) {
@@ -38,6 +38,41 @@ function genDepArray(data) {
     return str;
 }
 exports.genDepArray = genDepArray;
+function genListArray(data, field) {
+    let str = `<table>
+    <thead>
+    <tr>
+        <th>N°</th>
+        <th>Numéro de table</th>
+        <th>Tag qrcode</th>
+    </tr>
+    </thead>
+    <tbody>`;
+    for (let i = 0; i < data.length; i++) {
+        str += `<tr>
+        <td>${i + 1}</td>
+        <td>
+        ${data[i].numero}
+        </td>
+        <td>${data[i].qrcodes[field].tag}</td>
+    </tr>`;
+    }
+    str += `</tbody>
+    </table>`;
+    return str;
+}
+exports.genListArray = genListArray;
+function genCodeArray(data, field) {
+    let str = ``;
+    for (let i = 0; i < data.length; i++) {
+        str += `<div>
+      <img src="${data[i].qrcodes[field].qrcode}" />
+      <div>${data[i].qrcodes[field].tag}</div>
+    </div>`;
+    }
+    return str;
+}
+exports.genCodeArray = genCodeArray;
 function genDepObject(data) {
     let result = [];
     for (const key in data) {

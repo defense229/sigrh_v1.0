@@ -36,6 +36,10 @@ __decorate([
     (0, swagger_1.ApiProperty)({ required: false, enum: PDFFormat }),
     __metadata("design:type", String)
 ], IPdfDownloadPayload.prototype, "format", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    __metadata("design:type", Object)
+], IPdfDownloadPayload.prototype, "margin", void 0);
 exports.IPdfDownloadPayload = IPdfDownloadPayload;
 class IXlsxDownloadPayload {
 }

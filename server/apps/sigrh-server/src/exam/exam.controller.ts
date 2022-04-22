@@ -187,4 +187,10 @@ export class ExamController {
   ) {
     return await this.examService.countInsertedScores(exam, field);
   }
+
+  @Get('results/:exam')
+  async getResults(@Param('exam') exam: string) {
+    console.log(exam);
+    return await this.examService.getScoreResults(exam, 'DSC');
+  }
 }
