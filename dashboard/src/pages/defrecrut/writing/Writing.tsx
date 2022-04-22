@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Select from '../../../components/Dropdowns/Select';
 import Flex from '../../../components/Utils/Flex/Flex';
 import { config } from '../../../env';
@@ -17,6 +17,26 @@ function Writing() {
   const [loadingField, fields] = useFetch({
     url: config.api_url.sigrh + 'fields/' + id,
   });
+  const [scores, setScores] = useState<any[]>([]);
+  const scoresCopie = useRef<any[]>([]);
+
+  useEffect(() => {
+    setScores(result ? [...result] : []);
+    scoresCopie.current = result ? [...result] : [];
+  }, [result]);
+
+  const handleChange = (value: any) => {
+    if (value.id === '*') {
+      setScores([...scoresCopie.current]);
+    } else {
+      setScores([
+        ...scoresCopie.current.filter((score: any) => {
+          console.log(score.candidate.departement, value.label);
+          return score.candidate.departement === value.label;
+        }),
+      ]);
+    }
+  };
 
   if (loadingDep || loadingRes || loadingField) return <ComponentLoading />;
 
@@ -28,6 +48,7 @@ function Writing() {
           <Select
             display='label'
             placeholder='Tous les départements'
+            onChange={(value: any) => handleChange(value)}
             values={[
               ...departements,
               { label: 'Tous les départements', id: '*' },
@@ -51,7 +72,7 @@ function Writing() {
             </tr>
           </thead>
           <tbody>
-            {result.map((score: any, index: number) => {
+            {scores.map((score: any, index: number) => {
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>
