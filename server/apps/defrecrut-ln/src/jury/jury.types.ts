@@ -9,4 +9,10 @@ export interface IMember {
   departement?: string;
   jury?: string;
   exam?: string;
+  role?: JuryMemberRole;
+}
+
+export enum JuryMemberRole {
+  MEMBER = 'MEMBER',
+  PRESIDENT = 'PRESIDENT',
 }

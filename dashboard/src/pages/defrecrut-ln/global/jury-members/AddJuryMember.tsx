@@ -29,6 +29,7 @@ function AddJuryMember({
         jury: '',
         exam,
         departement: '',
+        role: '',
       };
     return member;
   });
@@ -65,6 +66,7 @@ function AddJuryMember({
       jury: '',
       exam,
       departement: '',
+      role: '',
     });
 
     onFinish();
@@ -74,32 +76,46 @@ function AddJuryMember({
 
   return (
     <form onSubmit={handleSubmit}>
-      <Flex direction="col" gap="15px">
-        <Input
-          label="Identifiant"
-          value={member_.username}
-          name="username"
-          required
-          onChange={handleChange}
-        />
-        <Password
-          label="Mot de passe"
-          value={member_.password}
-          name="password"
-          required
-          onChange={handleChange}
-        />
+      <Flex direction='col' gap='15px'>
+        <div className='grid grid-cols-2 gap-20'>
+          <Input
+            label='Identifiant'
+            value={member_.username}
+            name='username'
+            required
+            onChange={handleChange}
+          />
+          <Password
+            label='Mot de passe'
+            value={member_.password}
+            name='password'
+            required
+            onChange={handleChange}
+          />
+        </div>
+        <div className='grid grid-cols-2 gap-20'>
+          <Select
+            label='Jury'
+            values={jurys}
+            display='numero'
+            required
+            onChange={(value) => handleSelectChange('jury', value)}
+          />
+          <Select
+            label='Rôle'
+            values={[
+              { id: 'MEMBER', label: 'Membre de jury' },
+              { id: 'PRESIDENT', label: 'Président de jury' },
+            ]}
+            display='label'
+            required
+            onChange={(value) => handleSelectChange('role', value)}
+          />
+        </div>
         <Select
-          label="Jury"
-          values={jurys}
-          display="numero"
-          required
-          onChange={(value) => handleSelectChange('jury', value)}
-        />
-        <Select
-          label="Départements"
+          label='Départements'
           values={departements}
-          display="label"
+          display='label'
           required
           onChange={(value) => handleSelectChange('departement', value)}
         />

@@ -1,9 +1,7 @@
 import axios from 'axios';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { config } from '../../../env';
 import { useParams } from 'react-router-dom';
-import Table from '../../../components/Tables/Table';
-import { join } from 'path';
 import ComponentLoading from '../../../components/Progress/ComponentLoading';
 
 function ResultLn() {
@@ -20,7 +18,7 @@ function ResultLn() {
       setLoading(false);
     };
     cb();
-  });
+  }, [id]);
 
   if (loading) return <ComponentLoading />;
 

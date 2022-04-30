@@ -53,14 +53,18 @@ export class QuestionService extends RepositoryService<Question> {
   }
 
   async getResults(exam: string) {
-    const results = await this.score.getResults(exam, 'DSC');
+    const results = await this.score.getResults(exam, 'DESC');
     const result = [];
 
+    console.log(results);
+
     for (const score of results) {
-      const candidate = await this.candidateService.one(
-        score.scores[0].candidate,
-      );
-      result.push({ ...score, candidate });
+      if (score.scores.length > 0) {
+        const candidate = await this.candidateService.one(
+          score.scores[0].candidate,
+        );
+        result.push({ ...score, candidate });
+      }
     }
 
     return result;

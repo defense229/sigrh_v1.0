@@ -30,8 +30,12 @@ function LoadJuryMembers({ reload }: { reload: any }) {
         label: 'Département',
         render: (row: any) => <div>{row.departement.label}</div>,
       },
+      {
+        label: 'Rôle',
+        name: 'role',
+      },
     ],
-    [hovered.id]
+    []
   );
 
   const removeItems = async (rows: any[]) => {
@@ -44,13 +48,13 @@ function LoadJuryMembers({ reload }: { reload: any }) {
 
   if (members.length === 0)
     return (
-      <div className="my-10">
+      <div className='my-10'>
         <EmptyState>Aucun membre de jury trouvé</EmptyState>
       </div>
     );
 
   return (
-    <div className="datatable my-8">
+    <div className='datatable my-8'>
       <Table
         selection
         onRemoved={removeItems}
@@ -59,7 +63,7 @@ function LoadJuryMembers({ reload }: { reload: any }) {
         {...tableProps}
       />
 
-      <Modal open={!!current} title="Modifier la question">
+      <Modal open={!!current} title='Modifier la question'>
         <AddJuryMember
           id={current ? current.id : null}
           exam={id ?? ''}
@@ -83,14 +87,14 @@ function JuryMembers() {
 
   return (
     <div>
-      <div className="fs-20 bold">Membres de jury</div>
-      <div className="text-right">
+      <div className='fs-20 bold'>Membres de jury</div>
+      <div className='text-right'>
         <Button onClick={toggle}>Ajouter un membre</Button>
       </div>
       <Suspense fallback={<ComponentLoading />}>
         <LoadJuryMembers reload={reload} />
       </Suspense>
-      <Modal open={open} title="Ajouter un membre">
+      <Modal open={open} title='Ajouter un membre'>
         <AddJuryMember
           exam={id ?? ''}
           onFinish={() => {

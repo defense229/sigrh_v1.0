@@ -255,4 +255,11 @@ $positions: (
     box-shadow: inset 0px -4px 0px $primary;
     font-weight: 600;
   }
+
+  .tab-item {
+    max-width: 250px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 }

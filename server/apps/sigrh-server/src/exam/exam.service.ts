@@ -59,6 +59,7 @@ export class ExamService extends RepositoryService<Exam> {
     });
     const center = await this.centerService.one(id);
     const fields = await this.scoreService.getFields(center.exam);
+    console.log(fields, center);
     if (!fields || fields.length === 0) {
       return new HttpException(
         {
@@ -274,7 +275,8 @@ export class ExamService extends RepositoryService<Exam> {
     return;
   }
 
-  async getScoreResults(exam: string, sort: 'ASC' | 'DSC' = 'DSC') {
+  async getScoreResults(exam: string, sort: 'ASC' | 'DESC' = 'DESC') {
+    console.log('sort', sort);
     const results = await this.score.getResults(exam, sort);
     console.log(results);
     const result = [];
@@ -300,7 +302,7 @@ export class ExamService extends RepositoryService<Exam> {
 
   async simulate(
     exam: string,
-    sort: 'ASC' | 'DSC' = 'DSC',
+    sort: 'ASC' | 'DESC' = 'DESC',
     payload: ISimulationPayload,
   ) {
     const results = this.getScoreResults(exam, sort);

@@ -63,7 +63,7 @@ export class ScoreService {
   }
 
   @HandleHttpException()
-  async getResults(exam: string, sort: 'ASC' | 'DSC') {
+  async getResults(exam: string, sort: 'ASC' | 'DESC') {
     console.log(exam, sort);
     const response = await this.http.axiosRef.get(
       this.baseUrl + 'scores/results/' + exam,

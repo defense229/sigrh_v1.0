@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { IJury, IMember } from './jury.types';
+import { IJury, IMember, JuryMemberRole } from './jury.types';
 import mongoose, { Document } from 'mongoose';
 
 @Schema()
@@ -38,6 +38,10 @@ export class Member implements IMember {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Departement' })
   @ApiProperty()
   departement?: string;
+
+  @Prop({ enum: JuryMemberRole })
+  @ApiProperty({ enum: JuryMemberRole })
+  role?: JuryMemberRole;
 
   @Prop({ default: true })
   enabled: boolean;

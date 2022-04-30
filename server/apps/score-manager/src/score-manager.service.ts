@@ -59,7 +59,7 @@ export class ScoreManagerService {
     return {
       scores: _computed,
       ...sums,
-      mean: Math.round((sums.sum / sums.coefSum) * 100) / 100,
+      mean: (Math.round((sums.sum / sums.coefSum) * 100) / 100).toFixed(2),
     };
   }
 
@@ -77,10 +77,21 @@ export class ScoreManagerService {
     const promises = candidates.map((candidate) =>
       this.getCandidateScore(exam, candidate),
     );
-    const scores = await Promise.all(promises);
-    if (!sorted) return scores;
-    if (sorted && !reverse) return scores.sort((a, b) => a.sum - b.sum);
-    if (sorted && reverse) return scores.sort((a, b) => -a.sum + b.sum);
+    const scores = (await Promise.all(promises)).filter(
+      (score) => score.sum > 0,
+    );
+    console.log('sorted: ', sorted);
+    console.log('[scores]: ', scores);
+    if (!sorted)
+      return scores.map((score) => ({ ...score, sum: score.sum.toFixed(2) }));
+    if (sorted && !reverse)
+      return scores
+        .sort((a, b) => a.sum - b.sum)
+        .map((score) => ({ ...score, sum: score.sum.toFixed(2) }));
+    if (sorted && reverse)
+      return scores
+        .sort((a, b) => -a.sum + b.sum)
+        .map((score) => ({ ...score, sum: score.sum.toFixed(2) }));
   }
 
   async save(payload: Score) {
