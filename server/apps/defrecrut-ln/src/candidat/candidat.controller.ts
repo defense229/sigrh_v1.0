@@ -68,4 +68,9 @@ export class CandidatController {
     await Promise.all(promises);
     return { statusCode: HttpStatus.OK };
   }
+
+  @Get('jury/:jury')
+  async getJuryCandidates(@Param('jury') jury: string) {
+    return await this.candidatService.countJuryCandidates(jury);
+  }
 }

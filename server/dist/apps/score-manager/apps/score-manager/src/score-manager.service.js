@@ -76,17 +76,15 @@ let ScoreManagerService = class ScoreManagerService {
         const candidates = await this.getAllCandidates();
         const promises = candidates.map((candidate) => this.getCandidateScore(exam, candidate));
         const scores = (await Promise.all(promises)).filter((score) => score.sum > 0);
-        console.log('sorted: ', sorted);
-        console.log('[scores]: ', scores);
         if (!sorted)
             return scores.map((score) => (Object.assign(Object.assign({}, score), { sum: score.sum.toFixed(2) })));
         if (sorted && !reverse)
             return scores
-                .sort((a, b) => a.sum - b.sum)
+                .sort((a, b) => Number(a.mean) - Number(b.mean))
                 .map((score) => (Object.assign(Object.assign({}, score), { sum: score.sum.toFixed(2) })));
         if (sorted && reverse)
             return scores
-                .sort((a, b) => -a.sum + b.sum)
+                .sort((a, b) => -Number(a.mean) + Number(b.mean))
                 .map((score) => (Object.assign(Object.assign({}, score), { sum: score.sum.toFixed(2) })));
     }
     async save(payload) {

@@ -7,6 +7,8 @@ import { DbParserService } from '@sigrh/db-parser';
 import { ScoreService } from '../consumers/score/score.service';
 import { ScorePayload } from '../consumers/score/score.types';
 import { CandidatService } from '../candidat/candidat.service';
+import { WsGateway } from '@sigrh/websocket';
+import { WsEvents } from '../utils';
 
 @Injectable()
 export class QuestionService extends RepositoryService<Question> {
@@ -16,6 +18,7 @@ export class QuestionService extends RepositoryService<Question> {
     protected readonly dbParser: DbParserService,
     private readonly score: ScoreService,
     private readonly candidateService: CandidatService,
+    private ws: WsGateway,
   ) {
     super(model, dbParser);
   }
@@ -45,7 +48,20 @@ export class QuestionService extends RepositoryService<Question> {
   }
 
   async createScore(score: ScorePayload) {
-    return await this.score.insertScore(score);
+    const r = await this.score.insertScore(score);
+    const candidateScore = await this.score.getCandidateScore(
+      score.exam,
+      score.candidate,
+    );
+
+    this.ws.notify({
+      event: WsEvents.NEW_SCORE_ADDED,
+      cb: () => {
+        return { score, candidateScore };
+      },
+    });
+
+    return r;
   }
 
   async remove(id: string) {
@@ -55,8 +71,6 @@ export class QuestionService extends RepositoryService<Question> {
   async getResults(exam: string) {
     const results = await this.score.getResults(exam, 'DESC');
     const result = [];
-
-    console.log(results);
 
     for (const score of results) {
       if (score.scores.length > 0) {

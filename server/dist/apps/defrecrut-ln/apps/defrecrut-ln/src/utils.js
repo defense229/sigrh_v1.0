@@ -22,5 +22,6 @@ var WsEvents;
     WsEvents["ADD_SCORE"] = "ADD_SCORE";
     WsEvents["CANDIDATE_SELECTED"] = "CANDIDATE_SELECTED";
     WsEvents["CANDIDATE_NUMBERS_SELECTED"] = "CANDIDATE_NUMBERS_SELECTED";
+    WsEvents["NEW_SCORE_ADDED"] = "NEW_SCORE_ADDED";
 })(WsEvents = exports.WsEvents || (exports.WsEvents = {}));
 //# sourceMappingURL=utils.js.map

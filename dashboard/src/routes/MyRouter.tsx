@@ -35,6 +35,7 @@ import Home from '../pages/Home';
 import Login from '../pages/Login';
 import NotFoud from '../pages/NotFoud';
 import ResultLn from '../pages/defrecrut-ln/global/ResultLn';
+import SetttingsLn from '../pages/defrecrut-ln/global/settings/SetttingsLn';
 
 function MyRouter() {
   return (
@@ -77,6 +78,7 @@ function MyRouter() {
         <Route path='candidate' element={<CandidatesLn />} />
         <Route path='question' element={<QuestionsLn />} />
         <Route path='results' element={<ResultLn />} />
+        <Route path='settings' element={<SetttingsLn />} />
       </Route>
       <Route path='*' element={<NotFoud />} />
     </Routes>

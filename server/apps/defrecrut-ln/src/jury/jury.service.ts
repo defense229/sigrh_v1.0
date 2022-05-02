@@ -103,10 +103,15 @@ export class JuryService extends RepositoryService<Jury> {
       return { statusCode: HttpStatus.NOT_FOUND };
     }
 
+    await this.candidatService.update(candidate.id, { jury });
+
     this.ws.notify({
       event: WsEvents.CANDIDATE_SELECTED,
-      cb: () => {
-        return { jury, candidate };
+      cb: async () => {
+        return {
+          jury,
+          candidate: await this.candidatService.findOne({ _id: candidate.id }),
+        };
       },
     });
 

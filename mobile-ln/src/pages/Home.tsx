@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import BottomBar from '../components/Layout/BottomBar/BottomBar';
 import Topbar from '../components/Layout/Topbar/Topbar';
 import ComponentLoading from '../components/Progress/ComponentLoading';
 import Condition from '../components/Utils/Others/Condition';
@@ -20,10 +21,8 @@ function Home() {
 
   if (authLoading) return <ComponentLoading />;
 
-  console.log(current, questions, !!current && questions.length === 0);
-
   return (
-    <div>
+    <div className='bg-light h-full relative'>
       <Topbar user={user as IUser} />
       <Condition cond={!current}>
         <CandidatNumber user={user} setCurrent={setCurrent} />
@@ -43,6 +42,7 @@ function Home() {
           user={user}
         />
       </Condition>
+      <BottomBar />
     </div>
   );
 }

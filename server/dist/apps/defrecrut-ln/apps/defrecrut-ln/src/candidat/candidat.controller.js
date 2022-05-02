@@ -60,6 +60,9 @@ let CandidatController = class CandidatController {
         await Promise.all(promises);
         return { statusCode: common_1.HttpStatus.OK };
     }
+    async getJuryCandidates(jury) {
+        return await this.candidatService.countJuryCandidates(jury);
+    }
 };
 __decorate([
     (0, common_1.Get)(':exam'),
@@ -91,6 +94,13 @@ __decorate([
     __metadata("design:paramtypes", [Array]),
     __metadata("design:returntype", Promise)
 ], CandidatController.prototype, "archiveMany", null);
+__decorate([
+    (0, common_1.Get)('jury/:jury'),
+    __param(0, (0, common_1.Param)('jury')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], CandidatController.prototype, "getJuryCandidates", null);
 CandidatController = __decorate([
     (0, common_1.Controller)('candidats'),
     (0, swagger_1.ApiTags)('Candidats'),

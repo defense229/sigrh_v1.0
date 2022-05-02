@@ -8,4 +8,5 @@ export interface ICandidat {
   numero?: string;
   departement?: string;
   exam?: string;
+  jury?: string;
 }

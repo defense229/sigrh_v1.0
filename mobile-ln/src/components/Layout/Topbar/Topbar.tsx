@@ -5,7 +5,8 @@ import { logout } from '../../../services/libs';
 import { IUser } from '../../../services/types/login.types';
 import Button from '../../Buttons/Button';
 import Dropdown from '../../Dropdowns/Dropdown';
-import SvgArrowDown from '../../Svgs/SvgArrowDown';
+import SvgChevronDown from '../../Svgs/SvgChevronDown';
+import SvgUserCircle from '../../Svgs/SvgUserCircle';
 import Flex from '../../Utils/Flex/Flex';
 
 function Topbar({ user }: { user: IUser }) {
@@ -18,29 +19,28 @@ function Topbar({ user }: { user: IUser }) {
 
   return (
     <Flex
-      className="bg-primary px-16"
-      justify="between"
-      items="center"
-      style={{ height: '60px' }}
-    >
-      <img height="32" src={logo} alt="LOGO" />
-      <div>
+      className='bg-primary px-16'
+      justify='between'
+      items='center'
+      style={{ height: '60px' }}>
+      <img height='32' src={logo} alt='LOGO' />
+      <Flex gap='15px'>
+        <SvgUserCircle />
         <Dropdown
           dropdown={
             <Button onClick={_logout} outlined>
               Déconnexion
             </Button>
-          }
-        >
-          <Flex items="center" gap="20px" className="cursor-pointer">
+          }>
+          <Flex items='center' gap='10px' className='cursor-pointer'>
             <div>
-              <div className="fs-16 text-white bold">{user.username}</div>
-              <div className="fs-12 text-white">{user.role}</div>
+              <div className='fs-16 text-white bold'>{user.username}</div>
+              <div className='fs-12 text-white'>{user.role}</div>
             </div>
-            <SvgArrowDown />
+            <SvgChevronDown />
           </Flex>
         </Dropdown>
-      </div>
+      </Flex>
     </Flex>
   );
 }

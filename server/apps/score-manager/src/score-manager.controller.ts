@@ -25,7 +25,7 @@ export class ScoreManagerController {
     );
   }
 
-  @Get('/:exam/:candidate')
+  @Get('results/:exam/:candidate')
   async examsNotesForCandidate(
     @Param('exam') exam: string,
     @Param('candidate') candidate: string,

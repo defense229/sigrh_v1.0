@@ -17,6 +17,7 @@ const db_parser_1 = require("../../../../libs/db-parser/src");
 const score_service_1 = require("../consumers/score/score.service");
 const axios_1 = require("@nestjs/axios");
 const candidat_module_1 = require("../candidat/candidat.module");
+const websocket_1 = require("../../../../libs/websocket/src");
 let QuestionModule = class QuestionModule {
 };
 QuestionModule = __decorate([
@@ -29,6 +30,7 @@ QuestionModule = __decorate([
             db_parser_1.DbParserModule,
             axios_1.HttpModule,
             candidat_module_1.CandidatModule,
+            websocket_1.WebsocketModule,
         ],
         controllers: [question_controller_1.QuestionController],
         providers: [question_service_1.QuestionService, score_service_1.ScoreService],

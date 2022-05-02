@@ -8,6 +8,7 @@ import { DbParserModule } from '@sigrh/db-parser';
 import { ScoreService } from '../consumers/score/score.service';
 import { HttpModule } from '@nestjs/axios';
 import { CandidatModule } from '../candidat/candidat.module';
+import { WebsocketModule } from '@sigrh/websocket';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CandidatModule } from '../candidat/candidat.module';
     DbParserModule,
     HttpModule,
     CandidatModule,
+    WebsocketModule,
   ],
   controllers: [QuestionController],
   providers: [QuestionService, ScoreService],

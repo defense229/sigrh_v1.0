@@ -55,9 +55,11 @@ let ScoreService = class ScoreService {
         return response.data;
     }
     async countInsertedScores(exam, field = 'ALL') {
-        console.log(exam);
         const response = await this.http.axiosRef.get(this.baseUrl + 'scores/count-scores/exam/' + exam + '?field=' + field);
-        console.log(response.data);
+        return response.data;
+    }
+    async getCandidateScore(exam, candidate) {
+        const response = await this.http.axiosRef.get(this.baseUrl + 'scores/results/' + exam + '/' + candidate);
         return response.data;
     }
 };
@@ -109,6 +111,12 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], ScoreService.prototype, "countInsertedScores", null);
+__decorate([
+    (0, decorators_1.HandleHttpException)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], ScoreService.prototype, "getCandidateScore", null);
 ScoreService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [axios_1.HttpService])

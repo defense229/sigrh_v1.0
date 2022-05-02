@@ -63,6 +63,11 @@ __decorate([
     (0, mongoose_1.Prop)({ default: true }),
     __metadata("design:type", Boolean)
 ], Candidat.prototype, "enabled", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'Jury' }),
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], Candidat.prototype, "jury", void 0);
 Candidat = __decorate([
     (0, mongoose_1.Schema)({
         timestamps: true,

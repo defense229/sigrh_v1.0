@@ -29,5 +29,5 @@ export function useFetch<T>(options: IFetch) {
       });
   }, [options.url, options.headers, options.params]);
 
-  return [loading, data, error];
+  return [loading, data, error, setData];
 }

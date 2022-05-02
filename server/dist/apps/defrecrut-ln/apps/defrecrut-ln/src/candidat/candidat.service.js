@@ -31,6 +31,9 @@ let CandidatService = class CandidatService extends repository_1.RepositoryServi
     async getDepartement(exam, label) {
         return await this.departement.findOne({ exam, label });
     }
+    async countJuryCandidates(jury) {
+        return await this.model.countDocuments({ jury });
+    }
 };
 CandidatService = __decorate([
     (0, common_1.Injectable)(),

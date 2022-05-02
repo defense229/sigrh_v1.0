@@ -5,6 +5,8 @@ import Input from '../components/Inputs/Input';
 import Toast from '../components/Modals/Toast';
 import ComponentLoading from '../components/Progress/ComponentLoading';
 import { config } from '../env';
+import { UserRoles } from '../services/types/user.types';
+import CandidatResult from './CandidatResult';
 
 type Props = {
   questions: any[];
@@ -19,6 +21,7 @@ function EnterScore({ questions, onFinish, candidate, user }: Props) {
   const [score, setScore] = useState('');
   const [loading, setLoading] = useState(false);
 
+  console.log(user.jury);
   const handleNext = async () => {
     const q = questions[index - 1];
     setLoading(true);
@@ -27,19 +30,19 @@ function EnterScore({ questions, onFinish, candidate, user }: Props) {
       field: q.id,
       candidate: candidate.id,
       value: Number(score),
-      extras: user.jury,
+      extras: user.id,
     });
     setLoading(false);
     if (index === questions.length) {
       setOpenToast(true);
       setTimeout(() => {
         onFinish();
-      }, 5000);
+      }, 2000);
     }
     setScore('');
     setIndex((index) => index + 1);
   };
-  console.log(index, questions.length);
+
   if (index >= questions.length + 1 || loading) {
     return (
       <div>
@@ -51,26 +54,35 @@ function EnterScore({ questions, onFinish, candidate, user }: Props) {
     );
   }
 
-  return (
-    <div className='my-40 mx-20'>
-      <div className='fs-20 bold text-center'>Question n° {index}</div>
+  if (user.role === UserRoles.PRESIDENT) {
+    return <CandidatResult candidate={candidate} onFinish={onFinish} />;
+  }
 
-      <div className='fs-16 my-4 text-center'>
-        <i>{index <= questions.length ? questions[index - 1].label : ''}</i>
+  return (
+    <div className='my-20 mx-10 bg-white radius-8 p-10'>
+      <div className='fs-18 bold mb-8'>Attribution de notes</div>
+      <hr />
+
+      <div className='fs-18 bold mt-10 mb-4'>
+        Question N° {index}/{questions.length}
+      </div>
+      <div className='fs-16' style={{ fontWeight: '500' }}>
+        {index <= questions.length ? questions[index - 1].label : ''}
       </div>
 
       <div className='my-10 mt-20'>
         <Input
-          label='Saisir la note du candidat'
+          label='Note'
           type='number'
           value={score}
+          placeholder='Saisir la note ici'
           onChange={(e) => setScore(e.target.value)}
         />
       </div>
 
-      <div className='my-10'>
+      <div className='mt-30'>
         <Button expand onClick={handleNext}>
-          Continuer
+          Valider
         </Button>
       </div>
     </div>

@@ -17,6 +17,7 @@ const links: ISidebarLink[] = [
   { label: 'Candidats', path: 'candidate' },
   { label: 'Questions', path: 'question' },
   { label: 'Résultats', path: 'results' },
+  { label: 'Paramètres', path: 'settings' },
 ];
 
 function ExamLnWindow() {

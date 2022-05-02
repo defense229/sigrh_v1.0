@@ -21,4 +21,8 @@ export class CandidatService extends RepositoryService<Candidat> {
   async getDepartement(exam: string, label: string) {
     return await this.departement.findOne({ exam, label });
   }
+
+  async countJuryCandidates(jury: string) {
+    return await this.model.countDocuments({ jury });
+  }
 }

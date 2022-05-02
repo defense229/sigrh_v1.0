@@ -7,6 +7,7 @@ import { QuestionModule } from './question/question.module';
 import { CandidatModule } from './candidat/candidat.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ExamModule } from './exam/exam.module';
+import { DefConfigModule } from './def-config/def-config.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ExamModule } from './exam/exam.module';
     QuestionModule,
     CandidatModule,
     ExamModule,
+    DefConfigModule,
   ],
   controllers: [DefrecrutLnController],
   providers: [DefrecrutLnService],

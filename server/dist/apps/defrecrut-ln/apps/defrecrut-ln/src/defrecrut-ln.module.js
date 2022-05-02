@@ -16,6 +16,7 @@ const question_module_1 = require("./question/question.module");
 const candidat_module_1 = require("./candidat/candidat.module");
 const mongoose_1 = require("@nestjs/mongoose");
 const exam_module_1 = require("./exam/exam.module");
+const def_config_module_1 = require("./def-config/def-config.module");
 let DefrecrutLnModule = class DefrecrutLnModule {
 };
 DefrecrutLnModule = __decorate([
@@ -33,6 +34,7 @@ DefrecrutLnModule = __decorate([
             question_module_1.QuestionModule,
             candidat_module_1.CandidatModule,
             exam_module_1.ExamModule,
+            def_config_module_1.DefConfigModule,
         ],
         controllers: [defrecrut_ln_controller_1.DefrecrutLnController],
         providers: [defrecrut_ln_service_1.DefrecrutLnService],

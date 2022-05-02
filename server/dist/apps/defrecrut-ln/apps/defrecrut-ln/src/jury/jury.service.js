@@ -99,10 +99,14 @@ let JuryService = class JuryService extends repository_1.RepositoryService {
         if (!candidate) {
             return { statusCode: common_1.HttpStatus.NOT_FOUND };
         }
+        await this.candidatService.update(candidate.id, { jury });
         this.ws.notify({
             event: utils_1.WsEvents.CANDIDATE_SELECTED,
-            cb: () => {
-                return { jury, candidate };
+            cb: async () => {
+                return {
+                    jury,
+                    candidate: await this.candidatService.findOne({ _id: candidate.id }),
+                };
             },
         });
         return { statusCode: common_1.HttpStatus.OK };

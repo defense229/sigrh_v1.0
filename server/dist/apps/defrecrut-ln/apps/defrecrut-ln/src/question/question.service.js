@@ -21,13 +21,16 @@ const mongoose_2 = require("mongoose");
 const db_parser_1 = require("../../../../libs/db-parser/src");
 const score_service_1 = require("../consumers/score/score.service");
 const candidat_service_1 = require("../candidat/candidat.service");
+const websocket_1 = require("../../../../libs/websocket/src");
+const utils_1 = require("../utils");
 let QuestionService = class QuestionService extends repository_1.RepositoryService {
-    constructor(model, dbParser, score, candidateService) {
+    constructor(model, dbParser, score, candidateService, ws) {
         super(model, dbParser);
         this.model = model;
         this.dbParser = dbParser;
         this.score = score;
         this.candidateService = candidateService;
+        this.ws = ws;
     }
     async getAll(exam) {
         return await this.score.getFields(exam);
@@ -48,7 +51,15 @@ let QuestionService = class QuestionService extends repository_1.RepositoryServi
         return fields.filter((field, index) => ids.map((id) => Number(id)).includes(index + 1));
     }
     async createScore(score) {
-        return await this.score.insertScore(score);
+        const r = await this.score.insertScore(score);
+        const candidateScore = await this.score.getCandidateScore(score.exam, score.candidate);
+        this.ws.notify({
+            event: utils_1.WsEvents.NEW_SCORE_ADDED,
+            cb: () => {
+                return { score, candidateScore };
+            },
+        });
+        return r;
     }
     async remove(id) {
         return this.score.removeField(id);
@@ -56,7 +67,6 @@ let QuestionService = class QuestionService extends repository_1.RepositoryServi
     async getResults(exam) {
         const results = await this.score.getResults(exam, 'DESC');
         const result = [];
-        console.log(results);
         for (const score of results) {
             if (score.scores.length > 0) {
                 const candidate = await this.candidateService.one(score.scores[0].candidate);
@@ -72,7 +82,8 @@ QuestionService = __decorate([
     __metadata("design:paramtypes", [mongoose_2.Model,
         db_parser_1.DbParserService,
         score_service_1.ScoreService,
-        candidat_service_1.CandidatService])
+        candidat_service_1.CandidatService,
+        websocket_1.WsGateway])
 ], QuestionService);
 exports.QuestionService = QuestionService;
 //# sourceMappingURL=question.service.js.map

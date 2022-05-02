@@ -49,7 +49,7 @@ export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   async notify(data: IWsPayload) {
-    console.log('[websocket-notification]: ', data);
+    console.log('[websocket-notification]: ', data, await data.cb());
     if (data.room) {
       await this.broadcastRoom(data.room, data.event, data.cb);
       return;

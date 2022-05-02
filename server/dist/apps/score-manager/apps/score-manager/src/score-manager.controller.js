@@ -53,7 +53,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ScoreManagerController.prototype, "results", null);
 __decorate([
-    (0, common_1.Get)('/:exam/:candidate'),
+    (0, common_1.Get)('results/:exam/:candidate'),
     __param(0, (0, common_1.Param)('exam')),
     __param(1, (0, common_1.Param)('candidate')),
     __metadata("design:type", Function),

@@ -32,6 +32,7 @@ function ResultLn() {
             <tr>
               <th>Rang</th>
               <th>Nom et prénoms</th>
+              <th>Numéro de table</th>
               <th>Notes</th>
               <th>Total</th>
               <th>Moyenne</th>
@@ -45,9 +46,10 @@ function ResultLn() {
                   <td>
                     {score.candidate.nom} {score.candidate.prenom}
                   </td>
+                  <td>{score.candidate.numero}</td>
                   <td>{score.scores.map((s: any) => s.value).join(' - ')}</td>
                   <td>{score.sum}</td>
-                  <td>{score.mean}</td>
+                  <td className='text-right'>{score.mean}</td>
                 </tr>
               );
             })}
