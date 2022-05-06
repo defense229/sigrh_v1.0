@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.config = exports.mode = void 0;
-exports.mode = 'dev';
+exports.mode = 'prod';
 const _config = {
     dev: {
         api_url: {

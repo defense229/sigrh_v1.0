@@ -30,3 +30,15 @@
   background-color: rgba(8, 90, 3, 0.5);
   background-blend-mode: multiply;
 }
+
+.stats-table {
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  td, th {
+    border: solid;
+    padding: 5px;
+  }
+}
