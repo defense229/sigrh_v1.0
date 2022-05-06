@@ -9,9 +9,11 @@ const _config = {
     db_name: 'defrecrut_test',
   },
   prod: {
-    qrcode_generator: 'https://api-qrcodes.defense.bj/api/v1/qrcodes/',
-    score_manager: 'https://api-scores.defense.bj/api/v1/',
-    report: 'https://api-reports/api/v1/',
+    api_url: {
+      qrcode_generator: 'https://api-qrcodes.defense.bj/api/v1/qrcodes/',
+      score_manager: 'https://api-scores.defense.bj/api/v1/',
+      report: 'https://api-reports/api/v1/'
+    }
   },
 };
 
