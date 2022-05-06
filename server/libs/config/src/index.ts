@@ -13,7 +13,8 @@ const _config = {
       qrcode_generator: 'https://api-qrcodes.defense.bj/api/v1/qrcodes/',
       score_manager: 'https://api-scores.defense.bj/api/v1/',
       report: 'https://api-reports/api/v1/'
-    }
+    }, 
+    db_name: 'defrecrut_test'
   },
 };
 
