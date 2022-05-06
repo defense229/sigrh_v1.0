@@ -1,0 +1,8 @@
+FROM node:alpine
+WORKDIR /usr/app
+COPY package.json .
+RUN yarn
+COPY dist/apps/score-manager .
+EXPOSE 7003
+CMD [ "node", "src/main.js" ]
+

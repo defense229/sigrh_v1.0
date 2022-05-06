@@ -21,6 +21,12 @@
     "prod:report": "nest start report",
     "prod:mail": "nest start mail-push",
     "prod:defln": "nest start defrecrut-ln",
+    "build:core": "nest build",
+    "build:qrcode": "nest build qrcode-generator",
+    "build:score": "nest build score-manager",
+    "build:report": "nest build report",
+    "build:mail": "nest build mail-push",
+    "build:defln": "nest build defrecrut-ln",
     "dev": "npm-run-all --parallel start:*",
     "prod": "chmod +x build.sh && ./build.sh"
   },
