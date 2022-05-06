@@ -1,0 +1,36 @@
+export declare class CandidatDto {
+    demobilise: string;
+    numeroDepotDossier: string;
+    numero: string;
+    accepted: boolean;
+    rejected: boolean;
+    sportPresent: boolean;
+    sportAccept: boolean;
+    motif: string;
+    nom: string;
+    prenom: string;
+    departement: string;
+    dateNaissance: string;
+    lieuNaissance: string;
+    diplomePresente: string;
+    numeroPiece: number;
+    adresse: string;
+    telephone: string;
+    sexe: string;
+    email: string;
+    anneeObtention: string;
+    lieuObtention: string;
+    dateEnregistrement: string;
+    photo: string;
+    acteNaissance: string;
+    certificatNationalite: string;
+    carteIdentite: string;
+    diplome: string;
+    attestationResidence: string;
+    casierJudiciaire: string;
+    certificatPositionMilitaire: string;
+    certificatMedicalAptitudePhysique: string;
+    decAccept: boolean;
+    decRefuse: boolean;
+    exam: string;
+}

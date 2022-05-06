@@ -12,7 +12,12 @@ const _config = {
         db_name: 'defrecrut_test',
     },
     prod: {
-        db_name: 'defrecrut_prod',
+        api_url: {
+            qrcode_generator: 'https://api-qrcodes.defense.bj/api/v1/qrcodes/',
+            score_manager: 'https://api-scores.defense.bj/api/v1/',
+            report: 'https://api-reports/api/v1/',
+        },
+        db_name: 'defrecrut_test',
     },
 };
 exports.config = _config[exports.mode];
