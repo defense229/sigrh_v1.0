@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .text-center {
+        text-align: center;
+      }
+
+      .stats-table table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      td,
+      th {
+        border: solid;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h3 class="text-center">Statistiques de la phase sportive</h3>
+    <div className="stats-table p-10">
+      <table>
+        <thead>
+          <tr>
+            <th rowspan="2">Départements</th>
+            <th colspan="3" class="text-center">Présents</th>
+            <th colspan="3" class="text-center">Absents</th>
+            <th colspan="3" class="text-center">Retenus</th>
+            <th colspan="3" class="text-center">Non retenus</th>
+          </tr>
+          <tr>
+            <th class="text-center">Homme</th>
+            <th class="text-center">Femme</th>
+            <th class="text-center">T</th>
+
+            <th class="text-center">Homme</th>
+            <th class="text-center">Femme</th>
+            <th class="text-center">T</th>
+
+            <th class="text-center">Homme</th>
+            <th class="text-center">Femme</th>
+            <th class="text-center">T</th>
+
+            <th class="text-center">Homme</th>
+            <th class="text-center">Femme</th>
+            <th class="text-center">T</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${statsTop(stats)} ${statsAll(stats)}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

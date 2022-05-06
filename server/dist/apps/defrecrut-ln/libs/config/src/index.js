@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.config = exports.mode = void 0;
-exports.mode = 'prod';
+exports.mode = 'dev';
 const _config = {
     dev: {
         api_url: {
@@ -15,7 +15,7 @@ const _config = {
         api_url: {
             qrcode_generator: 'https://api-qrcodes.defense.bj/api/v1/qrcodes/',
             score_manager: 'https://api-scores.defense.bj/api/v1/',
-            report: 'https://api-reports/api/v1/',
+            report: 'https://api-reports.defense.bj/api/v1/',
         },
         db_name: 'defrecrut_test',
     },

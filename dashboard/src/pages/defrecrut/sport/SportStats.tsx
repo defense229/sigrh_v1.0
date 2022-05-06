@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import Button from '../../../components/Buttons/Button';
 import ComponentLoading from '../../../components/Progress/ComponentLoading';
 import { config } from '../../../env';
 import { useFetch } from '../../../services/hooks/useFetch';
@@ -15,6 +16,18 @@ function SportStats() {
 
   return (
     <div className="stats-table p-10">
+      <div className="text-right mb-10">
+        <Button
+          outlined
+          onClick={() => {
+            window.open(
+              config.api_url.sigrh + 'candidats/download-sport-stats/pdf/' + id,
+              '_blank'
+            );
+          }}>
+          Télécharger
+        </Button>
+      </div>
       <table>
         <thead>
           <tr>

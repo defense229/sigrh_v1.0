@@ -14,6 +14,8 @@ const candidat_service_1 = require("./candidat.service");
 const candidat_controller_1 = require("./candidat.controller");
 const repository_module_1 = require("../repository/repository.module");
 const db_parser_1 = require("../../../../libs/db-parser/src");
+const report_service_1 = require("../consumers/report/report.service");
+const axios_1 = require("@nestjs/axios");
 let CandidatModule = class CandidatModule {
 };
 CandidatModule = __decorate([
@@ -24,8 +26,9 @@ CandidatModule = __decorate([
             ]),
             repository_module_1.RepositoryModule,
             db_parser_1.DbParserModule,
+            axios_1.HttpModule,
         ],
-        providers: [candidat_service_1.CandidatService],
+        providers: [candidat_service_1.CandidatService, report_service_1.ReportService],
         controllers: [candidat_controller_1.CandidatController],
         exports: [candidat_service_1.CandidatService],
     })
