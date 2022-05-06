@@ -1,4 +1,4 @@
-export const mode = 'dev';
+export const mode = 'prod';
 const _config = {
   dev: {
     api_url: {
@@ -9,7 +9,9 @@ const _config = {
     db_name: 'defrecrut_test',
   },
   prod: {
-    db_name: 'defrecrut_prod',
+    qrcode_generator: 'https://api-qrcodes.defense.bj/api/v1/qrcodes/',
+    score_manager: 'https://api-scores.defense.bj/api/v1/',
+    report: 'https://api-reports/api/v1/',
   },
 };
 

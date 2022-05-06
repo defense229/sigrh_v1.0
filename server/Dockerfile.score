@@ -1,8 +1,0 @@
-FROM node:alpine
-WORKDIR /usr/app
-COPY package.json .
-RUN yarn
-COPY . .
-RUN yarn build:score
-CMD [ "yarn", "prod:score" ]
-

@@ -7,15 +7,15 @@ services:
       - "80:3000"
     restart: always
 
-  mail-push:
-    build: ./server
-    container_name: mdn-mail-push
-    command: yarn prod:mail
-    ports:
-      - "3794:7001"
-    restart: always
-    networks:
-      - defrecrut
+  # mail-push:
+  #   build: ./server
+  #   container_name: mdn-mail-push
+  #   command: yarn prod:mail
+  #   ports:
+  #     - "3794:7001"
+  #   restart: always
+  #   networks:
+  #     - defrecrut
 
   qrcode-generator:
     build: ./server
