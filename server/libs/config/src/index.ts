@@ -1,4 +1,4 @@
-export const mode = 'dev';
+export const mode = 'prod';
 const _config = {
   dev: {
     api_url: {
