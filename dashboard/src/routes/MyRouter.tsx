@@ -38,53 +38,55 @@ import ResultLn from '../pages/defrecrut-ln/global/ResultLn';
 import SetttingsLn from '../pages/defrecrut-ln/global/settings/SetttingsLn';
 import FileCollectStats from '../pages/defrecrut/fileCollect/FileCollectStats';
 import SportStats from '../pages/defrecrut/sport/SportStats';
+import Users from '../pages/defrecrut/users/Users';
 
 function MyRouter() {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="home" element={<Home />} />
-      <Route path="exams" element={<Exams />} />
-      <Route path="exam/:id" element={<ExamWindow />}>
+      <Route path='/' element={<Login />} />
+      <Route path='home' element={<Home />} />
+      <Route path='exams' element={<Exams />} />
+      <Route path='exam/:id' element={<ExamWindow />}>
         <Route index element={<GlobalVue />} />
-        <Route path="file-collect" element={<FileCollect />}>
+        <Route path='file-collect' element={<FileCollect />}>
           <Route index element={<CandidatesAll />} />
-          <Route path="accepted" element={<CandidatesAccepted />} />
-          <Route path="rejected" element={<CandidatesRejected />} />
-          <Route path="stats" element={<FileCollectStats />} />
+          <Route path='accepted' element={<CandidatesAccepted />} />
+          <Route path='rejected' element={<CandidatesRejected />} />
+          <Route path='stats' element={<FileCollectStats />} />
         </Route>
-        <Route path="sport" element={<Sport />}>
+        <Route path='sport' element={<Sport />}>
           <Route index element={<CandidatesPresent />} />
-          <Route path="absents" element={<CandidatesAbsent />} />
-          <Route path="accepted" element={<CandidateSportAccept />} />
-          <Route path="rejected" element={<CandidatesSportReject />} />
-          <Route path="stats" element={<SportStats />} />
+          <Route path='absents' element={<CandidatesAbsent />} />
+          <Route path='accepted' element={<CandidateSportAccept />} />
+          <Route path='rejected' element={<CandidatesSportReject />} />
+          <Route path='stats' element={<SportStats />} />
         </Route>
-        <Route path="dec" element={<Dec />} />
-        <Route path="writing" element={<Writing />} />
-        <Route path="health-control" element={<HealthControl />} />
-        <Route path="settings" element={<Settings />}>
+        <Route path='dec' element={<Dec />} />
+        <Route path='writing' element={<Writing />} />
+        <Route path='health-control' element={<HealthControl />} />
+        <Route path='settings' element={<Settings />}>
           <Route index element={<CandidateSettings />} />
-          <Route path="departements" element={<DepartementSettings />} />
-          <Route path="centers" element={<CentersSettings />} />
-          <Route path="fields" element={<FieldsSettings />} />
+          <Route path='departements' element={<DepartementSettings />} />
+          <Route path='centers' element={<CentersSettings />} />
+          <Route path='fields' element={<FieldsSettings />} />
         </Route>
-        <Route path="candidate/:candidateId" element={<CandidateDetails />} />
-        <Route path="add-score/:field" element={<AddScore />} />
-        <Route path="qrcodes/:center" element={<QrCodes />} />
+        <Route path='candidate/:candidateId' element={<CandidateDetails />} />
+        <Route path='add-score/:field' element={<AddScore />} />
+        <Route path='qrcodes/:center' element={<QrCodes />} />
+        <Route path='users' element={<Users />} />
       </Route>
-      <Route path="exams-ln" element={<ExamLn />} />
-      <Route path="exam-ln/:id" element={<ExamLnWindow />}>
+      <Route path='exams-ln' element={<ExamLn />} />
+      <Route path='exam-ln/:id' element={<ExamLnWindow />}>
         <Route index element={<GlobalVueLn />} />
-        <Route path="departement" element={<DepartementsLn />} />
-        <Route path="jury" element={<Jury />} />
-        <Route path="jury-members" element={<JuryMembers />} />
-        <Route path="candidate" element={<CandidatesLn />} />
-        <Route path="question" element={<QuestionsLn />} />
-        <Route path="results" element={<ResultLn />} />
-        <Route path="settings" element={<SetttingsLn />} />
+        <Route path='departement' element={<DepartementsLn />} />
+        <Route path='jury' element={<Jury />} />
+        <Route path='jury-members' element={<JuryMembers />} />
+        <Route path='candidate' element={<CandidatesLn />} />
+        <Route path='question' element={<QuestionsLn />} />
+        <Route path='results' element={<ResultLn />} />
+        <Route path='settings' element={<SetttingsLn />} />
       </Route>
-      <Route path="*" element={<NotFoud />} />
+      <Route path='*' element={<NotFoud />} />
     </Routes>
   );
 }

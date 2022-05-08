@@ -14,19 +14,21 @@ export function useFetch<T>(options: IFetch) {
   const [data, setData] = useState<T>();
 
   useEffect(() => {
-    axios
-      .get(options.url, {
-        params: options.params,
-        headers: options.headers,
-      })
-      .then((response: AxiosResponse) => {
-        setData(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error);
-        setLoading(false);
-      });
+    if (options.url !== '') {
+      axios
+        .get(options.url, {
+          params: options.params,
+          headers: options.headers,
+        })
+        .then((response: AxiosResponse) => {
+          setData(response.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          setError(error);
+          setLoading(false);
+        });
+    }
   }, [options.url, options.headers, options.params]);
 
   return [loading, data, error, setData];

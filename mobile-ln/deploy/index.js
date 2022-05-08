@@ -1,5 +1,3 @@
-const { execFileSync } = require('child_process');
+const { execFile } = require('child_process');
 
-const data = execFileSync('./deploy.sh');
-
-console.log(data);
+execFile('./deploy.sh');

@@ -17,6 +17,7 @@ const links: ISidebarLink[] = [
   { label: 'Phase écrite', path: 'writing' },
   // { label: 'Visite médicale', path: 'health-control' },
   { label: 'Paramètres', path: 'settings' },
+  { label: 'Utilisateurs', path: 'users' },
 ];
 
 function ExamWindow() {
