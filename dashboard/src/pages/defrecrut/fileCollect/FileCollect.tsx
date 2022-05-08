@@ -6,6 +6,7 @@ const candidatesTabs: IRouterTab[] = [
   { title: 'Tous les candidats', url: '' },
   { title: 'Acceptés', url: 'accepted' },
   { title: 'Rejetés', url: 'rejected' },
+  { title: 'Statistiques', url: 'stats' },
 ];
 
 function FileCollect() {

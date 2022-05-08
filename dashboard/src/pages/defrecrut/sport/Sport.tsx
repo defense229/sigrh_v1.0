@@ -7,6 +7,7 @@ const candidatesSportTabs: IRouterTab[] = [
   { title: 'Absents', url: 'absents' },
   { title: 'Acceptés', url: 'accepted' },
   { title: 'Rejetés', url: 'rejected' },
+  { title: 'Statistiques', url: 'stats' },
 ];
 
 function Sport() {

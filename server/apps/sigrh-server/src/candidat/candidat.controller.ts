@@ -1,6 +1,13 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, Res } from '@nestjs/common';
 import { CandidatService } from './candidat.service';
 import { ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
+import { renderFileCollectStats } from './templates/file-collect';
+import { ReportService } from '../consumers/report/report.service';
+import { join } from 'path';
+import { tmpdir } from 'os';
+import { writeFileSync } from 'fs';
+import { Response } from 'express';
+import { renderSportStats } from './templates/sport';
 
 class CandidateQuery {
   @ApiPropertyOptional()
@@ -15,7 +22,10 @@ class CandidateQuery {
 @ApiTags('CANDIDATS')
 @Controller('candidats')
 export class CandidatController {
-  constructor(private readonly candidatService: CandidatService) {}
+  constructor(
+    private readonly candidatService: CandidatService,
+    private report: ReportService,
+  ) {}
 
   @Get()
   async all(@Query() query: CandidateQuery) {
@@ -89,6 +99,19 @@ export class CandidatController {
     return await this.candidatService.getCollectStatsAll(id);
   }
 
+  @Get('download-file-collect-stats/pdf/:id')
+  async downloadFileCollectStats(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ) {
+    const stats = await this.candidatService.getCollectStatsAll(id);
+    const html = renderFileCollectStats(stats);
+    const buffer = await this.report.downloadPdf(html);
+    const path = join(tmpdir(), `stats_phase_dossier.pdf`);
+    writeFileSync(path, Buffer.from(buffer.data));
+    res.download(path);
+  }
+
   @Get('sport-stats/:id')
   async getSportStats(@Param('id') id: string) {
     return await this.candidatService.getSportStats(id);
@@ -97,6 +120,16 @@ export class CandidatController {
   @Get('sport-stats-all/:id')
   async getSportStatsAll(@Param('id') id: string) {
     return await this.candidatService.getSportStatsAll(id);
+  }
+
+  @Get('download-sport-stats/pdf/:id')
+  async downloadSportStats(@Param('id') id: string, @Res() res: Response) {
+    const stats = await this.candidatService.getSportStatsAll(id);
+    const html = renderSportStats(stats);
+    const buffer = await this.report.downloadPdf(html);
+    const path = join(tmpdir(), `stats_phase_sportive.pdf`);
+    writeFileSync(path, Buffer.from(buffer.data));
+    res.download(path);
   }
 
   @Get('dec-stats/:id')

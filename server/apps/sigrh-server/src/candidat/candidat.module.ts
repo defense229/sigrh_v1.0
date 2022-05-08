@@ -5,6 +5,8 @@ import { CandidatService } from './candidat.service';
 import { CandidatController } from './candidat.controller';
 import { RepositoryModule } from '../repository/repository.module';
 import { DbParserModule } from '@sigrh/db-parser';
+import { ReportService } from '../consumers/report/report.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -13,8 +15,9 @@ import { DbParserModule } from '@sigrh/db-parser';
     ]),
     RepositoryModule,
     DbParserModule,
+    HttpModule,
   ],
-  providers: [CandidatService],
+  providers: [CandidatService, ReportService],
   controllers: [CandidatController],
   exports: [CandidatService],
 })
