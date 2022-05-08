@@ -14,11 +14,10 @@ const _config = {
     },
   },
   prod: {
-    db_name: 'defrecrut',
     api_url: {
-      sigrh: 'http://52.23.134.77:7000/api/v2/',
-      defrecrutLn: 'http://52.23.134.77:7006/api/v1/',
-      ws: 'ws://52.23.134.77:7006/',
+      sigrh: 'https://api-defrecrut-core.defense.bj/api/v2/',
+      defrecrutLn: 'https://api-defrecrut-core.defense.bj-special/api/v1/',
+      ws: 'https://api-defrecrut-core.defense-special.bj/',
     },
   },
 };
