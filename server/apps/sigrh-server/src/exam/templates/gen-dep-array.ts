@@ -4,7 +4,9 @@ export function genDepArray(data: any) {
     str += `<h2>${key}</h2>`;
     for (let i = 0; i < data[key].length; i++) {
       str += `<h3>Salle ${i + 1}</h3>`;
-      str += `<table>
+      str += `
+      </div>  
+    <table>
     <thead>
     <tr>
         <th>N°</th>

@@ -101,8 +101,15 @@ export const getPdfListDes = (
 
       td,
       th {
-        padding: 5px;
+        padding: 3px;
         border: solid 1px #aaa;
+        text-align: center;
+      }
+
+      .super-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        line-height: 1.4;
       }
     </style>
   </head>
@@ -131,7 +138,7 @@ export const getPdfListDes = (
       <div class="text-right line-2">
         <div>01 BP 772 Cotonou</div>
         <div>Tél: 00229 21 30 02 58</div>
-        <div>etat-majorgeneral_fab.yahoo.fr</div>
+        <div>dopa_admin@defense.bj</div>
       </div>
     </div>
     <div>
@@ -141,15 +148,16 @@ export const getPdfListDes = (
         DIRECTION DE L'ORGANISATION ET DU PERSONNEL DES ARMÉES
       </div>
       <hr />
+      <br />
     </div>
     <div>
-      <br />
-      <div class="maroon huge bold">
+      <div class="maroon huge bold text-center">
         Concours de recrutement militaire au titre de l'année 2022
       </div>
+      <br />
     </div>
 
-    <div style="display: flex, gap: 20px;">
+    <div class="super-grid">
       <div><b>Département: </b> ${params.departement}</div>
       <div><b>Centre: </b> ${params.center}</div>
       <div><b>Salle: </b> ${Number(params.room) + 1}</div>
@@ -181,11 +189,11 @@ export const getPdfCodes = (data: any, field: string) => `<!DOCTYPE html>
         }
 
         body > div {
-            height: 29.7mm;
+            height: 30mm;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 5px;
+            gap: 2px;
             flex-direction: column;
         }
 

@@ -100,6 +100,11 @@ export const getPdfList = (data: any) => `<!DOCTYPE html>
         padding: 5px;
         border: solid 1px #aaa;
       }
+
+      .super-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
     </style>
   </head>
   <body>
@@ -127,7 +132,7 @@ export const getPdfList = (data: any) => `<!DOCTYPE html>
       <div class="text-right line-2">
         <div>01 BP 772 Cotonou</div>
         <div>Tél: 00229 21 30 02 58</div>
-        <div>etat-majorgeneral_fab.yahoo.fr</div>
+        <div>dopa_admin@defense.bj</div>
       </div>
     </div>
     <div>
@@ -140,16 +145,17 @@ export const getPdfList = (data: any) => `<!DOCTYPE html>
     </div>
     <div>
       <br /><br />
-      <div class="maroon huge bold">
+      <div class="maroon huge bold text-center">
         Concours de recrutement militaire au titre de l'année 2022
       </div>
     </div>
 
     <br />
     <h2 class="text-center">Liste des candidats</h2>
-    <div>Département: <b>Atlantique</b></div>
+    <div class="super-grid">
+      <div>Département: <b>Atlantique</b></div>
 
-    ${genDepArray(data)}
+      ${genDepArray(data)}
     
   </body>
 </html>

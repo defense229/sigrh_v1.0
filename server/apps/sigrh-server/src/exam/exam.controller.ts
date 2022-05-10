@@ -134,12 +134,14 @@ export class ExamController {
     const data = await this.examService.getRepartition(exam, departement);
     const result = data[center][Number(room)];
     const field_ = await this.examService.getField(field);
-    console.log(field_);
     const html = getPdfListDes(result, { departement, center, room }, field_);
+    console.log(html);
     const buffer = await this.examService.downloadPdf(html);
     const path = join(
       tmpdir(),
-      `list_${departement}_${center}_salle_${room + 1}_${field_.label}.pdf`,
+      `list_${departement}_${center}_salle_${Number(room) + 1}_${
+        field_.label
+      }.pdf`,
     );
     writeFileSync(path, Buffer.from(buffer.data));
     res.download(path);
@@ -168,7 +170,9 @@ export class ExamController {
     });
     const path = join(
       tmpdir(),
-      `qrcodes_${departement}_${center}_salle_${room + 1}_${field_.label}.pdf`,
+      `qrcodes_${departement}_${center}_salle_${Number(room) + 1}_${
+        field_.label
+      }.pdf`,
     );
     writeFileSync(path, Buffer.from(buffer.data));
     res.download(path);
