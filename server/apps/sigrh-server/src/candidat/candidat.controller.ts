@@ -170,4 +170,9 @@ export class CandidatController {
   async acceptSport(@Param('id') id: string) {
     return await this.candidatService.acceptAnyWay(id);
   }
+
+  @Get('change-exam/:id/:exam')
+  async changeExam(@Param('id') id: string, @Param('exam') exam: string) {
+    return await this.candidatService.changeExam(id, exam);
+  }
 }

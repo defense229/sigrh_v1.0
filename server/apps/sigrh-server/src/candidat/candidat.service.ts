@@ -54,6 +54,10 @@ export class CandidatService extends RepositoryService<Candidat> {
     return await this.model.find(query);
   }
 
+  async changeExam(candidateId: string, exam: string) {
+    return await this.model.updateOne({ _id: candidateId }, { exam });
+  }
+
   async findDeep(
     query: DF_FILTER,
     pagination: DF_DATA_PAGINATION = { page: 1, limit: 10 },
