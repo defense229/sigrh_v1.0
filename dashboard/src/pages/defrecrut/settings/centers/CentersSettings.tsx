@@ -36,7 +36,7 @@ function LoadCentersSettings() {
 
   useEffect(() => {
     addSocketListener(WsEvents.REPARTITION_END, (data: any) => {
-      setMemo({ ...memo, [data.id]: 100 });
+      setMemo((memo: any) => ({ ...memo, [data.id]: 100 }));
     });
 
     addSocketListener(WsEvents.REPARTITION_ERROR, (data: any) => {
@@ -46,6 +46,8 @@ function LoadCentersSettings() {
     addSocketListener(WsEvents.REPARTITION_PROGRESS, (data: any) => {
       setMemo({ ...memo, [data.id]: data.percentage });
     });
+
+    // eslint-disable-next-line
   }, []);
 
   const handleRun = async (id: string) => {
@@ -65,9 +67,8 @@ function LoadCentersSettings() {
         label: 'Répartition',
         render: (row: any) => (
           <div
-            className="text-primary fs-10 semi-bold"
-            onClick={() => handleRun(row.id)}
-          >
+            className='text-primary fs-10 semi-bold'
+            onClick={() => handleRun(row.id)}>
             {memo[row.id] ? (
               <ProgressBar value={memo[row.id]} />
             ) : (
@@ -84,24 +85,22 @@ function LoadCentersSettings() {
               className={
                 (row.id === hovered.id ? 'visible' : 'not-visible') +
                 ' text-right'
-              }
-            >
-              <Flex items="center" justify="end" gap="20px">
+              }>
+              <Flex items='center' justify='end' gap='20px'>
                 <SvgEdit onClick={() => setCurrent(row)} />
                 <Dropdown
                   style={{ width: '200px' }}
                   dropdown={
-                    <Flex direction="col" gap="20px">
+                    <Flex direction='col' gap='20px'>
                       <IconWithLabel
                         icon={<SvgQrcode />}
-                        label="Qrcodes"
+                        label='Qrcodes'
                         onClick={() =>
                           navigate(`/exam/${id}/qrcodes/${row.departement}`)
                         }
                       />
                     </Flex>
-                  }
-                >
+                  }>
                   <SvgMore />
                 </Dropdown>
               </Flex>
@@ -123,13 +122,13 @@ function LoadCentersSettings() {
 
   if (centers.length === 0)
     return (
-      <div className="my-10">
+      <div className='my-10'>
         <EmptyState>Aucun centre trouvé</EmptyState>
       </div>
     );
 
   return (
-    <div className="datatable my-10">
+    <div className='datatable my-10'>
       <Table
         onRemoved={removeItems}
         selection
@@ -138,7 +137,7 @@ function LoadCentersSettings() {
         {...tableProps}
       />
 
-      <Modal open={!!current} title="Modifier le centre d’examen">
+      <Modal open={!!current} title='Modifier le centre d’examen'>
         <AddCenter
           center={current ? current.id : null}
           onClose={() => {
@@ -162,14 +161,14 @@ function CentersSettings() {
 
   return (
     <div>
-      <Flex justify="end" gap="20px">
+      <Flex justify='end' gap='20px'>
         {/* <Button outlined>Démarrer les répartitions</Button> */}
         <Button onClick={toggle}>Créer un centre d'examen</Button>
       </Flex>
       <Suspense fallback={<ComponentLoading />}>
         <LoadCentersSettings />
       </Suspense>
-      <Modal open={open} title="Créer un centre d’examen" onClose={handleClose}>
+      <Modal open={open} title='Créer un centre d’examen' onClose={handleClose}>
         <AddCenter onClose={handleClose} />
       </Modal>
     </div>

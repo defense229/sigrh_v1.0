@@ -1,0 +1,1 @@
+npx serve ../build -p 9000
