@@ -47,9 +47,9 @@ function LoadCandidates({ id = '' }: Props) {
             value={
               row.accepted
                 ? CandidateStatus.ACCEPTED
-                : !row.numero
-                ? CandidateStatus.NEW
-                : CandidateStatus.REJECTED
+                : row.rejected
+                ? CandidateStatus.REJECTED
+                : CandidateStatus.NEW
             }
           />
         ),
@@ -68,8 +68,7 @@ function LoadCandidates({ id = '' }: Props) {
             <div
               className={`pr-3 mr-3 ${
                 row.id === hovered.id ? 'visible' : 'not-visible'
-              }`}
-            >
+              }`}>
               <u>
                 <b>Voir les détails</b>
               </u>
@@ -80,7 +79,6 @@ function LoadCandidates({ id = '' }: Props) {
     ],
     [hovered.id, handleDetailClick]
   );
-
 
   return (
     <div className="pb-8">

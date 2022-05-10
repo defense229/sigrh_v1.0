@@ -9,16 +9,18 @@ export interface IFetch {
 }
 
 export function useFetch<T>(options: IFetch) {
+  const [_options, setOptions] = useState(options);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState<T>();
 
   useEffect(() => {
-    if (options.url !== '') {
+    console.log('reload');
+    if (_options.url !== '') {
       axios
-        .get(options.url, {
-          params: options.params,
-          headers: options.headers,
+        .get(_options.url, {
+          params: _options.params,
+          headers: _options.headers,
         })
         .then((response: AxiosResponse) => {
           setData(response.data);
@@ -29,7 +31,12 @@ export function useFetch<T>(options: IFetch) {
           setLoading(false);
         });
     }
-  }, [options.url, options.headers, options.params]);
+  }, [_options.url, _options.headers, _options.params]);
 
-  return [loading, data, error, setData];
+  function reload() {
+    setOptions((_options) => ({ ..._options, url: '' }));
+    setOptions((_options) => ({ ..._options, url: options.url }));
+  }
+
+  return [loading, data, error, setData, reload];
 }

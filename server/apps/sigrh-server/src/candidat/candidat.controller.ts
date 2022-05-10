@@ -36,6 +36,11 @@ export class CandidatController {
     );
   }
 
+  @Get('reload')
+  async reload() {
+    return this.candidatService.reloadCandidate();
+  }
+
   @Get('/:id')
   async getOne(@Param('id') id: string) {
     return await this.candidatService.one(id);
@@ -144,5 +149,25 @@ export class CandidatController {
       sportStep: await this.candidatService.getSportStats(id),
       fileAuthenticationStep: await this.candidatService.getDecStats(id),
     };
+  }
+
+  @Get('accept/:id')
+  async accept(@Param('id') id: string) {
+    return await this.candidatService.acceptCandidature(id);
+  }
+
+  @Get('reject/:id')
+  async reject(@Param('id') id: string) {
+    return await this.candidatService.rejectCandidature(id);
+  }
+
+  @Get('present-sport/:id')
+  async presentSport(@Param('id') id: string) {
+    return await this.candidatService.setIsPresent(id);
+  }
+
+  @Get('accept-sport/:id')
+  async acceptSport(@Param('id') id: string) {
+    return await this.candidatService.acceptAnyWay(id);
   }
 }

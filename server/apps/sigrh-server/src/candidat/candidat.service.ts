@@ -10,6 +10,7 @@ import {
 import { Model } from 'mongoose';
 import { DbParserService } from '@sigrh/db-parser';
 import { RepositoryService } from '../repository/repository.service';
+import { HandleHttpException } from '@sigrh/decorators';
 
 export interface DF_FILTER {
   categorie?: DF_CANDIDAT_CATEGORIE;
@@ -31,6 +32,22 @@ export class CandidatService extends RepositoryService<Candidat> {
   ) {
     super(model, dbParser);
     this.searchFields = ['nom', 'prenom', 'numero', 'telephone'];
+  }
+
+  @HandleHttpException()
+  async reloadCandidate() {
+    const result = await this.model.updateMany(
+      {
+        $and: [
+          { exam: { $ne: '624d806e82b473d0c636932d' } },
+          { exam: { $ne: '624d808282b473d0c6369331' } },
+          { exam: { $ne: '624d808e82b473d0c6369335' } },
+        ],
+      },
+      { exam: '624d806e82b473d0c636932d' },
+    );
+    console.log(result);
+    return 'ok';
   }
 
   async filter(query: DF_FILTER) {
@@ -115,6 +132,42 @@ export class CandidatService extends RepositoryService<Candidat> {
       message: 'Candidat marqué présent avec succès',
       id: updatedValue._id,
     };
+  }
+
+  async acceptCandidature(id: string) {
+    await this.model.updateOne(
+      { _id: id },
+      { accepted: true, rejected: false },
+    );
+    return this.dbParser.parseData(await this.model.findById(id));
+  }
+  async rejectCandidature(id: string) {
+    await this.model.updateOne(
+      { _id: id },
+      { accepted: false, rejected: true },
+    );
+    return this.dbParser.parseData(await this.model.findById(id));
+  }
+
+  async setIsPresent(id: string) {
+    await this.model.updateOne(
+      { _id: id },
+      { accepted: true, rejected: false, sportPresent: true },
+    );
+    return this.dbParser.parseData(await this.model.findById(id));
+  }
+
+  async acceptAnyWay(id: string) {
+    await this.model.updateOne(
+      { _id: id },
+      {
+        accepted: true,
+        rejected: false,
+        sportPresent: true,
+        sportAccept: true,
+      },
+    );
+    return this.dbParser.parseData(await this.model.findById(id));
   }
 
   async accept(id: string) {
