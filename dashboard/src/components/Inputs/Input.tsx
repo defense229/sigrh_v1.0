@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import Flex from '../Utils/Flex/Flex';
 import { IInput } from './input.types';
 
@@ -8,9 +8,17 @@ const Input = ({
   actions = null,
   ...props
 }: IInput) => {
+  // const ref = useRef<any>(null);
+
   const css = useMemo(() => {
     return `input input-${color}`;
   }, [color]);
+
+  // useEffect(() => {
+  //   if (ref && ref.current && props.auf) {
+  //     console.log(ref);
+  //   }
+  // }, []);
 
   return (
     <div className="w-full">
@@ -21,7 +29,7 @@ const Input = ({
       <div className={css}>
         <Flex items="center">
           <>{actions && actions.left ? actions.left : ''}</>
-          <input type="text" {...props} />
+          <input autoFocus={props.autoFocus} type="text" {...props} />
           <>{actions && actions.right ? actions.right : ''}</>
         </Flex>
       </div>

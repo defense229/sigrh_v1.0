@@ -278,11 +278,11 @@ export class ExamService extends RepositoryService<Exam> {
   async getScoreResults(exam: string, sort: 'ASC' | 'DESC' = 'DESC') {
     console.log('sort', sort);
     const results = await this.score.getResults(exam, sort);
-    console.log(results);
     const result = [];
 
     for (const score of results) {
       if (score.scores[0]) {
+        console.log(score.scores[0].candidate);
         const candidateId = await this.qrcodeService.verify(
           score.scores[0].candidate,
         );

@@ -1,4 +1,5 @@
 #!/bin/sh
+pm2 delete main
 yarn
 ./build.sh
 pm2 start dist/apps/sigrh-server/apps/sigrh-server/src/main.js

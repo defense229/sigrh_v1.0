@@ -56,6 +56,8 @@ function AddScore() {
       value: '',
     });
     setLoading(false);
+
+    document.getElementById('qrcode-input')?.focus();
   };
 
   if (loading) return <ComponentLoading />;
@@ -72,10 +74,16 @@ function AddScore() {
               value={score.candidate}
               onChange={(event) => {
                 setScore({ ...score, candidate: event.target.value });
+                if (event.target.value.length > 20) {
+                  setTimeout(() => {
+                    document.getElementById('note-input')?.focus();
+                  }, 1000);
+                }
               }}
               label="QrCode"
               required
               autoFocus
+              id="qrcode-input"
             />
             <Input
               value={score.value}
@@ -85,6 +93,7 @@ function AddScore() {
               label="Saisir la note"
               required
               type="number"
+              id="note-input"
             />
             <IconWithLabel
               icon={<SvgCalculator />}
@@ -94,8 +103,7 @@ function AddScore() {
             <Button
               expand
               loading={fetchLoading}
-              disabled={score.candidate === '' || score.value === ''}
-            >
+              disabled={score.candidate === '' || score.value === ''}>
               Valider
             </Button>
           </Flex>
