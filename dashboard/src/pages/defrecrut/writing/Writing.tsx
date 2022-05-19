@@ -8,6 +8,7 @@ import ComponentLoading from '../../../components/Progress/ComponentLoading';
 
 function Writing() {
   const { id } = useParams();
+
   const [loadingDep, departements] = useFetch({
     url: config.api_url.sigrh + 'departements/exam/' + id,
   });
@@ -16,6 +17,9 @@ function Writing() {
   });
   const [loadingField, fields] = useFetch({
     url: config.api_url.sigrh + 'fields/' + id,
+  });
+  const [loadingCandidate, candidates] = useFetch({
+    url: config.api_url.sigrh + 'candidats/exam/' + id,
   });
   const [scores, setScores] = useState<any[]>([]);
   const scoresCopie = useRef<any[]>([]);
@@ -31,23 +35,30 @@ function Writing() {
     } else {
       setScores([
         ...scoresCopie.current.filter((score: any) => {
-          console.log(score.candidate.departement, value.label);
-          return score.candidate.departement === value.label;
+          console.log(getCandidate(score.candidate).departement, value.label);
+          return getCandidate(score.candidate).departement === value.label;
         }),
       ]);
     }
   };
 
-  if (loadingDep || loadingRes || loadingField) return <ComponentLoading />;
+  const getCandidate = (id: string) => {
+    return candidates.values.find((c: any) => c.id === id);
+  };
+
+  if (loadingDep || loadingRes || loadingField || loadingCandidate)
+    return <ComponentLoading />;
+
+  console.log(result, candidates, fields);
 
   return (
     <div>
-      <Flex justify='between' items='center'>
-        <div className='fs-20 bold'>Phase écrite</div>
+      <Flex justify="between" items="center">
+        <div className="fs-20 bold">Phase écrite</div>
         <div style={{ width: '300px' }}>
           <Select
-            display='label'
-            placeholder='Tous les départements'
+            display="label"
+            placeholder="Tous les départements"
             onChange={(value: any) => handleChange(value)}
             values={[
               ...departements,
@@ -57,7 +68,7 @@ function Writing() {
         </div>
       </Flex>
 
-      <div className='mt-20 datatable'>
+      <div className="mt-20 datatable">
         <table>
           <thead>
             <tr>
@@ -76,26 +87,26 @@ function Writing() {
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>{score.candidate.departement}</td>
-                  <td>{score.candidate.sexe}</td>
+                  <td>{getCandidate(score.candidate)?.departement}</td>
+                  <td>{getCandidate(score.candidate)?.sexe}</td>
                   {fields.map((field: any) => {
                     return (
                       <td style={{ textAlign: 'center' }} key={field.id}>
-                        {score.scores.find((s: any) => s.field === field.label)
-                          ? score.scores.find(
-                              (s: any) => s.field === field.label
-                            ).value +
+                        {score.grades.find((s: any) => s.field === field.id)
+                          ? score.grades.find((s: any) => s.field === field.id)
+                              .value +
                             ' (' +
-                            score.scores.find(
-                              (s: any) => s.field === field.label
-                            ).coefficient +
+                            score.grades.find((s: any) => s.field === field.id)
+                              .coef +
                             ')'
                           : ''}
                       </td>
                     );
                   })}
-                  <td style={{ textAlign: 'center' }}>{score.sum}</td>
-                  <td style={{ textAlign: 'center' }}>{score.mean}</td>
+                  <td style={{ textAlign: 'center' }}>{score.total}</td>
+                  <td style={{ textAlign: 'center' }}>
+                    {score.mean.toFixed(2)}
+                  </td>
                 </tr>
               );
             })}

@@ -45,4 +45,16 @@ export class ScoreManagerController {
   ) {
     return await this.scoreManagerService.countByExam(exam, field);
   }
+
+  @Get('computed/:exam')
+  async computeScores(
+    @Param('exam') exam: string,
+    @Query('sort') sort: 'ASC' | 'DESC' | 'NONE' = 'NONE',
+  ) {
+    return await this.scoreManagerService.computeExamScore(
+      exam,
+      sort === 'ASC' || sort === 'DESC',
+      sort === 'DESC',
+    );
+  }
 }

@@ -36,6 +36,7 @@ export class ScoreManagerService {
     const _result = await this.model
       .find({ exam, candidate })
       .populate('field');
+    console.log('[result]', _result);
     const _computed = _result.map((item: any) => {
       const result = {
         value: item.value,
@@ -90,6 +91,52 @@ export class ScoreManagerService {
       return scores
         .sort((a, b) => -Number(a.mean) + Number(b.mean))
         .map((score) => ({ ...score, sum: score.sum.toFixed(2) }));
+  }
+
+  async computeExamScore(exam: string, sorted = true, reverse = false) {
+    console.log(sorted, reverse);
+    const pipeline: any[] = [
+      { $match: { exam } },
+      {
+        $lookup: {
+          from: 'fields',
+          localField: 'field',
+          foreignField: '_id',
+          as: 'field_',
+        },
+      },
+      { $unwind: '$field_' },
+      {
+        $set: { total: { $multiply: ['$value', '$field_.coefficient'] } },
+      },
+      {
+        $group: {
+          _id: { candidate: '$candidate' },
+          grades: {
+            $push: {
+              value: '$value',
+              coef: '$field_.coefficient',
+              field: '$field',
+            },
+          },
+          total: { $sum: '$total' },
+          coefSum: { $sum: '$field_.coefficient' },
+        },
+      },
+      {
+        $set: {
+          mean: { $divide: ['$total', '$coefSum'] },
+          candidate: '$_id.candidate',
+        },
+      },
+      { $project: { _id: 0 } },
+    ];
+    if (sorted) {
+      pipeline.push({ $sort: { mean: reverse ? -1 : 1 } });
+    }
+    console.log(pipeline);
+    const result = await this.model.aggregate(pipeline);
+    return result;
   }
 
   async save(payload: Score) {

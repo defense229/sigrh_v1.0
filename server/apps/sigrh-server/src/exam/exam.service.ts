@@ -276,24 +276,24 @@ export class ExamService extends RepositoryService<Exam> {
   }
 
   async getScoreResults(exam: string, sort: 'ASC' | 'DESC' = 'DESC') {
-    console.log('sort', sort);
+    // console.log('sort', sort);
     const results = await this.score.getResults(exam, sort);
-    const result = [];
+    // const result = [];
 
-    for (const score of results) {
-      if (score.scores[0]) {
-        console.log(score.scores[0].candidate);
-        const candidateId = await this.qrcodeService.verify(
-          score.scores[0].candidate,
-        );
-        const candidate = await this.candidatService.one(candidateId);
-        result.push({ ...score, candidate });
-      } else {
-        result.push({ ...score });
-      }
-    }
+    // for (const score of results) {
+    //   if (score.scores[0]) {
+    //     console.log(score.scores[0].candidate);
+    //     const candidateId = await this.qrcodeService.verify(
+    //       score.scores[0].candidate,
+    //     );
+    //     const candidate = await this.candidatService.one(candidateId);
+    //     result.push({ ...score, candidate });
+    //   } else {
+    //     result.push({ ...score });
+    //   }
+    // }
 
-    return result;
+    return results;
   }
 
   async countInsertedScores(exam: string, field: string) {
