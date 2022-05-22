@@ -4,7 +4,6 @@ import { Qrcode, QrcodeDocument } from './qrcode-generator.dto';
 import { IQrcodePayload } from './qrcode-generator.types';
 import { Model } from 'mongoose';
 import * as QRCode from 'qrcode';
-import { hash } from 'bcrypt';
 
 @Injectable()
 export class QrcodeGeneratorService {

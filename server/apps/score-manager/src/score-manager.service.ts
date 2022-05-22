@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Score, ScoreDocument } from './score-manager.dto';
 import { Model } from 'mongoose';
 import { DbParserService } from '@sigrh/db-parser';
+import axios from 'axios';
 
 @Injectable()
 export class ScoreManagerService {
@@ -36,7 +37,6 @@ export class ScoreManagerService {
     const _result = await this.model
       .find({ exam, candidate })
       .populate('field');
-    console.log('[result]', _result);
     const _computed = _result.map((item: any) => {
       const result = {
         value: item.value,
@@ -94,7 +94,6 @@ export class ScoreManagerService {
   }
 
   async computeExamScore(exam: string, sorted = true, reverse = false) {
-    console.log(sorted, reverse);
     const pipeline: any[] = [
       { $match: { exam } },
       {
@@ -134,9 +133,22 @@ export class ScoreManagerService {
     if (sorted) {
       pipeline.push({ $sort: { mean: reverse ? -1 : 1 } });
     }
-    console.log(pipeline);
     const result = await this.model.aggregate(pipeline);
     return result;
+  }
+
+  async correction() {
+    const scores = await this.model.find({});
+    const _scores = scores.filter((score) => score.candidate.length < 12);
+    // const p = [];
+    // for (const _s of _scores) {
+    //   const response = await axios.get(
+    //     `http://localhost:7002/api/v1/qrcodes/${_s.candidate}`,
+    //   );
+    //   p.push(response.data);
+    // }
+
+    return _scores;
   }
 
   async save(payload: Score) {
@@ -162,5 +174,22 @@ export class ScoreManagerService {
         HttpStatus.NOT_ACCEPTABLE,
       );
     }
+  }
+
+  async getScoreByFieldAndCandidate(field: string, candidate: string) {
+    const _result = await this.model.findOne({ candidate, field });
+    console.log(_result);
+    return this.dbParser.parseData(_result);
+  }
+
+  async removeScore(id: string) {
+    return await this.model.remove({ _id: id });
+  }
+
+  async updateEnseignants() {
+    await this.model.updateMany(
+      { exam: '624d808282b473d0c6369331', field: '6278219b726f06e793c433e1' },
+      { field: '627820a7726f06e793c433cf' },
+    );
   }
 }

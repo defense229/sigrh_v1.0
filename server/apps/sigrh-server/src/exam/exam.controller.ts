@@ -11,7 +11,6 @@ import {
   Res,
 } from '@nestjs/common';
 import { ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
-import { createRunner } from '@sigrh/runner';
 import { Response } from 'express';
 import { writeFileSync } from 'fs';
 import { tmpdir } from 'os';
@@ -19,7 +18,8 @@ import { join } from 'path';
 import { ScorePayload } from '../consumers/score/score.types';
 import { Exam } from './exam.dto';
 import { ExamService } from './exam.service';
-import { genDepObject, genListArray } from './templates/gen-dep-array';
+import { ExamSetting } from './setting/setting.dto';
+import { genDepObject } from './templates/gen-dep-array';
 import { getPdfList } from './templates/list';
 import { getPdfListDes, getPdfCodes } from './templates/list_des';
 
@@ -196,5 +196,10 @@ export class ExamController {
   async getResults(@Param('exam') exam: string) {
     console.log(exam);
     return await this.examService.getScoreResults(exam, 'DESC');
+  }
+
+  @Get('simulation/make')
+  async simulation(@Query() query: ExamSetting) {
+    return await this.examService.getSimulationResult(query);
   }
 }

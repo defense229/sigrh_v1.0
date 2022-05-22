@@ -1,33 +1,45 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Select from '../../../components/Dropdowns/Select';
+import ComponentLoading from '../../../components/Progress/ComponentLoading';
 import Flex from '../../../components/Utils/Flex/Flex';
+import DisplayStats from '../../../components/Utils/Others/DisplayStats';
 import { config } from '../../../env';
 import { useFetch } from '../../../services/hooks/useFetch';
-import { useParams } from 'react-router-dom';
-import ComponentLoading from '../../../components/Progress/ComponentLoading';
-import ReactToPrint from 'react-to-print';
-import Button from '../../../components/Buttons/Button';
 
-function Writing() {
+function BeforeWriting() {
   const { id } = useParams();
+
+  const [loadingConfig, config_, , , reload] = useFetch({
+    url: config.api_url.sigrh + 'settings/' + id,
+  });
 
   const [loadingDep, departements] = useFetch({
     url: config.api_url.sigrh + 'departements/exam/' + id,
   });
-  const [loadingRes, result] = useFetch({
-    url: config.api_url.sigrh + 'exams/results/' + id,
-  });
+
   const [loadingField, fields] = useFetch({
     url: config.api_url.sigrh + 'fields/' + id,
   });
   const [scores, setScores] = useState<any[]>([]);
+  const [stats, setStats] = useState<any>({});
   const scoresCopie = useRef<any[]>([]);
   const ref = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setScores(result ? [...result] : []);
-    scoresCopie.current = result ? [...result] : [];
-  }, [result]);
+    if (!loadingConfig) {
+      console.log(config_);
+      if (!config_.result) navigate('/exam/' + id + '/writing');
+      else {
+        setScores(config_.result.values ? [...config_.result.values] : []);
+        setStats(JSON.parse(JSON.stringify(config_.result.stats)));
+        scoresCopie.current = config_.result.values
+          ? [...config_.result.values]
+          : [];
+      }
+    }
+  }, [loadingConfig]);
 
   const handleChange = (value: any) => {
     if (value.id === '*') {
@@ -42,14 +54,12 @@ function Writing() {
     }
   };
 
-  if (loadingDep || loadingRes || loadingField) return <ComponentLoading />;
-
-  console.log(result, fields);
+  if (loadingDep || loadingField || loadingConfig) return <ComponentLoading />;
 
   return (
     <div>
       <Flex justify="between" items="center">
-        <div className="fs-20 bold">Phase écrite</div>
+        <div className="fs-20 bold">Résultats du concours</div>
         <div style={{ width: '300px' }}>
           <Select
             display="label"
@@ -62,14 +72,18 @@ function Writing() {
           />
         </div>
       </Flex>
-      <ReactToPrint
-        trigger={() => {
-          return <Button>Imprimer</Button>;
-        }}
-        content={() => ref.current}
-      />
 
-      <div className="mt-20 datatable" ref={ref}>
+      <div className="pt-5 pb-10 px-10 mt-4  radius-6 bg-white">
+        <Flex justify="between" items="center" className="mb-4">
+          <div className="fs-14 semi-bold">Statistiques</div>
+        </Flex>
+
+        <div className="mx-4">
+          <DisplayStats stats={stats} />
+        </div>
+      </div>
+
+      <div className="mt-10 datatable" ref={ref}>
         <table>
           <thead>
             <tr>
@@ -137,4 +151,4 @@ function Writing() {
   );
 }
 
-export default Writing;
+export default BeforeWriting;

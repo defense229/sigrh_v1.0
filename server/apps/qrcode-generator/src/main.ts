@@ -1,11 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { json } from 'express';
 import { QrcodeGeneratorModule } from './qrcode-generator.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(QrcodeGeneratorModule);
 
   app.setGlobalPrefix('api/v1');
+  app.use(json({ limit: '50mb' }));
 
   const config = new DocumentBuilder()
     .setTitle('Qrcode generator API')

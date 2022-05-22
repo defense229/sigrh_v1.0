@@ -15,6 +15,7 @@ import { RepartitionModule } from './repartition/repartition.module';
 import { QrcodeService } from '../consumers/qrcode/qrcode.service';
 import { WsGateway } from '@sigrh/websocket';
 import { DepartementsModule } from './departements/departements.module';
+import { SettingModule } from './setting/setting.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { DepartementsModule } from './departements/departements.module';
     CandidatModule,
     RepartitionModule,
     DepartementsModule,
+    SettingModule,
   ],
   controllers: [ExamController, FieldController],
   providers: [
@@ -33,7 +35,6 @@ import { DepartementsModule } from './departements/departements.module';
     ScoreService,
     ReportService,
     QrcodeService,
-    ScoreService,
     WsGateway,
   ],
 })

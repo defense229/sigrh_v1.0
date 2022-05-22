@@ -694,4 +694,8 @@ export class CandidatService extends RepositoryService<Candidat> {
   async getHCStats(id: string) {}
 
   async getGlobalStats(id: string) {}
+
+  async countAcceptedWomanByExam(exam: string) {
+    return this.model.countDocuments({ exam, sportAccept: true });
+  }
 }

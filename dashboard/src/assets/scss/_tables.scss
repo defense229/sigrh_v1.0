@@ -1,4 +1,7 @@
 .datatable {
+  width: 100%;
+  overflow-x: auto;
+
   table {
     width: 100%;
     border-collapse: collapse;
@@ -42,5 +45,16 @@
   .dt-box {
     width: 100%;
     // overflow: auto;
+  }
+}
+
+.no-hover {
+  tr {
+    &:hover {
+      cursor: auto !important;
+      td {
+        background-color: $white !important;
+      }
+    }
   }
 }

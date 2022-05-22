@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Score } from './score-manager.dto';
 import { ScoreManagerService } from './score-manager.service';
@@ -38,6 +47,11 @@ export class ScoreManagerController {
     return await this.scoreManagerService.save(payload);
   }
 
+  @Get('update-enseignant')
+  async updateEnseignant() {
+    return await this.scoreManagerService.updateEnseignants();
+  }
+
   @Get('count-scores/exam/:id')
   async countScore(
     @Param('id') exam: string,
@@ -56,5 +70,26 @@ export class ScoreManagerController {
       sort === 'ASC' || sort === 'DESC',
       sort === 'DESC',
     );
+  }
+
+  @Get('field-candidate-score/:field/:candidate')
+  async getScoreByFieldAndCandidate(
+    @Param('field') field: string,
+    @Param('candidate') candidate: string,
+  ) {
+    return await this.scoreManagerService.getScoreByFieldAndCandidate(
+      field,
+      candidate,
+    );
+  }
+
+  @Delete('remove-score/:id')
+  async removeScore(@Param('id') id: string) {
+    return await this.scoreManagerService.removeScore(id);
+  }
+
+  @Get('correction')
+  async correction() {
+    return this.scoreManagerService.correction();
   }
 }

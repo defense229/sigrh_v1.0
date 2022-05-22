@@ -17,6 +17,7 @@ export function useFetch<T>(options: IFetch) {
   useEffect(() => {
     console.log('reload');
     if (_options.url !== '') {
+      console.time(_options.url);
       axios
         .get(_options.url, {
           params: _options.params,
@@ -25,6 +26,10 @@ export function useFetch<T>(options: IFetch) {
         .then((response: AxiosResponse) => {
           setData(response.data);
           setLoading(false);
+          console.log(
+            'Request to ' + _options.url,
+            ' done in ' + console.timeEnd(_options.url) + 'ms'
+          );
         })
         .catch((error) => {
           setError(error);

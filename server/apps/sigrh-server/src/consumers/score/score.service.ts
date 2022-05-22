@@ -77,12 +77,36 @@ export class ScoreService {
   }
 
   @HandleHttpException()
+  async getCandidateResults(exam: string, candidate: string) {
+    const response = await this.http.axiosRef.get(
+      this.baseUrl + 'scores/results/' + exam + '/' + candidate,
+    );
+    return response.data;
+  }
+
+  @HandleHttpException()
+  async getScoreByFieldAndCandidate(field: string, candidate: string) {
+    const response = await this.http.axiosRef.get(
+      this.baseUrl + 'scores/field-candidate-score/' + field + '/' + candidate,
+    );
+    return response.data;
+  }
+
+  @HandleHttpException()
   async countInsertedScores(exam: string, field: string = 'ALL') {
     console.log(exam);
     const response = await this.http.axiosRef.get(
       this.baseUrl + 'scores/count-scores/exam/' + exam + '?field=' + field,
     );
     console.log(response.data);
+    return response.data;
+  }
+
+  @HandleHttpException()
+  async removeScore(id: string) {
+    const response = await this.http.axiosRef.delete(
+      this.baseUrl + 'scores/remove-score/' + id,
+    );
     return response.data;
   }
 }

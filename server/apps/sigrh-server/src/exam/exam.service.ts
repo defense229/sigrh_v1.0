@@ -12,17 +12,14 @@ import { RepartitionService } from './repartition/repartition.service';
 import { ScoreService } from '../consumers/score/score.service';
 import { customAlphabet } from 'nanoid';
 import { getDepartementCode, WsEvents } from '../lib';
-import { hash } from 'bcrypt';
 import { QrcodeService } from '../consumers/qrcode/qrcode.service';
 import { WsGateway } from '@sigrh/websocket';
-import {
-  ExamRepartitionStatus,
-  examSteps,
-  ExamStepStatus,
-  ISimulationPayload,
-} from './exam.types';
+import { ExamRepartitionStatus, examSteps, ExamStepStatus } from './exam.types';
 import { ScorePayload } from '../consumers/score/score.types';
 import { createRunner } from '@sigrh/runner';
+import { ExamSetting } from './setting/setting.dto';
+import { ExamQuotaUnit } from './setting/setting.types';
+import { SettingService } from './setting/setting.service';
 
 @Injectable()
 export class ExamService extends RepositoryService<Exam> {
@@ -38,6 +35,7 @@ export class ExamService extends RepositoryService<Exam> {
     private qrcodeService: QrcodeService,
     private readonly ws: WsGateway,
     private score: ScoreService,
+    private settingService: SettingService,
   ) {
     super(model, dbParser);
     this.searchFields = ['label'];
@@ -97,8 +95,6 @@ export class ExamService extends RepositoryService<Exam> {
           );
         }
 
-        // TODO: get all candidates who are succeed sport phase exam
-        // TODO: sort by name ASC
         const candidates: any[] = (
           await this.candidatService.filter({
             sportAccept: true,
@@ -148,8 +144,6 @@ export class ExamService extends RepositoryService<Exam> {
 
         const result = {};
         if (data.candidates && data.candidates > 0) {
-          // TODO: if candidates is provided, group by number of candidates (rooms)
-          // if centers if provided, group by number of centers
           const _candidates = [];
           for (
             let i = 0;
@@ -173,9 +167,6 @@ export class ExamService extends RepositoryService<Exam> {
             result[`Centre ${i + 1}`] = _candidates.slice(start, start + len);
           }
         } else {
-          // TODO: if not candidates provided, check if centers and rooms are provided
-          // if ok, group by centers and then by rooms
-          // else throw error
           const len = Math.ceil(candidates.length / data.centers);
           if (data.rooms && data.rooms > 0) {
             for (let i = 0; i < data.centers; ++i) {
@@ -276,36 +267,164 @@ export class ExamService extends RepositoryService<Exam> {
   }
 
   async getScoreResults(exam: string, sort: 'ASC' | 'DESC' = 'DESC') {
-    // console.log('sort', sort);
     const results = await this.score.getResults(exam, sort);
-    // const result = [];
+    const candidates = await this.candidatService.find({
+      exam,
+      sportAccept: true,
+    });
+    const _results = [];
 
-    // for (const score of results) {
-    //   if (score.scores[0]) {
-    //     console.log(score.scores[0].candidate);
-    //     const candidateId = await this.qrcodeService.verify(
-    //       score.scores[0].candidate,
-    //     );
-    //     const candidate = await this.candidatService.one(candidateId);
-    //     result.push({ ...score, candidate });
-    //   } else {
-    //     result.push({ ...score });
-    //   }
-    // }
+    for (const result of results) {
+      const candidate = candidates.find(
+        (c) => String(c.id) === result.candidate,
+      );
+      if (candidate) {
+        _results.push({
+          ...result,
+          candidate,
+        });
+      }
+    }
 
-    return results;
+    return _results;
+  }
+
+  async getSimulationResult(params: ExamSetting) {
+    const {
+      considerAllField,
+      exam,
+      quotaUnit,
+      take,
+      wmQuota,
+      wmQuotaUnit,
+      isDefinitive,
+    } = params;
+
+    if (!isDefinitive) {
+      return await this.makeSimulation(
+        exam,
+        considerAllField,
+        take,
+        wmQuota,
+        quotaUnit,
+        wmQuotaUnit,
+      );
+    } else {
+      const setting = await this.settingService.getSetting(exam);
+      if (setting.result) return setting.result;
+      else {
+        const result = await this.makeSimulation(
+          exam,
+          considerAllField,
+          take,
+          wmQuota,
+          quotaUnit,
+          wmQuotaUnit,
+        );
+        await this.settingService.updateSetting(exam, { result });
+        return result;
+      }
+    }
+  }
+
+  private async makeSimulation(
+    exam: string,
+    considerAllField: boolean,
+    take: number,
+    wmQuota: number,
+    quotaUnit: ExamQuotaUnit,
+    wmQuotaUnit: ExamQuotaUnit,
+  ) {
+    const nbrFields = (await this.score.getFields(exam)).length;
+    console.log('[nbr of fields]:', nbrFields);
+    const results = await this.getScoreResults(exam, 'DESC');
+    const len = results.length;
+    console.log('[nbr of result]:', len);
+    let _results: any;
+
+    if (considerAllField) {
+      _results = results.filter((r: any) => r.grades.length === nbrFields);
+    }
+
+    const totalWoman = await this.candidatService.countAcceptedWomanByExam(
+      exam,
+    );
+
+    let totalToTake = Number(take),
+      wmTotalToTake = Number(wmQuota);
+    if (quotaUnit === ExamQuotaUnit.PERCENT) {
+      totalToTake = Math.ceil((len * take) / 100);
+    }
+
+    if (wmQuotaUnit === ExamQuotaUnit.PERCENT) {
+      wmTotalToTake = Math.ceil((totalToTake * wmQuota) / 100);
+    }
+
+    const fWmToTake = Math.min(wmTotalToTake, totalWoman);
+    const fmToTake = totalToTake - fWmToTake;
+    console.log('[total to take]:', totalToTake);
+    console.log('[total of women to take]:', wmTotalToTake);
+    console.log('[total of women available]:', totalWoman);
+    console.log('[total of women will take]:', fWmToTake);
+    console.log('[total of men will take]:', fmToTake);
+
+    const _firstPass = _results.slice(0, totalToTake);
+    const r = wmQuota
+      ? this.handleWomenQuota(_firstPass, fWmToTake, fmToTake, _results)
+      : _firstPass;
+    const stats = this.generateSimulationStats(r);
+    console.log({ values: r, stats });
+    return { values: r, stats };
+  }
+
+  handleWomenQuota(results: any[], wQuota: number, mQuota: number, all: any[]) {
+    const nbrOfWm = results.filter((r: any) => r.candidate.sexe === 'F').length;
+    console.log(nbrOfWm, wQuota);
+    if (nbrOfWm >= wQuota) return results;
+    let result = [];
+    for (let i = 0, c = 0; c < wQuota; i++) {
+      if (all[i].candidate.sexe === 'F') {
+        result.push(all[i]);
+        c++;
+      }
+    }
+
+    for (let i = 0, c = 0; c < mQuota; i++) {
+      if (all[i].candidate.sexe === 'H') {
+        result.push(all[i]);
+        c++;
+      }
+    }
+
+    result = result.sort((a: any, b: any) => b.mean - a.mean);
+
+    return result;
+  }
+
+  generateSimulationStats(results: any[]) {
+    const stats = {};
+    for (const r of results) {
+      if (r.candidate.sexe in stats) {
+        stats[r.candidate.sexe]++;
+      } else {
+        stats[r.candidate.sexe] = 1;
+      }
+      if (r.candidate.departement in stats) {
+        stats[r.candidate.departement].total++;
+        if (r.candidate.sexe === 'H') stats[r.candidate.departement].h++;
+        if (r.candidate.sexe === 'F') stats[r.candidate.departement].f++;
+      } else {
+        stats[r.candidate.departement] = {
+          total: 1,
+          h: r.candidate.sexe === 'H' ? 1 : 0,
+          f: r.candidate.sexe === 'F' ? 1 : 0,
+        };
+      }
+    }
+    return stats;
   }
 
   async countInsertedScores(exam: string, field: string) {
     return await this.score.countInsertedScores(exam, field);
-  }
-
-  async simulate(
-    exam: string,
-    sort: 'ASC' | 'DESC' = 'DESC',
-    payload: ISimulationPayload,
-  ) {
-    const results = this.getScoreResults(exam, sort);
-    // TODO: make simulations
   }
 }

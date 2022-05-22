@@ -25,6 +25,10 @@ function SocketProvider({ children }: { children: ReactElement }) {
     _socket.on('connect', () => {
       console.log('Socket ' + _socket.id + ' connected!');
     });
+
+    _socket.on('results', (data) => {
+      console.log('[results:event]:', data);
+    });
   }, []);
 
   const addSocketListener = useCallback(

@@ -18,10 +18,11 @@ const links: ISidebarLink[] = [
   { label: 'Phase de dépôt de dossier', path: 'file-collect' },
   { label: 'Phase sportive', path: 'sport' },
   // { label: 'Authentification des diplômes', path: 'dec' },
-  { label: 'Phase écrite', path: 'writing' },
+  { label: 'Phase écrite', path: 'before-writing' },
   // { label: 'Visite médicale', path: 'health-control' },
   { label: 'Paramètres', path: 'settings' },
   { label: 'Utilisateurs', path: 'users' },
+  { label: 'Délibérations', path: 'configs' },
 ];
 
 function ExamWindow() {
