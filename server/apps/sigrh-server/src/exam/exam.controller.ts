@@ -25,7 +25,12 @@ import {
   genStatsObject,
 } from './templates/gen-dep-array';
 import { getPdfList } from './templates/list';
-import { getPdfListDes, getPdfCodes, getPdfStats } from './templates/list_des';
+import {
+  getPdfListDes,
+  getPdfCodes,
+  getPdfStats,
+  getPdfResultList,
+} from './templates/list_des';
 
 class ExamQuery {
   @ApiPropertyOptional()
@@ -234,9 +239,10 @@ export class ExamController {
     @Query('departement') departement: string,
   ) {
     const data = await this.examService.getSetting(exam);
-    const html = getPdfStats(data[0].result);
+    const fields = await this.examService.getFields(exam);
+    const html = getPdfResultList(data[0].result, fields, departement);
     const buffer = await this.examService.downloadPdf(html);
-    const path = join(tmpdir(), `statistiques.pdf`);
+    const path = join(tmpdir(), `liste_des_retenus.pdf`);
     writeFileSync(path, Buffer.from(buffer.data));
     res.download(path);
   }

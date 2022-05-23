@@ -101,7 +101,11 @@ function BeforeWriting() {
                   onClick={() => download('download-stats-xlsx')}>
                   Statistiques en Excel
                 </div>
-                <div className="cursor-pointer hover-u mt-4">Liste en PDF</div>
+                <div
+                  className="cursor-pointer hover-u mt-4"
+                  onClick={() => download('download-list-pdf')}>
+                  Liste en PDF
+                </div>
                 <div
                   className="cursor-pointer hover-u mt-4"
                   onClick={() => download('download-list-xlsx')}>
