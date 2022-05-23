@@ -74,7 +74,7 @@ function Writing() {
           <thead>
             <tr>
               <th style={{ textAlign: 'center', width: '350px' }}>Rang</th>
-              <th>Nom et prénoms</th>
+              {/* <th>Nom et prénoms</th> */}
               <th>Département</th>
               <th style={{ width: '80px' }}>Genre</th>
               {fields.map((field: any) => {
@@ -82,11 +82,11 @@ function Writing() {
                   <th
                     style={{ textAlign: 'center', width: '150px' }}
                     key={field.id}>
-                    {field.label.slice(0, 5)}
+                    {field.label}
                   </th>
                 );
               })}
-              <th style={{ textAlign: 'center', width: '150px' }}>Tot</th>
+              <th style={{ textAlign: 'center', width: '150px' }}>Total</th>
               <th style={{ textAlign: 'center', width: '150px' }}>Moy</th>
             </tr>
           </thead>
@@ -104,9 +104,9 @@ function Writing() {
                       <sup className="fs-10">ème</sup>
                     )}
                   </td>
-                  <td>
+                  {/* <td>
                     {score.candidate?.nom} {score.candidate?.prenom}
-                  </td>
+                  </td> */}
                   <td>{score.candidate?.departement}</td>
                   <td>{score.candidate?.sexe}</td>
                   {fields.map((field: any) => {

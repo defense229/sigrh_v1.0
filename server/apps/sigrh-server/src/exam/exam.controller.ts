@@ -19,9 +19,13 @@ import { ScorePayload } from '../consumers/score/score.types';
 import { Exam } from './exam.dto';
 import { ExamService } from './exam.service';
 import { ExamSetting } from './setting/setting.dto';
-import { genDepObject } from './templates/gen-dep-array';
+import {
+  genDepObject,
+  genListObject,
+  genStatsObject,
+} from './templates/gen-dep-array';
 import { getPdfList } from './templates/list';
-import { getPdfListDes, getPdfCodes } from './templates/list_des';
+import { getPdfListDes, getPdfCodes, getPdfStats } from './templates/list_des';
 
 class ExamQuery {
   @ApiPropertyOptional()
@@ -201,5 +205,54 @@ export class ExamController {
   @Get('simulation/make')
   async simulation(@Query() query: ExamSetting) {
     return await this.examService.getSimulationResult(query);
+  }
+
+  @Get('download-stats-pdf/:exam/')
+  async downloadStats(@Param('exam') exam: string, @Res() res: Response) {
+    const data = await this.examService.getSetting(exam);
+    const html = getPdfStats(data[0].result);
+    const buffer = await this.examService.downloadPdf(html);
+    const path = join(tmpdir(), `statistiques.pdf`);
+    writeFileSync(path, Buffer.from(buffer.data));
+    res.download(path);
+  }
+
+  @Get('download-stats-xlsx/:exam')
+  async downloadStatsXlsx(@Param('exam') exam: string, @Res() res: Response) {
+    const data = await this.examService.getSetting(exam);
+    const payload = genStatsObject(data[0].result);
+    const buffer = await this.examService.downloadXlsx(payload);
+    const path = join(tmpdir(), `statistiques.xlsx`);
+    writeFileSync(path, Buffer.from(buffer.data));
+    res.download(path);
+  }
+
+  @Get('download-list-pdf/:exam/')
+  async downloadListPdf(
+    @Param('exam') exam: string,
+    @Res() res: Response,
+    @Query('departement') departement: string,
+  ) {
+    const data = await this.examService.getSetting(exam);
+    const html = getPdfStats(data[0].result);
+    const buffer = await this.examService.downloadPdf(html);
+    const path = join(tmpdir(), `statistiques.pdf`);
+    writeFileSync(path, Buffer.from(buffer.data));
+    res.download(path);
+  }
+
+  @Get('download-list-xlsx/:exam')
+  async downloadListXlsx(
+    @Param('exam') exam: string,
+    @Res() res: Response,
+    @Query('departement') departement: string,
+  ) {
+    const data = await this.examService.getSetting(exam);
+    const fields = await this.examService.getFields(exam);
+    const payload = genListObject(data[0].result, fields, departement);
+    const buffer = await this.examService.downloadXlsx(payload);
+    const path = join(tmpdir(), `liste_des_retenus.xlsx`);
+    writeFileSync(path, Buffer.from(buffer.data));
+    res.download(path);
   }
 }

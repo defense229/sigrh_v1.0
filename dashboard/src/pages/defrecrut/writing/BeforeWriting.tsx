@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import Button from '../../../components/Buttons/Button';
+import Dropdown from '../../../components/Dropdowns/Dropdown';
 import Select from '../../../components/Dropdowns/Select';
 import ComponentLoading from '../../../components/Progress/ComponentLoading';
 import Flex from '../../../components/Utils/Flex/Flex';
@@ -25,6 +27,7 @@ function BeforeWriting() {
   const [stats, setStats] = useState<any>({});
   const scoresCopie = useRef<any[]>([]);
   const ref = useRef(null);
+  const currentDep = useRef('*');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,6 +45,7 @@ function BeforeWriting() {
   }, [loadingConfig]);
 
   const handleChange = (value: any) => {
+    currentDep.current = value.label;
     if (value.id === '*') {
       setScores([...scoresCopie.current]);
     } else {
@@ -54,23 +58,60 @@ function BeforeWriting() {
     }
   };
 
+  const download = (path: string) => {
+    window.open(
+      config.api_url.sigrh +
+        'exams/' +
+        path +
+        '/' +
+        id +
+        '?departement=' +
+        currentDep.current
+    );
+  };
+
   if (loadingDep || loadingField || loadingConfig) return <ComponentLoading />;
 
   return (
     <div>
       <Flex justify="between" items="center">
         <div className="fs-20 bold">Résultats du concours</div>
-        <div style={{ width: '300px' }}>
-          <Select
-            display="label"
-            placeholder="Tous les départements"
-            onChange={(value: any) => handleChange(value)}
-            values={[
-              ...departements,
-              { label: 'Tous les départements', id: '*' },
-            ]}
-          />
-        </div>
+        <Flex items="center" gap="20px">
+          <div style={{ width: '300px' }}>
+            <Select
+              display="label"
+              placeholder="Tous les départements"
+              onChange={(value: any) => handleChange(value)}
+              values={[
+                ...departements,
+                { label: 'Tous les départements', id: '*' },
+              ]}
+            />
+          </div>
+          <Dropdown
+            dropdown={
+              <div style={{ width: '150px' }}>
+                <div
+                  className="cursor-pointer hover-u mb-4"
+                  onClick={() => download('download-stats-pdf')}>
+                  Statistiques en PDF
+                </div>
+                <div
+                  className="cursor-pointer hover-u mt-4"
+                  onClick={() => download('download-stats-xlsx')}>
+                  Statistiques en Excel
+                </div>
+                <div className="cursor-pointer hover-u mt-4">Liste en PDF</div>
+                <div
+                  className="cursor-pointer hover-u mt-4"
+                  onClick={() => download('download-list-xlsx')}>
+                  Liste en Excel
+                </div>
+              </div>
+            }>
+            <Button outlined>Télécharger</Button>
+          </Dropdown>
+        </Flex>
       </Flex>
 
       <div className="pt-5 pb-10 px-10 mt-4  radius-6 bg-white">
@@ -88,6 +129,7 @@ function BeforeWriting() {
           <thead>
             <tr>
               <th style={{ textAlign: 'center', width: '350px' }}>Rang</th>
+              <th>Numéro de table</th>
               <th>Nom et prénoms</th>
               <th>Département</th>
               <th style={{ width: '80px' }}>Genre</th>
@@ -118,8 +160,10 @@ function BeforeWriting() {
                       <sup className="fs-10">ème</sup>
                     )}
                   </td>
+                  <td>{score.candidate?.numero}</td>
                   <td>
-                    {score.candidate?.nom} {score.candidate?.prenom}
+                    {score.candidate?.nom.toUpperCase()}{' '}
+                    {score.candidate?.prenom.toUpperCase()}
                   </td>
                   <td>{score.candidate?.departement}</td>
                   <td>{score.candidate?.sexe}</td>

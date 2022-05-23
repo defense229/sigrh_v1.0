@@ -15,7 +15,7 @@ function WritingComponent({
           <thead>
             <tr>
               <th>Rang</th>
-              {/* <th>Nom et prénoms</th> */}
+              <th>Nom et prénoms</th>
               <th>Département</th>
               <th style={{ width: '80px' }}>Genre</th>
               {fields.map((field: any) => {
@@ -39,9 +39,9 @@ function WritingComponent({
                       <sup className="fs-10">ème</sup>
                     )}
                   </td>
-                  {/* <td>
+                  <td>
                     {score.candidate?.nom} {score.candidate?.prenom}
-                  </td> */}
+                  </td>
                   <td>{score.candidate?.departement}</td>
                   <td>{score.candidate?.sexe}</td>
                   {fields.map((field: any) => {

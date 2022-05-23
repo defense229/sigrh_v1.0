@@ -32,7 +32,7 @@ function Configuration() {
   useEffect(() => {
     if (!loadingConfig) {
       console.log(config_);
-      if (config_.result) navigate('/exam/' + id + '/writing');
+      if (config_.isDefinitive) navigate('/exam/' + id + '/before-writing');
     }
   }, [loadingConfig]);
 

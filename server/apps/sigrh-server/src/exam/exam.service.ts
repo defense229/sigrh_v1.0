@@ -427,4 +427,12 @@ export class ExamService extends RepositoryService<Exam> {
   async countInsertedScores(exam: string, field: string) {
     return await this.score.countInsertedScores(exam, field);
   }
+
+  async getSetting(exam: string) {
+    return this.settingService.getSetting(exam);
+  }
+
+  async getFields(exam: string) {
+    return this.scoreService.getFields(exam);
+  }
 }
