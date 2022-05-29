@@ -8,6 +8,7 @@ import { encrypt, verify, WsEvents } from '../utils';
 import { CandidatService } from '../candidat/candidat.service';
 import { WsGateway } from '@sigrh/websocket';
 import { QuestionService } from '../question/question.service';
+import { PickCandidate } from './jury.controller';
 
 @Injectable()
 export class MemberService extends RepositoryService<Member> {
@@ -93,6 +94,7 @@ export class JuryService extends RepositoryService<Jury> {
     numero: string,
     departement: string,
     jury: string,
+    body: PickCandidate,
   ) {
     const candidate = await this.candidatService.findOne({
       numero,
@@ -103,7 +105,7 @@ export class JuryService extends RepositoryService<Jury> {
       return { statusCode: HttpStatus.NOT_FOUND };
     }
 
-    await this.candidatService.update(candidate.id, { jury });
+    await this.candidatService.update(candidate.id, { jury, ...body });
 
     this.ws.notify({
       event: WsEvents.CANDIDATE_SELECTED,
@@ -124,7 +126,9 @@ export class JuryService extends RepositoryService<Jury> {
     departement: string,
     jury: string,
     nums: string[],
+    opt: 'true' | 'false',
   ) {
+    console.log(opt);
     const candidate = await this.candidatService.findOne({
       exam,
       numero,
@@ -139,7 +143,13 @@ export class JuryService extends RepositoryService<Jury> {
     this.ws.notify({
       event: WsEvents.CANDIDATE_NUMBERS_SELECTED,
       cb: () => {
-        return { jury, candidate, nums, questions };
+        return {
+          jury,
+          candidate,
+          nums,
+          questions,
+          optional: opt === 'true' ? true : false,
+        };
       },
     });
 

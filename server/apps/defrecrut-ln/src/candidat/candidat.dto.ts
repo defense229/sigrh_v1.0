@@ -48,6 +48,14 @@ export class Candidat implements ICandidat {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Jury' })
   @ApiProperty()
   jury?: string;
+
+  @Prop()
+  @ApiProperty()
+  language?: string;
+
+  @Prop()
+  @ApiProperty({ default: null })
+  optionalLanguage?: string;
 }
 
 export type CandidatDocument = Candidat & Document;

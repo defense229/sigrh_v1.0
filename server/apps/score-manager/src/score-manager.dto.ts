@@ -33,6 +33,10 @@ export class Score implements IScore {
   @ApiProperty()
   @Prop()
   extras?: string;
+
+  @ApiProperty({ required: false, default: false })
+  @Prop({ type: Boolean, default: false })
+  isOptional: boolean;
 }
 
 export type ScoreDocument = Score & Document;

@@ -1,8 +1,23 @@
-import { Body, Controller, Get, HttpStatus, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
+import { writeFileSync } from 'fs';
+import { tmpdir } from 'os';
+import { join } from 'path';
 import { ScorePayload } from '../consumers/score/score.types';
 import { Question } from './question.dto';
 import { QuestionService } from './question.service';
+import { genListObject } from './templates/gen-dep-array';
+import { getPdfResultList } from './templates/list_des';
 
 @Controller('questions')
 @ApiTags('Questions')
@@ -16,8 +31,33 @@ export class QuestionController {
 
   @Get('results/:exam')
   async getResults(@Param('exam') exam: string) {
-    console.log(exam);
     return await this.questionService.getResults(exam);
+  }
+
+  @Get('download-list-pdf/:exam')
+  async downloadListPdf(
+    @Param('exam') exam: string,
+    @Res() res: Response,
+    @Query('name') name: string,
+  ) {
+    console.log(name);
+    const data = await this.questionService.getResults(exam);
+    const html = getPdfResultList(data, name);
+    console.log(html);
+    const buffer = await this.questionService.downloadPdf(html);
+    const path = join(tmpdir(), `liste_des_retenus.pdf`);
+    writeFileSync(path, Buffer.from(buffer.data));
+    res.download(path);
+  }
+
+  @Get('download-list-xlsx/:exam')
+  async downloadListXlsx(@Param('exam') exam: string, @Res() res: Response) {
+    const data = await this.questionService.getResults(exam);
+    const payload = genListObject(data);
+    const buffer = await this.questionService.downloadXlsx(payload);
+    const path = join(tmpdir(), `liste_des_retenus.xlsx`);
+    writeFileSync(path, Buffer.from(buffer.data));
+    res.download(path);
   }
 
   @Get(':exam/:id')
@@ -27,12 +67,18 @@ export class QuestionController {
 
   @Post('add-score')
   async addScore(@Body() score: ScorePayload) {
+    console.log('[score]: ', score);
     return await this.questionService.createScore(score);
   }
 
   @Get(':exam')
   async all(@Param('exam') exam: string) {
-    return this.questionService.getAll(exam);
+    const result = await this.questionService.getAll(exam);
+    console.log(
+      result,
+      result.filter((r: any) => r.enabled === true),
+    );
+    return result.filter((r: any) => r.enabled === true);
   }
 
   @Post('archive')

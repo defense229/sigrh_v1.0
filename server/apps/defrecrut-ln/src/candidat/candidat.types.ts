@@ -9,4 +9,6 @@ export interface ICandidat {
   departement?: string;
   exam?: string;
   jury?: string;
+  language?: string;
+  optionalLanguage?: string;
 }

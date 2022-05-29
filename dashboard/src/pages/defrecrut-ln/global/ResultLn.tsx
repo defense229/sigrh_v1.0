@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { config } from '../../../env';
 import { useParams } from 'react-router-dom';
 import ComponentLoading from '../../../components/Progress/ComponentLoading';
+import Dropdown from '../../../components/Dropdowns/Dropdown';
+import Button from '../../../components/Buttons/Button';
+import Flex from '../../../components/Utils/Flex/Flex';
 
 function ResultLn() {
   const [results, setResults] = useState([]);
@@ -20,22 +23,59 @@ function ResultLn() {
     cb();
   }, [id]);
 
+  const download = (path: string) => {
+    window.open(
+      config.api_url.defrecrutLn +
+        'questions/' +
+        path +
+        '/' +
+        id +
+        '?name=Concours spécial'
+    );
+  };
+
   if (loading) return <ComponentLoading />;
 
   return (
     <div>
-      <div className='fs-20 bold'>Résultats</div>
+      <Flex justify="between" items="center">
+        <div className="fs-20 bold">Résultats</div>
+        <div>
+          <Dropdown
+            dropdown={
+              <div>
+                <div
+                  className="cursor-pointer hover-u mt-4"
+                  onClick={() => download('download-list-pdf')}>
+                  Liste en PDF
+                </div>
+                <div
+                  className="cursor-pointer hover-u mt-4"
+                  onClick={() => download('download-list-xlsx')}>
+                  Liste en Excel
+                </div>
+              </div>
+            }>
+            <Button outlined>Télécharger</Button>
+          </Dropdown>
+        </div>
+      </Flex>
 
-      <div className='my-20 datatable'>
+      <div className="my-20 datatable">
         <table>
           <thead>
             <tr>
-              <th>Rang</th>
+              <th>Rg</th>
               <th>Nom et prénoms</th>
-              <th>Numéro de table</th>
+              <th>Dep</th>
+              <th>N° </th>
               <th>Notes</th>
+              <th>Notes *</th>
               <th>Total</th>
-              <th>Moyenne</th>
+              <th>Total *</th>
+              <th>Moy</th>
+              <th>Moy *</th>
+              <th>Moy finale</th>
             </tr>
           </thead>
           <tbody>
@@ -46,10 +86,31 @@ function ResultLn() {
                   <td>
                     {score.candidate.nom} {score.candidate.prenom}
                   </td>
+                  <td>{score.candidate.departement.label}</td>
                   <td>{score.candidate.numero}</td>
-                  <td>{score.scores.map((s: any) => s.value).join(' - ')}</td>
-                  <td>{score.sum}</td>
-                  <td className='text-right'>{score.mean}</td>
+                  <td>
+                    {score.grades
+                      .filter((s: any) => !s.isOptional)
+                      .map((s: any) => s.value)
+                      .join(' - ')}
+                  </td>
+                  <td>
+                    {score.grades
+                      .filter((s: any) => s.isOptional)
+                      .map((s: any) => s.value)
+                      .join(' - ')}
+                  </td>
+                  <td>{score.optTotal}</td>
+                  <td>{score.total}</td>
+                  <td className="text-right">
+                    {Number(score.optMean).toFixed(2)}
+                  </td>
+                  <td className="text-right">
+                    {Number(score.mean_).toFixed(2)}
+                  </td>
+                  <td className="text-right">
+                    {Number(score.mean).toFixed(2)}
+                  </td>
                 </tr>
               );
             })}

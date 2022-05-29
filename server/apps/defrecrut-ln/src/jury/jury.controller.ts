@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiProperty, ApiTags } from '@nestjs/swagger';
+import { ApiProperty, ApiTags, ApiPropertyOptional } from '@nestjs/swagger';
 import { Jury, Member } from './jury.dto';
 import { JuryService } from './jury.service';
 
@@ -17,6 +17,14 @@ class LoginPayload {
 
   @ApiProperty()
   password: string;
+}
+
+export class PickCandidate {
+  @ApiProperty()
+  language: string;
+
+  @ApiPropertyOptional()
+  optionalLanguage?: string;
 }
 
 @Controller('jury')
@@ -73,24 +81,33 @@ export class JuryController {
     return { statusCode: HttpStatus.OK };
   }
 
-  @Get('pick-candidate/:exam/:dep/:jury/:num')
+  @Post('pick-candidate/:exam/:dep/:jury/:num')
   async pickCandidate(
     @Param('exam') exam: string,
     @Param('dep') dep: string,
     @Param('jury') jury: string,
     @Param('num') num: string,
+    @Body() body: PickCandidate,
   ) {
-    return this.juryService.pickCandidate(exam, num, dep, jury);
+    return this.juryService.pickCandidate(exam, num, dep, jury, body);
   }
 
-  @Post('pick-candidate-numbers/:exam/:dep/:jury/:num')
+  @Post('pick-candidate-numbers/:exam/:dep/:jury/:num/:opt')
   async pickCandidateNumbers(
     @Param('exam') exam: string,
     @Param('dep') dep: string,
     @Param('jury') jury: string,
     @Param('num') num: string,
+    @Param('opt') opt: 'true' | 'false',
     @Body() nums: string[],
   ) {
-    return this.juryService.pickCandidateNumbers(exam, num, dep, jury, nums);
+    return this.juryService.pickCandidateNumbers(
+      exam,
+      num,
+      dep,
+      jury,
+      nums,
+      opt,
+    );
   }
 }

@@ -23,7 +23,7 @@ export function HandleHttpException(code?: number) {
                 ? error.response.data.message
                 : error.message,
           },
-          lastArg.code ? lastArg.code : HttpStatus.BAD_REQUEST,
+          lastArg && lastArg.code ? lastArg.code : HttpStatus.BAD_REQUEST,
         );
       }
     };

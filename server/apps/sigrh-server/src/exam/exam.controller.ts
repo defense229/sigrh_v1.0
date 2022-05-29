@@ -237,10 +237,11 @@ export class ExamController {
     @Param('exam') exam: string,
     @Res() res: Response,
     @Query('departement') departement: string,
+    @Query('name') name: string,
   ) {
     const data = await this.examService.getSetting(exam);
     const fields = await this.examService.getFields(exam);
-    const html = getPdfResultList(data[0].result, fields, departement);
+    const html = getPdfResultList(data[0].result, fields, departement, name);
     const buffer = await this.examService.downloadPdf(html);
     const path = join(tmpdir(), `liste_des_retenus.pdf`);
     writeFileSync(path, Buffer.from(buffer.data));

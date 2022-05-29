@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Score, ScoreDocument } from './score-manager.dto';
 import { Model } from 'mongoose';
 import { DbParserService } from '@sigrh/db-parser';
-import axios from 'axios';
 
 @Injectable()
 export class ScoreManagerService {
@@ -34,63 +33,85 @@ export class ScoreManagerService {
   }
 
   async getCandidateScore(exam: string, candidate: string) {
-    const _result = await this.model
-      .find({ exam, candidate })
-      .populate('field');
-    const _computed = _result.map((item: any) => {
-      const result = {
-        value: item.value,
-        candidate: item.candidate,
-        coefficient: item.field.coefficient,
-        field: item.field.label,
-        poundValue: item.value * item.field.coefficient,
-        extras: item.extras,
-      };
-      return result;
-    });
-    const sums = _computed.reduce(
-      (acc, cur) => {
-        return {
-          sum: acc.sum + cur.value * cur.coefficient,
-          coefSum: acc.coefSum + cur.coefficient,
-        };
+    const pipeline: any[] = [
+      { $match: { exam, candidate } },
+      {
+        $lookup: {
+          from: 'fields',
+          localField: 'field',
+          foreignField: '_id',
+          as: 'field_',
+        },
       },
-      { sum: 0, coefSum: 0 },
-    );
-    return {
-      scores: _computed,
-      ...sums,
-      mean: (Math.round((sums.sum / sums.coefSum) * 100) / 100).toFixed(2),
-    };
+      { $unwind: '$field_' },
+      {
+        $set: {
+          total: { $multiply: ['$value', '$field_.coefficient'] },
+          optTotal: {
+            $cond: {
+              if: { $eq: ['$isOptional', true] },
+              then: 0,
+              else: { $multiply: ['$value', '$field_.coefficient'] },
+            },
+          },
+          optCoef: {
+            $cond: {
+              if: { $eq: ['$isOptional', true] },
+              then: 0,
+              else: '$field_.coefficient',
+            },
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { candidate: '$candidate' },
+          grades: {
+            $push: {
+              value: '$value',
+              coef: '$field_.coefficient',
+              field: '$field',
+              isOptional: '$isOptional',
+            },
+          },
+          total: { $sum: '$total' },
+          optTotal: { $sum: '$optTotal' },
+          coefSum: { $sum: '$field_.coefficient' },
+          optCoefSum: { $sum: '$optCoef' },
+        },
+      },
+      {
+        $set: {
+          mean_: { $divide: ['$total', '$coefSum'] },
+          optMean: { $divide: ['$optTotal', '$optCoefSum'] },
+          candidate: '$_id.candidate',
+        },
+      },
+      {
+        $set: {
+          mean: {
+            $cond: {
+              if: { $gte: ['$optMean', '$mean_'] },
+              then: '$optMean',
+              else: '$mean_',
+            },
+          },
+        },
+      },
+      { $project: { _id: 0 } },
+    ];
+    const result = await this.model.aggregate(pipeline);
+    return result.length > 0 ? result[0] : null;
   }
 
-  async getAllCandidates() {
-    const _scores = await this.model.find({});
+  async getAllCandidates(exam: string) {
+    console.log(exam);
+    const _scores = await this.model.find({ exam });
     const candidates = {};
     for (const score of _scores) {
       if (!(score.candidate in candidates)) candidates[score.candidate] = '';
     }
     return Object.keys(candidates);
-  }
-
-  async getExamsScores(exam: string, sorted = true, reverse = false) {
-    const candidates = await this.getAllCandidates();
-    const promises = candidates.map((candidate) =>
-      this.getCandidateScore(exam, candidate),
-    );
-    const scores = (await Promise.all(promises)).filter(
-      (score) => score.sum > 0,
-    );
-    if (!sorted)
-      return scores.map((score) => ({ ...score, sum: score.sum.toFixed(2) }));
-    if (sorted && !reverse)
-      return scores
-        .sort((a, b) => Number(a.mean) - Number(b.mean))
-        .map((score) => ({ ...score, sum: score.sum.toFixed(2) }));
-    if (sorted && reverse)
-      return scores
-        .sort((a, b) => -Number(a.mean) + Number(b.mean))
-        .map((score) => ({ ...score, sum: score.sum.toFixed(2) }));
   }
 
   async computeExamScore(exam: string, sorted = true, reverse = false) {
@@ -106,7 +127,23 @@ export class ScoreManagerService {
       },
       { $unwind: '$field_' },
       {
-        $set: { total: { $multiply: ['$value', '$field_.coefficient'] } },
+        $set: {
+          total: { $multiply: ['$value', '$field_.coefficient'] },
+          optTotal: {
+            $cond: {
+              if: { $eq: ['$isOptional', true] },
+              then: 0,
+              else: { $multiply: ['$value', '$field_.coefficient'] },
+            },
+          },
+          optCoef: {
+            $cond: {
+              if: { $eq: ['$isOptional', true] },
+              then: 0,
+              else: '$field_.coefficient',
+            },
+          },
+        },
       },
       {
         $group: {
@@ -116,16 +153,31 @@ export class ScoreManagerService {
               value: '$value',
               coef: '$field_.coefficient',
               field: '$field',
+              isOptional: '$isOptional',
             },
           },
           total: { $sum: '$total' },
+          optTotal: { $sum: '$optTotal' },
           coefSum: { $sum: '$field_.coefficient' },
+          optCoefSum: { $sum: '$optCoef' },
         },
       },
       {
         $set: {
-          mean: { $divide: ['$total', '$coefSum'] },
+          mean_: { $divide: ['$total', '$coefSum'] },
+          optMean: { $divide: ['$optTotal', '$optCoefSum'] },
           candidate: '$_id.candidate',
+        },
+      },
+      {
+        $set: {
+          mean: {
+            $cond: {
+              if: { $gte: ['$optMean', '$mean_'] },
+              then: '$optMean',
+              else: '$mean_',
+            },
+          },
         },
       },
       { $project: { _id: 0 } },
@@ -137,28 +189,15 @@ export class ScoreManagerService {
     return result;
   }
 
-  async correction() {
-    const scores = await this.model.find({});
-    const _scores = scores.filter((score) => score.candidate.length < 12);
-    // const p = [];
-    // for (const _s of _scores) {
-    //   const response = await axios.get(
-    //     `http://localhost:7002/api/v1/qrcodes/${_s.candidate}`,
-    //   );
-    //   p.push(response.data);
-    // }
-
-    return _scores;
-  }
-
   async save(payload: Score) {
     try {
-      const { field, candidate, exam, extras } = payload;
+      const { field, candidate, exam, extras, isOptional } = payload;
       const previousScore = await this.model.findOne({
         field,
         candidate,
         exam,
         extras,
+        isOptional,
       });
       if (!previousScore)
         return this.dbParser.parseData(await this.model.create(payload));
@@ -184,12 +223,5 @@ export class ScoreManagerService {
 
   async removeScore(id: string) {
     return await this.model.remove({ _id: id });
-  }
-
-  async updateEnseignants() {
-    await this.model.updateMany(
-      { exam: '624d808282b473d0c6369331', field: '6278219b726f06e793c433e1' },
-      { field: '627820a7726f06e793c433cf' },
-    );
   }
 }

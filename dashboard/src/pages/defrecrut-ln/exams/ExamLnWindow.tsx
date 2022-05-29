@@ -15,6 +15,7 @@ const links: ISidebarLink[] = [
   { label: 'Jury', path: 'jury' },
   { label: 'Membres de jury', path: 'jury-members' },
   { label: 'Candidats', path: 'candidate' },
+  { label: 'Langues', path: 'languages' },
   { label: 'Questions', path: 'question' },
   { label: 'Résultats', path: 'results' },
   { label: 'Paramètres', path: 'settings' },
@@ -25,7 +26,7 @@ function ExamLnWindow() {
 
   if (authLoading) return <PageLoading />;
   return (
-    <div className='bg-light h-page'>
+    <div className="bg-light h-page">
       <Topbar user={user as IUser} />
       <Sidebar data={links} />
       <MainWindow>

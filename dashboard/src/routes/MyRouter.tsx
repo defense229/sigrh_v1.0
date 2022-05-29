@@ -41,6 +41,7 @@ import SportStats from '../pages/defrecrut/sport/SportStats';
 import Users from '../pages/defrecrut/users/Users';
 import Configuration from '../pages/defrecrut/configs/Configuration';
 import BeforeWriting from '../pages/defrecrut/writing/BeforeWriting';
+import LanguageLn from '../pages/defrecrut-ln/global/languages/LanguageLn';
 
 function MyRouter() {
   return (
@@ -89,6 +90,7 @@ function MyRouter() {
         <Route path="question" element={<QuestionsLn />} />
         <Route path="results" element={<ResultLn />} />
         <Route path="settings" element={<SetttingsLn />} />
+        <Route path="languages" element={<LanguageLn />} />
       </Route>
 
       <Route path="*" element={<NotFoud />} />

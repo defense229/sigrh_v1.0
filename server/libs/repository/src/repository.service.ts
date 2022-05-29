@@ -28,7 +28,8 @@ export class RepositoryService<T> {
     for (const key in this.searcher) {
       result.push({ [key]: !search ? /.+/ : new RegExp(search, 'i') });
     }
-    return { $or: result };
+
+    return result.length === 0 ? {} : { $or: result };
   }
 
   @HandleHttpException()
@@ -39,6 +40,7 @@ export class RepositoryService<T> {
     query: any = {},
     populate?: 'string' | string[],
   ) {
+    console.log(this.parsedSearchFields(search));
     const total = await this.model.countDocuments({
       enabled: true,
       ...this.parsedSearchFields(search),

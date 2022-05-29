@@ -43,4 +43,7 @@ export class ScorePayload implements IFieldPayload {
 
   @ApiProperty()
   extras?: string;
+
+  @ApiProperty()
+  isOptional?: boolean;
 }

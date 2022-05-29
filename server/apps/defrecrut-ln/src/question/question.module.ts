@@ -9,6 +9,8 @@ import { ScoreService } from '../consumers/score/score.service';
 import { HttpModule } from '@nestjs/axios';
 import { CandidatModule } from '../candidat/candidat.module';
 import { WebsocketModule } from '@sigrh/websocket';
+import { DepartementModule } from '../departement/departement.module';
+import { ReportService } from '../consumers/report/report.service';
 
 @Module({
   imports: [
@@ -20,9 +22,10 @@ import { WebsocketModule } from '@sigrh/websocket';
     HttpModule,
     CandidatModule,
     WebsocketModule,
+    DepartementModule,
   ],
   controllers: [QuestionController],
-  providers: [QuestionService, ScoreService],
+  providers: [QuestionService, ScoreService, ReportService],
   exports: [QuestionService],
 })
 export class QuestionModule {}

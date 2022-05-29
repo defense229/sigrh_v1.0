@@ -1,3 +1,4 @@
+import { DepartementService } from './../departement/departement.service';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { RepositoryService } from '@sigrh/repository';
@@ -9,6 +10,7 @@ import { ScorePayload } from '../consumers/score/score.types';
 import { CandidatService } from '../candidat/candidat.service';
 import { WsGateway } from '@sigrh/websocket';
 import { WsEvents } from '../utils';
+import { ReportService } from '../consumers/report/report.service';
 
 @Injectable()
 export class QuestionService extends RepositoryService<Question> {
@@ -18,9 +20,19 @@ export class QuestionService extends RepositoryService<Question> {
     protected readonly dbParser: DbParserService,
     private readonly score: ScoreService,
     private readonly candidateService: CandidatService,
+    private depService: DepartementService,
+    private report: ReportService,
     private ws: WsGateway,
   ) {
     super(model, dbParser);
+  }
+
+  async downloadPdf(data: string, format: any = {}) {
+    return await this.report.downloadPdf(data, format);
+  }
+
+  async downloadXlsx(data: Record<string, string>[]) {
+    return await this.report.downloadXlsx(data);
   }
 
   async getAll(exam: string) {
@@ -70,15 +82,18 @@ export class QuestionService extends RepositoryService<Question> {
 
   async getResults(exam: string) {
     const results = await this.score.getResults(exam, 'DESC');
+    console.log(results);
     const result = [];
 
     for (const score of results) {
-      if (score.scores.length > 0) {
-        const candidate = await this.candidateService.one(
-          score.scores[0].candidate,
-        );
-        result.push({ ...score, candidate });
-      }
+      const candidate = await this.candidateService.one(score.candidate);
+      result.push({
+        ...score,
+        candidate: {
+          ...candidate,
+          departement: await this.depService.one(candidate.departement),
+        },
+      });
     }
 
     return result;

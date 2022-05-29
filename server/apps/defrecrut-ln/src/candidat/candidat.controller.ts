@@ -71,6 +71,7 @@ export class CandidatController {
 
   @Get('jury/:jury')
   async getJuryCandidates(@Param('jury') jury: string) {
+    console.log('[jury]', jury);
     return await this.candidatService.countJuryCandidates(jury);
   }
 }

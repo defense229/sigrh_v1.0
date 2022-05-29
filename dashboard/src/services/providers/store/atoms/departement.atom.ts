@@ -74,6 +74,20 @@ export const quetionsLnList = selectorFamily({
     },
 });
 
+export const languageLnList = selectorFamily({
+  key: 'languages-list-per-exam-ln',
+  get:
+    (id: string) =>
+    async ({ get }) => {
+      const dep = get(queryParams);
+      console.log(dep);
+      const response = await axios.get(
+        config.api_url.defrecrutLn + 'languages/exam/' + id
+      );
+      return response.data;
+    },
+});
+
 export const candidatLnList = selectorFamily({
   key: 'candidat-list-per-exam-ln',
   get:

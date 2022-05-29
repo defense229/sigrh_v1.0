@@ -52,6 +52,6 @@ export class FieldService {
   }
 
   async remove(id: string): Promise<void> {
-    await this.update(id, { enabled: false });
+    await this.model.updateOne({ _id: id }, { enabled: false });
   }
 }

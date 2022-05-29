@@ -11,6 +11,9 @@ import { useFetch } from '../../../services/hooks/useFetch';
 
 function BeforeWriting() {
   const { id } = useParams();
+  const [_, exam] = useFetch({
+    url: config.api_url.sigrh + 'exams/' + id,
+  });
 
   const [loadingConfig, config_, , , reload] = useFetch({
     url: config.api_url.sigrh + 'settings/' + id,
@@ -29,6 +32,8 @@ function BeforeWriting() {
   const ref = useRef(null);
   const currentDep = useRef('*');
   const navigate = useNavigate();
+
+  console.log(exam);
 
   useEffect(() => {
     if (!loadingConfig) {
@@ -66,7 +71,9 @@ function BeforeWriting() {
         '/' +
         id +
         '?departement=' +
-        currentDep.current
+        currentDep.current +
+        '&name=' +
+        exam.label
     );
   };
 

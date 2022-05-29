@@ -11,6 +11,8 @@ import CandidatInfo from './CandidatInfo';
 import Condition from '../components/Utils/Others/Condition';
 import { UserRoles } from '../services/types/user.types';
 import ComponentLoading from '../components/Progress/ComponentLoading';
+import Select from '../components/Dropdowns/Select';
+import { useFetch } from '../services/hooks/useFetch';
 
 type Props = {
   user: any;
@@ -23,6 +25,15 @@ function CandidatNumber({ user, setCurrent }: Props) {
   const [allCandidates, setAllCandidates] = useState(0);
   const [candidate, setCandidate] = useState<any | null>(null);
   const [btnLoading, setBtnLoading] = useState(false);
+  const [lgLoading, lgs] = useFetch({
+    url: config.api_url.defrecrutLn + 'languages/exam/625c395ca5a9760f63a5b9e5',
+  });
+  const [payload, setPayload] = useState({
+    language: null,
+    optionalLanguage: '',
+  });
+
+  console.log(lgs);
 
   useEffect(() => {
     axios
@@ -34,7 +45,7 @@ function CandidatNumber({ user, setCurrent }: Props) {
 
   const handleSelect = async () => {
     setBtnLoading(true);
-    await axios.get(
+    await axios.post(
       config.api_url.defrecrutLn +
         'jury/pick-candidate/' +
         user.exam +
@@ -43,7 +54,8 @@ function CandidatNumber({ user, setCurrent }: Props) {
         '/' +
         user.jury +
         '/' +
-        _number
+        _number,
+      payload
     );
     setBtnLoading(false);
   };
@@ -54,7 +66,6 @@ function CandidatNumber({ user, setCurrent }: Props) {
       (info: { jury: any; candidate: any }) => {
         console.log(info);
         if (info.jury === (user as IUser).jury) {
-          // setCurrent(() => info.candidate);
           if (user.role === UserRoles.MEMBER) {
             setCurrent(() => info.candidate);
           } else {
@@ -71,26 +82,48 @@ function CandidatNumber({ user, setCurrent }: Props) {
   }
 
   return (
-    <div className='my-20 mx-10'>
+    <div className="my-20 mx-10">
       <Condition cond={candidate === null}>
-        <div className='bg-primary text-center py-5 radius-8 px-20 text-white'>
+        <div className="bg-primary text-center py-5 radius-8 px-20 text-white">
           <div>Nombre de candidats reçus :</div>
-          <div className='fs-24 bold'>{allCandidates}</div>
+          <div className="fs-24 bold">{allCandidates}</div>
         </div>
-        <div className='bg-white p-10 mt-10 radius-8'>
-          <div className='fs-18 bold'>
-            Veuillez entrer le numéro de table du candidat
+        <div className="bg-white p-10 mt-10 radius-8">
+          <div className="fs-18 bold">
+            Veuillez entrer les informations du candidat
           </div>
 
-          <div className='mt-20'>
+          <div className="mt-20">
             <Input
               value={_number}
-              label='N° de table'
+              label="N° de table"
               onChange={(e) => setNumber(e.target.value.toUpperCase())}
             />
+
+            <div className="mt-8">
+              <Select
+                values={lgs}
+                display="label"
+                label="Choisir la langue principale"
+                onChange={(v: any) => {
+                  setPayload({ ...payload, language: v.label });
+                }}
+              />
+            </div>
+
+            <div className="mt-8">
+              <Select
+                values={lgs}
+                display="label"
+                label="Choisir la langue secondaire"
+                onChange={(v: any) => {
+                  setPayload({ ...payload, optionalLanguage: v.label });
+                }}
+              />
+            </div>
           </div>
 
-          <div className='mt-20'>
+          <div className="mt-20">
             <Button
               loading={btnLoading}
               disabled={_number.length < 4}

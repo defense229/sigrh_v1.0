@@ -45,6 +45,7 @@ export class ScoreService {
 
   @HandleHttpException()
   async removeField(id: string) {
+    console.log('[removing]', id);
     await this.http.axiosRef.delete(this.baseUrl + 'fields/' + id);
     return {
       statusCode: HttpStatus.NO_CONTENT,
@@ -64,13 +65,14 @@ export class ScoreService {
   @HandleHttpException()
   async getResults(exam: string, sort: 'ASC' | 'DESC') {
     const response = await this.http.axiosRef.get(
-      this.baseUrl + 'scores/results/' + exam,
+      this.baseUrl + 'scores/computed/' + exam,
       {
         params: {
           sort,
         },
       },
     );
+    console.log('[response]: ', response.data);
     return response.data;
   }
 

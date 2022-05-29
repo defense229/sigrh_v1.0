@@ -8,6 +8,10 @@ export class DefConfig implements IDefConfig {
   @Prop()
   @ApiProperty()
   questions?: number;
+
+  @Prop()
+  @ApiProperty()
+  optionals?: number;
 }
 
 export type DefConfigDocument = DefConfig & Document;

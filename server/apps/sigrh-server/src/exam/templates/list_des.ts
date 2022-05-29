@@ -388,6 +388,7 @@ export const getPdfResultList = (
   data: any,
   fields: any[],
   departement: string = '*',
+  name = '',
 ) => `<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -536,12 +537,14 @@ export const getPdfResultList = (
     </div>
     <div>
       <div class="maroon huge bold text-center">
-        Concours de recrutement militaire au titre de l'année 2022
+        ${name}
       </div>
       <br />
     </div>
 
-    <h3 class="center">Liste des retenus</h3>
+    <h3 class="text-center">Liste ${
+      departement.length > 2 ? `(${departement})` : ''
+    }</h3>
 
     <table>
         ${genListPdfArray(data, fields, departement)}

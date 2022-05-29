@@ -16,6 +16,11 @@ import { DepartementService } from './departement.service';
 export class DepartementController {
   constructor(private readonly departementService: DepartementService) {}
 
+  @Get(':id')
+  async one(@Param('id') id: string) {
+    return this.departementService.one(id);
+  }
+
   @Get('exam/:exam')
   async all(@Param('exam') exam: string) {
     return this.departementService.find({ exam });
