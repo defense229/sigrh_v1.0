@@ -57,6 +57,8 @@ export function genListObject(data: any) {
       ).toUpperCase(),
       Département: item.candidate.departement.label,
       Genre: item.candidate.sexe,
+      'Langue pricipale': item.candidate.language,
+      'Langue secondaire': item.candidate.optionalLanguage,
       Total: item.optTotal.toFixed(2),
       'Total avec opt': item.total.toFixed(2),
       Moyenne: item.optMean.toFixed(2),
