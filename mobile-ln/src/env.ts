@@ -17,7 +17,7 @@ const _config = {
     api_url: {
       sigrh: 'https://api-defrecrut-core.defense.bj/api/v2/',
       defrecrutLn: 'https://api-defrecrut-core.defense.bj-special/api/v1/',
-      ws: 'https://api-defrecrut-core.defense-special.bj/',
+      ws: 'https://api-defrecrut-core-special.defense.bj/',
     },
   },
 };
