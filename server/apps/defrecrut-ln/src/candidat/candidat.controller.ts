@@ -7,8 +7,10 @@ import {
   Post,
   Put,
   Query,
+  Res,
 } from '@nestjs/common';
 import { ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { Candidat } from './candidat.dto';
 import { CandidatService } from './candidat.service';
 
@@ -73,5 +75,15 @@ export class CandidatController {
   async getJuryCandidates(@Param('jury') jury: string) {
     console.log('[jury]', jury);
     return await this.candidatService.countJuryCandidates(jury);
+  }
+
+  @Get('download-list-xlsx/:exam')
+  async downloadListXlsx(
+    @Param('exam') exam: string,
+    @Res() res: Response,
+    @Query('departement') departement: string,
+  ) {
+    const path = await this.candidatService.getCandidateList(exam, departement);
+    res.download(path);
   }
 }

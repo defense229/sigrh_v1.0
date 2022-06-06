@@ -224,4 +224,8 @@ export class ScoreManagerService {
   async removeScore(id: string) {
     return await this.model.remove({ _id: id });
   }
+
+  async removeExamScores(id: string) {
+    return await this.model.remove({ exam: id });
+  }
 }

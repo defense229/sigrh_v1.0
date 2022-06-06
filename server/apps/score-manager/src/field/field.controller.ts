@@ -39,4 +39,9 @@ export class FieldController {
     console.log('[remove-field]', id);
     return await this.fieldService.remove(id);
   }
+
+  @Delete('remove-exam-fields/:id')
+  async removeExamFields(@Param('id') id: string) {
+    return await this.fieldService.removeExamFields(id);
+  }
 }

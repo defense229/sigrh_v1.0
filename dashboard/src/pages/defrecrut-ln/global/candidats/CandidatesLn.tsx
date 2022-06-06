@@ -3,12 +3,15 @@ import React, { Suspense, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import Button from '../../../../components/Buttons/Button';
+import Dropdown from '../../../../components/Dropdowns/Dropdown';
 import Modal from '../../../../components/Modals/Modal';
 import ComponentLoading from '../../../../components/Progress/ComponentLoading';
 import DataTable from '../../../../components/Tables/DataTable';
 import EmptyState from '../../../../components/Utils/EmptyState/EmptyState';
+import Flex from '../../../../components/Utils/Flex/Flex';
 import { config } from '../../../../env';
 import useChangePageSize from '../../../../services/hooks/useChangePageSize';
+import { useFetch } from '../../../../services/hooks/useFetch';
 import { useQueryParams } from '../../../../services/hooks/useQueryParams';
 import { useTable } from '../../../../services/hooks/useTable';
 import { xlsxUpload } from '../../../../services/libs';
@@ -88,6 +91,9 @@ function CandidatesLn() {
   const { id } = useParams();
   const [open, setOpen] = useState(false);
   const { reload } = useQueryParams();
+  const [_, departements] = useFetch({
+    url: config.api_url.defrecrutLn + 'departements/exam/' + id,
+  });
 
   const toggle = () => setOpen((open) => !open);
 
@@ -119,11 +125,36 @@ function CandidatesLn() {
   return (
     <div>
       <div className="fs-20 bold">Candidats</div>
-      <div className="text-right">
+      <div className="text-right flex my-10 justify-end">
         <Button onClick={toggle}>Ajouter un candidat</Button>
         <Button outlined className="ml-4" onClick={uploadCandidate}>
           Importer un fichier
         </Button>
+        <Dropdown
+          dropdown={
+            <Flex direction="col" gap="10px">
+              {departements?.map((item: any, index: number) => (
+                <div
+                  className="hover-u cursor-pointer"
+                  onClick={() => {
+                    window.open(
+                      config.api_url.defrecrutLn +
+                        'candidats/download-list-xlsx/' +
+                        id +
+                        '?departement=' +
+                        item.id
+                    );
+                  }}
+                  key={index}>
+                  {item.label}
+                </div>
+              ))}
+            </Flex>
+          }>
+          <Button outlined className="ml-4">
+            Télécharger la liste
+          </Button>
+        </Dropdown>
       </div>
       <Suspense fallback={<ComponentLoading />}>
         <LoadCandidat reload={reload} />

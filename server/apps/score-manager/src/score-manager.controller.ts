@@ -71,4 +71,9 @@ export class ScoreManagerController {
   async removeScore(@Param('id') id: string) {
     return await this.scoreManagerService.removeScore(id);
   }
+
+  @Delete('remove-exam-scores/:id')
+  async removeExamScores(@Param('id') id: string) {
+    return await this.scoreManagerService.removeExamScores(id);
+  }
 }

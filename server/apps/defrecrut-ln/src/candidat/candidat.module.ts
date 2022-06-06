@@ -6,6 +6,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { DbParserModule } from '@sigrh/db-parser';
 import { RepositoryModule } from '@sigrh/repository';
 import { DepartementModule } from '../departement/departement.module';
+import { ReportService } from '../consumers/report/report.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -15,9 +17,10 @@ import { DepartementModule } from '../departement/departement.module';
     DbParserModule,
     RepositoryModule,
     DepartementModule,
+    HttpModule,
   ],
   controllers: [CandidatController],
-  providers: [CandidatService],
+  providers: [CandidatService, ReportService],
   exports: [CandidatService],
 })
 export class CandidatModule {}
