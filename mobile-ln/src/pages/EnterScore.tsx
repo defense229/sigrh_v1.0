@@ -47,12 +47,13 @@ function EnterScore({
         isOptional: false,
       });
       setLoading(false);
-      if (index === questions.length) {
+      if (index === questions.length - 1) {
         setEndFirst(true);
       }
       setScore('');
       setIndex((index) => index + 1);
     } else {
+      console.log(opt_questions);
       if (opt_questions.length === 0) {
         setOpenToast(true);
         setTimeout(() => {

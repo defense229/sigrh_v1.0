@@ -19,12 +19,12 @@ function Topbar({ user }: { user: IUser }) {
 
   return (
     <Flex
-      className='bg-primary px-16'
-      justify='between'
-      items='center'
+      className="bg-primary px-16"
+      justify="between"
+      items="center"
       style={{ height: '60px' }}>
-      <img height='32' src={logo} alt='LOGO' />
-      <Flex gap='15px'>
+      <img height="32" src={logo} alt="LOGO" />
+      <Flex gap="15px">
         <SvgUserCircle />
         <Dropdown
           dropdown={
@@ -32,10 +32,12 @@ function Topbar({ user }: { user: IUser }) {
               Déconnexion
             </Button>
           }>
-          <Flex items='center' gap='10px' className='cursor-pointer'>
+          <Flex items="center" gap="10px" className="cursor-pointer">
             <div>
-              <div className='fs-16 text-white bold'>{user.username}</div>
-              <div className='fs-12 text-white'>{user.role}</div>
+              <div className="fs-16 text-white bold">
+                {user.username.toUpperCase()}
+              </div>
+              <div className="fs-12 text-white">{user.role}</div>
             </div>
             <SvgChevronDown />
           </Flex>

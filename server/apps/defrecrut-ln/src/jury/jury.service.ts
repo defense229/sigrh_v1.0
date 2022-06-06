@@ -28,7 +28,7 @@ export class MemberService extends RepositoryService<Member> {
   }
 
   async login(username: string, password: string) {
-    const member = await this.model.findOne({ username });
+    const member = await this.model.findOne({ username, enabled: true });
     if (member && verify(password, member.password)) {
       delete member.password;
       return {
