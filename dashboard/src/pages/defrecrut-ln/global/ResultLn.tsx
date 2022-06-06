@@ -30,7 +30,7 @@ function ResultLn() {
         path +
         '/' +
         id +
-        '?name=Concours spécial'
+        "?name=Concours de recrutement militaire sur titre au titre de l'année 2022"
     );
   };
 
