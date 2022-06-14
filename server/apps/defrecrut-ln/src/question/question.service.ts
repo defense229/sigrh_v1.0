@@ -80,20 +80,36 @@ export class QuestionService extends RepositoryService<Question> {
     return this.score.removeField(id);
   }
 
-  async getResults(exam: string) {
-    const results = await this.score.getResults(exam, 'DESC');
-    console.log(results);
+  async getResults(
+    exam: string,
+    departement: string = null,
+    limit: number = -1,
+  ) {
+    const results_ = await this.score.getResults(exam, 'DESC');
+    console.log(departement);
     const result = [];
+    let results = [...results_];
+
+    if (limit > 0) {
+      results = results.slice(0, limit);
+    }
 
     for (const score of results) {
       const candidate = await this.candidateService.one(score.candidate);
-      result.push({
-        ...score,
-        candidate: {
-          ...candidate,
-          departement: await this.depService.one(candidate.departement),
-        },
-      });
+      const departement_ = await this.depService.one(candidate.departement);
+      console.log(departement_.id, String(departement_.id));
+      if (
+        !departement ||
+        departement === '*' ||
+        String(departement_.id) === departement
+      )
+        result.push({
+          ...score,
+          candidate: {
+            ...candidate,
+            departement: departement_,
+          },
+        });
     }
 
     return result;

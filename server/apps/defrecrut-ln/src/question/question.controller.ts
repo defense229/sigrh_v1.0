@@ -39,11 +39,15 @@ export class QuestionController {
     @Param('exam') exam: string,
     @Res() res: Response,
     @Query('name') name: string,
+    @Query('departement') departement: string,
+    @Query('limit') limit: string,
   ) {
-    console.log(name);
-    const data = await this.questionService.getResults(exam);
+    const data = await this.questionService.getResults(
+      exam,
+      departement,
+      limit ? Number(limit) : -1,
+    );
     const html = getPdfResultList(data, name);
-    console.log(html);
     const buffer = await this.questionService.downloadPdf(html);
     const path = join(tmpdir(), `liste_des_retenus.pdf`);
     writeFileSync(path, Buffer.from(buffer.data));
@@ -51,9 +55,19 @@ export class QuestionController {
   }
 
   @Get('download-list-xlsx/:exam')
-  async downloadListXlsx(@Param('exam') exam: string, @Res() res: Response) {
-    const data = await this.questionService.getResults(exam);
+  async downloadListXlsx(
+    @Param('exam') exam: string,
+    @Res() res: Response,
+    @Query('departement') departement: string,
+    @Query('limit') limit: string,
+  ) {
+    const data = await this.questionService.getResults(
+      exam,
+      departement,
+      limit ? Number(limit) : -1,
+    );
     const payload = genListObject(data);
+    console.log(payload);
     const buffer = await this.questionService.downloadXlsx(payload);
     const path = join(tmpdir(), `liste_des_retenus.xlsx`);
     writeFileSync(path, Buffer.from(buffer.data));

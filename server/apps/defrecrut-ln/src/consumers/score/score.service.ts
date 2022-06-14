@@ -72,7 +72,6 @@ export class ScoreService {
         },
       },
     );
-    console.log('[response]: ', response.data);
     return response.data;
   }
 
