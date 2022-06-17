@@ -86,7 +86,6 @@ export class QuestionService extends RepositoryService<Question> {
     limit: number = -1,
   ) {
     const results_ = await this.score.getResults(exam, 'DESC');
-    console.log(departement);
     const result = [];
     let results = [...results_];
 
@@ -97,7 +96,6 @@ export class QuestionService extends RepositoryService<Question> {
     for (const score of results) {
       const candidate = await this.candidateService.one(score.candidate);
       const departement_ = await this.depService.one(candidate.departement);
-      console.log(departement_.id, String(departement_.id));
       if (
         !departement ||
         departement === '*' ||
