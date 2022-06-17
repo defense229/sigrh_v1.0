@@ -1,3 +1,4 @@
+import { json } from 'express';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { DefrecrutLnModule } from './defrecrut-ln.module';
@@ -6,6 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(DefrecrutLnModule);
   app.enableCors();
   app.setGlobalPrefix('api/v1');
+  app.use(json({ limit: '50mb' }));
 
   const config = new DocumentBuilder()
     .setTitle('Deferecrut-langues-nationaux core API')
