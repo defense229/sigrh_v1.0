@@ -86,6 +86,7 @@ export class QuestionService extends RepositoryService<Question> {
     limit: number = -1,
   ) {
     const results_ = await this.score.getResults(exam, 'DESC');
+    console.log('processing', results_.length);
     const result = [];
     let results = [...results_];
 
