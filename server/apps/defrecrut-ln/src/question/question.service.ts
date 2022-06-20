@@ -90,16 +90,12 @@ export class QuestionService extends RepositoryService<Question> {
     const result = [];
     let results = [...results_];
 
-    if (limit > 0) {
-      results = results.slice(0, limit);
-    }
-
     console.log('processing', results.length);
     const c_ = results.map((score) =>
       this.candidateService.one(score.candidate),
     );
     const c__ = await Promise.all(c_);
-    console.log('c__');
+    console.log('c__', departement);
 
     const d_ = c__.map((candidate) =>
       this.depService.one(candidate.departement),
@@ -111,6 +107,10 @@ export class QuestionService extends RepositoryService<Question> {
     for (const score of results) {
       const candidate = c__[i];
       const departement_ = d__[i];
+      console.log(
+        String(departement_.id),
+        String(departement_.id) === departement,
+      );
       if (
         !departement ||
         departement === '*' ||
@@ -124,6 +124,10 @@ export class QuestionService extends RepositoryService<Question> {
           },
         });
       i++;
+    }
+
+    if (limit > 0) {
+      return result.slice(0, limit);
     }
 
     return result;

@@ -50,11 +50,11 @@ function ResultLn() {
 
   return (
     <div>
-      <Flex justify='between' items='center'>
-        <div className='fs-20 bold'>Résultats</div>
-        <Flex justify='end' items='center' gap='20px'>
+      <Flex justify="between" items="center">
+        <div className="fs-20 bold">Résultats</div>
+        <Flex justify="end" items="center" gap="20px">
           <Select
-            placeholder='Choisir un département'
+            placeholder="Choisir un département"
             values={[
               ...departements,
               { label: 'Tous les départements', id: '*' },
@@ -66,19 +66,20 @@ function ResultLn() {
               );
               console.log(newResults);
               setResultsCopie(v.id === '*' ? [...results] : newResults);
+              setLimit(v.id === '*' ? results.length : newResults.length);
             }}
-            display='label'
+            display="label"
           />
           <Dropdown
             dropdown={
               <div>
                 <div
-                  className='cursor-pointer hover-u mt-4'
+                  className="cursor-pointer hover-u mt-4"
                   onClick={() => download('download-list-pdf')}>
                   Liste en PDF
                 </div>
                 <div
-                  className='cursor-pointer hover-u mt-4'
+                  className="cursor-pointer hover-u mt-4"
                   onClick={() => download('download-list-xlsx')}>
                   Liste en Excel
                 </div>
@@ -89,7 +90,7 @@ function ResultLn() {
         </Flex>
       </Flex>
 
-      <div className='my-20 datatable'>
+      <div className="my-20 datatable">
         <table>
           <thead>
             <tr>
@@ -130,13 +131,13 @@ function ResultLn() {
                   </td>
                   <td>{score.optTotal}</td>
                   <td>{score.total}</td>
-                  <td className='text-right'>
+                  <td className="text-right">
                     {Number(score.optMean).toFixed(2)}
                   </td>
-                  <td className='text-right'>
+                  <td className="text-right">
                     {Number(score.mean_).toFixed(2)}
                   </td>
-                  <td className='text-right'>
+                  <td className="text-right">
                     {Number(score.mean).toFixed(2)}
                   </td>
                 </tr>
@@ -147,22 +148,22 @@ function ResultLn() {
       </div>
 
       <Modal
-        title='Nombre de candiats à sélectionner'
+        title="Nombre de candiats à sélectionner"
         open={modal}
         onClose={() => {
           setModal(false);
         }}>
-        <div className='p-10'>
+        <div className="p-10">
           <Input
-            type='number'
-            label='Nombre de candidats'
+            type="number"
+            label="Nombre de candidats"
             value={limit}
             onChange={(e: any) => {
               setLimit(e.target.value);
             }}
           />
 
-          <div className='mt-10'>
+          <div className="mt-10">
             <Button
               expand
               onClick={() => {

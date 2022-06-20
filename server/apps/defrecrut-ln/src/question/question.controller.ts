@@ -61,6 +61,8 @@ export class QuestionController {
     @Query('departement') departement: string,
     @Query('limit') limit: string,
   ) {
+    console.log(departement);
+
     const data = await this.questionService.getResults(
       exam,
       departement,
