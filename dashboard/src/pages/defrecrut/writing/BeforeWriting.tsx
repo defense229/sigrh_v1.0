@@ -1,8 +1,11 @@
+import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '../../../components/Buttons/Button';
 import Dropdown from '../../../components/Dropdowns/Dropdown';
 import Select from '../../../components/Dropdowns/Select';
+import Input from '../../../components/Inputs/Input';
+import Modal from '../../../components/Modals/Modal';
 import ComponentLoading from '../../../components/Progress/ComponentLoading';
 import Flex from '../../../components/Utils/Flex/Flex';
 import DisplayStats from '../../../components/Utils/Others/DisplayStats';
@@ -32,6 +35,11 @@ function BeforeWriting() {
   const ref = useRef(null);
   const currentDep = useRef('*');
   const navigate = useNavigate();
+  const [openModal, setOpenModal] = useState(false);
+  const [suppleant, setSuppleant] = useState({
+    nbr: '0',
+    from: '0',
+  });
 
   console.log(exam);
 
@@ -122,6 +130,9 @@ function BeforeWriting() {
             }>
             <Button outlined>Télécharger</Button>
           </Dropdown>
+          <Button onClick={() => setOpenModal(true)}>
+            Liste des Suppléants
+          </Button>
         </Flex>
       </Flex>
 
@@ -202,6 +213,47 @@ function BeforeWriting() {
           </tbody>
         </table>
       </div>
+
+      <Modal
+        open={openModal}
+        title="Télécharger la liste des suppléants"
+        onClose={() => setOpenModal(false)}>
+        <div className="mt-10">
+          <Flex direction="col" gap="15px">
+            <Input
+              label="Nombre de suppléants à prendre"
+              type="number"
+              value={suppleant.nbr}
+              onChange={(e) =>
+                setSuppleant((s) => ({ ...s, nbr: e.target.value }))
+              }
+            />
+            <Input
+              label="Prendre à partir du numéro"
+              type="number"
+              value={suppleant.from}
+              onChange={(e) =>
+                setSuppleant((s) => ({ ...s, from: e.target.value }))
+              }
+            />
+            <Button
+              expand
+              onClick={() => {
+                const url =
+                  config.api_url.sigrh +
+                  `exams/download-suppleants/${id}/${suppleant.nbr}/${suppleant.from}`;
+
+                setOpenModal(false);
+
+                setSuppleant(() => ({ nbr: '0', from: '0' }));
+
+                window.open(url, '_blank');
+              }}>
+              Télécharger la liste
+            </Button>
+          </Flex>
+        </div>
+      </Modal>
     </div>
   );
 }

@@ -338,13 +338,74 @@ export class ExamService extends RepositoryService<Exam> {
     const nbrFields = (await this.score.getFields(exam)).length;
     console.log('[nbr of fields]:', nbrFields);
     const results = await this.getScoreResults(exam, 'DESC');
+
     const len = results.length;
-    console.log('[nbr of result]:', len);
+    // console.log('[nbr of result]:', len);
     let _results: any;
 
     if (considerAllField) {
       _results = results.filter((r: any) => r.grades.length === nbrFields);
+    } else {
+      _results = results;
     }
+
+    // Fixation
+    const names = [
+      'HOUDODE ELAGNON JULES',
+      'AMEYAVE AGBÉGNIGAN ARISTIDE',
+      'OKOU SYLVESTRE',
+      'KPOHO NEPAKARE MOISE',
+      'SOTO ARMAND',
+      'EHOU SAMUEL',
+      'HINNOUDE LETCHÈDÉ EXPÉDIT',
+      'SANTI PROSPER',
+      'OKE-FRY DÈGNON JÉRÔME',
+      'VIGNINOU EDOUARD',
+      'VITCHOEDO ROSALINE JANVIETTE',
+      'FOUNDOHOU ARLON JOSEPH',
+      'AKA THIÉRIE',
+      'HÈWLITO LAÏSSE',
+      'SEGODO CABIROU',
+      'SAKA SOUROKOU',
+      'GANZO EUVRAD ADELPH',
+      'FANOU SYLVAIN',
+      'DJOSSA NOUDÉHOUÉNOU PATRICE',
+      'GANGNIWOUI MÉDARD',
+      'TOKPASSI CHARLES',
+      'DAHAVO CÉDRIC',
+      'BIOGBE GILBERT',
+      'HOUNKONNOU JÉSUGNON',
+      'BOTON MIDOKPÈ JULIENNNE',
+      'AGBE DANIEL OYOWOLÉ',
+      'OGOUNONLA OLAGNIMIKA EMILIENNE',
+      'KOULIHO MICHELINE GOUTI',
+      'BOTON FIFA INÈS',
+      'CAKPO DOSSOU MAHOUGNON RAYMOND',
+    ];
+
+    // Get all 10.10
+    const tenten = _results.filter(
+      (score: any) => Number(score.mean).toFixed(2) === '10.10',
+    );
+    const index = _results.findIndex(
+      (score: any) => Number(score.mean).toFixed(2) === '10.10',
+    );
+    console.log(index);
+    const orderedName = [];
+    for (const name of names) {
+      const el = tenten.find(
+        (t: any) =>
+          name.indexOf(t.candidate.nom.trim().toUpperCase()) !== -1 &&
+          name.indexOf(t.candidate.prenom.trim().toUpperCase()) !== -1,
+      );
+      orderedName.push(el);
+    }
+
+    const __results = _results.slice(0, index);
+    const ___results = results.slice(index + orderedName.length);
+    const results_ = [...__results, ...orderedName, ___results];
+    // console.log('orderedName', orderedName, orderedName.length);
+    //
 
     const totalWoman = await this.candidatService.countAcceptedWomanByExam(
       exam,
@@ -362,18 +423,12 @@ export class ExamService extends RepositoryService<Exam> {
 
     const fWmToTake = Math.min(wmTotalToTake, totalWoman);
     const fmToTake = totalToTake - fWmToTake;
-    console.log('[total to take]:', totalToTake);
-    console.log('[total of women to take]:', wmTotalToTake);
-    console.log('[total of women available]:', totalWoman);
-    console.log('[total of women will take]:', fWmToTake);
-    console.log('[total of men will take]:', fmToTake);
 
-    const _firstPass = _results.slice(0, totalToTake);
+    const _firstPass = results_.slice(0, totalToTake);
     const r = wmQuota
       ? this.handleWomenQuota(_firstPass, fWmToTake, fmToTake, _results)
       : _firstPass;
     const stats = this.generateSimulationStats(r);
-    console.log({ values: r, stats });
     return { values: r, stats };
   }
 

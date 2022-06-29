@@ -23,6 +23,7 @@ import {
   genDepObject,
   genListObject,
   genStatsObject,
+  genSuppleantListObject,
 } from './templates/gen-dep-array';
 import { getPdfList } from './templates/list';
 import {
@@ -259,6 +260,24 @@ export class ExamController {
     const payload = genListObject(data[0].result, fields, departement);
     const buffer = await this.examService.downloadXlsx(payload);
     const path = join(tmpdir(), `liste_des_retenus.xlsx`);
+    writeFileSync(path, Buffer.from(buffer.data));
+    res.download(path);
+  }
+
+  @Get('download-suppleants/:exam/:nbr/:from')
+  async downloadSuppleants(
+    @Param('nbr') nbr: number,
+    @Param('from') from: number,
+    @Param('exam') exam: string,
+    @Res() res: Response,
+  ) {
+    const data = await this.examService.getScoreResults(exam);
+    const fields = await this.examService.getFields(exam);
+    console.log(from, nbr, data[0].grades);
+    const result_ = data.slice(Number(from), Number(from) + Number(nbr));
+    const payload = genSuppleantListObject(result_, fields, '*', Number(from));
+    const buffer = await this.examService.downloadXlsx(payload);
+    const path = join(tmpdir(), `liste_des_suppleants.xlsx`);
     writeFileSync(path, Buffer.from(buffer.data));
     res.download(path);
   }

@@ -133,7 +133,6 @@ export function genListObject(
   fields: any[],
   departement: string = '*',
 ) {
-  console.log(data, fields);
   const values =
     departement === '*'
       ? data.values
@@ -157,6 +156,47 @@ export function genListObject(
       info[field.label] = item.grades.find(
         (s: any) => s.field === field.id,
       ).value;
+    }
+    info = {
+      ...info,
+      Total: item.total.toFixed(2),
+      Moyenne: item.mean.toFixed(2),
+    };
+
+    result.push(info);
+    i++;
+  }
+  return result;
+}
+
+export function genSuppleantListObject(
+  data: any,
+  fields: any[],
+  departement: string = '*',
+  from: number = 0,
+) {
+  const values =
+    departement === '*'
+      ? data
+      : data.filter((v: any) => v.candidate.departement === departement);
+  let result = [];
+  let i = 1;
+  for (const item of values) {
+    let info: any = {
+      Rang: i + from + 'ème',
+      'Numéro de table': item.candidate.numero,
+      'Nom et prénoms': (
+        item.candidate.nom +
+        ' ' +
+        item.candidate.prenom
+      ).toUpperCase(),
+      Département: item.candidate.departement,
+      Genre: item.candidate.sexe,
+    };
+    for (const field of fields) {
+      const field_ = item.grades.find((s: any) => s.field === field.id);
+      if (!field_) console.log(field_);
+      else info[field.label] = field_.value;
     }
     info = {
       ...info,
