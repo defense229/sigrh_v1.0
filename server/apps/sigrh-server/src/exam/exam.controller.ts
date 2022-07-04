@@ -19,6 +19,7 @@ import { ScorePayload } from '../consumers/score/score.types';
 import { Exam } from './exam.dto';
 import { ExamService } from './exam.service';
 import { ExamSetting } from './setting/setting.dto';
+import { ExamQuotaUnit } from './setting/setting.types';
 import {
   genDepObject,
   genListObject,
@@ -271,10 +272,18 @@ export class ExamController {
     @Param('exam') exam: string,
     @Res() res: Response,
   ) {
-    const data = await this.examService.getScoreResults(exam);
+    const data_ = await this.examService.makeSimulation(
+      exam,
+      true,
+      Number(from) + Number(nbr),
+      0,
+      ExamQuotaUnit.NUMBER,
+      ExamQuotaUnit.NUMBER,
+      false,
+    );
+    const data = data_.values;
     const fields = await this.examService.getFields(exam);
-    console.log(from, nbr, data[0].grades);
-    const result_ = data.slice(Number(from), Number(from) + Number(nbr));
+    const result_ = data.slice(Number(from));
     const payload = genSuppleantListObject(result_, fields, '*', Number(from));
     const buffer = await this.examService.downloadXlsx(payload);
     const path = join(tmpdir(), `liste_des_suppleants.xlsx`);

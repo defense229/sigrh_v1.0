@@ -181,7 +181,9 @@ export function genSuppleantListObject(
       : data.filter((v: any) => v.candidate.departement === departement);
   let result = [];
   let i = 1;
+  console.log(values);
   for (const item of values) {
+    console.log(item);
     let info: any = {
       Rang: i + from + 'ème',
       'Numéro de table': item.candidate.numero,

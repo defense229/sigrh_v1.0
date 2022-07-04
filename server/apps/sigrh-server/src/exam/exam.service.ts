@@ -327,20 +327,21 @@ export class ExamService extends RepositoryService<Exam> {
     }
   }
 
-  private async makeSimulation(
+  async makeSimulation(
     exam: string,
     considerAllField: boolean,
     take: number,
     wmQuota: number,
     quotaUnit: ExamQuotaUnit,
     wmQuotaUnit: ExamQuotaUnit,
+    stats_: boolean = true,
   ) {
     const nbrFields = (await this.score.getFields(exam)).length;
     console.log('[nbr of fields]:', nbrFields);
     const results = await this.getScoreResults(exam, 'DESC');
 
     const len = results.length;
-    // console.log('[nbr of result]:', len);
+    console.log('[nbr of result]:', len);
     let _results: any;
 
     if (considerAllField) {
@@ -390,7 +391,6 @@ export class ExamService extends RepositoryService<Exam> {
     const index = _results.findIndex(
       (score: any) => Number(score.mean).toFixed(2) === '10.10',
     );
-    console.log(index);
     const orderedName = [];
     for (const name of names) {
       const el = tenten.find(
@@ -398,19 +398,24 @@ export class ExamService extends RepositoryService<Exam> {
           name.indexOf(t.candidate.nom.trim().toUpperCase()) !== -1 &&
           name.indexOf(t.candidate.prenom.trim().toUpperCase()) !== -1,
       );
-      orderedName.push(el);
+      if (el) orderedName.push(el);
     }
 
     const __results = _results.slice(0, index);
-    const ___results = results.slice(index + orderedName.length);
-    const results_ = [...__results, ...orderedName, ___results];
-    // console.log('orderedName', orderedName, orderedName.length);
+    const ___results = _results.slice(index + orderedName.length);
+    const results_ = [...__results, ...orderedName, ...___results];
+    console.log(
+      'orderedName',
+      results_.length,
+      orderedName.length,
+      __results.length,
+      ___results.length,
+    );
     //
 
     const totalWoman = await this.candidatService.countAcceptedWomanByExam(
       exam,
     );
-
     let totalToTake = Number(take),
       wmTotalToTake = Number(wmQuota);
     if (quotaUnit === ExamQuotaUnit.PERCENT) {
@@ -425,10 +430,12 @@ export class ExamService extends RepositoryService<Exam> {
     const fmToTake = totalToTake - fWmToTake;
 
     const _firstPass = results_.slice(0, totalToTake);
+    console.log('ttt', totalToTake, results_.length);
     const r = wmQuota
       ? this.handleWomenQuota(_firstPass, fWmToTake, fmToTake, _results)
       : _firstPass;
-    const stats = this.generateSimulationStats(r);
+    let stats = {};
+    if (stats_) stats = this.generateSimulationStats(r);
     return { values: r, stats };
   }
 
